@@ -1,4 +1,4 @@
-# `eth-json-rpc-errors`
+# eth-json-rpc-errors
 
 Errors for [JSON RPC 2.0](https://www.jsonrpc.org/specification) and [ETH JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC).
 
@@ -13,49 +13,44 @@ Errors for [JSON RPC 2.0](https://www.jsonrpc.org/specification) and [ETH JSON R
 
 ## Usage
 
-`npm install eth-json-rpc-errors`
+Installation: `npm install eth-json-rpc-errors`
+
+Import using ES6 syntax (no default) or Node `require`.
+
+### Errors API
 
 ```js
-// ES6 imports
-import { errors } from 'eth-json-rpc-errors`
+import { errors } from 'eth-json-rpc-errors'
 
-// OR //
+// standard JSON RPC 2.0 errors namespaced directly under errors
+response.error = errors.methodNotFound(someMessage, someUsefulData)
 
-// require
-const rpcErrors = require('eth-json-rpc-errors').errors
+// ETH JSON RPC errors namespaced under errors.eth
+response.error = errors.eth.deniedRequestAccounts(someMessage, someUsefulData)
 
-// ... //
+// the message can be falsy or a string
+// a falsy message will produce an error with a default message
+response.error = errors.eth.deniedRequestAccounts(null, someUsefulData)
 
-// example calls in some arbitrary RPC handler:
+// omitting the second argument will produce an error without a "data" property
+response.error = errors.eth.deniedRequestAccounts()
+```
 
-  // standard JSON RPC 2.0 errors namespaced directly under errors
-  response.error = errors.methodNotFound(someMessage, someUsefulData)
+### Other Exports
+```js
+// TypeScript interfaces
+import { IRpcErrors, IJsonRpcError, IEthJsonRpcError } from 'eth-json-rpc-errors'
 
-  // ETH JSON RPC errors namespaced under errors.eth
-  response.error = errors.eth.deniedRequestAccounts(someMessage, someUsefulData)
+// classes
+const JsonRpcError = require('eth-json-rpc-errors').JsonRpcError
+const EthJsonRpcError = require('eth-json-rpc-errors').EthJsonRpcError
 
-  // the message can be falsy or a string
-  // a falsy message will produce an error with a default message
-  response.error = errors.eth.deniedRequestAccounts(null, someUsefulData)
-
-  // omitting the second argument will produce an error without a "data" property
-  response.error = errors.eth.deniedRequestAccounts()
-
-// other imports
-
-  // TypeScript interfaces
-  import { errors, JsonRpcError, EthJsonRpcError } from 'eth-json-rpc-errors'
-
-  // classes
-  const JsonRpcError = require('eth-json-rpc-errors').JsonRpcError
-  const EthJsonRpcError = require('eth-json-rpc-errors').EthJsonRpcError
-
-  // serializeError
-  // this is useful for ensuring your errors are standardized
-  const serializeError = require('eth-json-rpc-errors').serializeError
-  // if the argument is not a valid error per any supported spec, it will be
-  // added as error.data.originalError
-  response.error = serializeError(anything)
+// serializeError
+// this is useful for ensuring your errors are standardized
+const serializeError = require('eth-json-rpc-errors').serializeError
+// if the argument is not a valid error per any supported spec, it will be
+// added as error.data.originalError
+response.error = serializeError(anything)
 ```
 
 ## License
