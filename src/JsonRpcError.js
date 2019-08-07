@@ -117,7 +117,7 @@ const errorValues = {
 }
 
 function isValidCode(code) {
-  return jsonRpcErrorCodes.includes(code) || (code >= -32099 && code <= -32000)
+  return (code >= -32099 && code <= -32000) || jsonRpcErrorCodes.includes(code)
 }
 
 function getMessageFromCode(code) {
