@@ -5,7 +5,7 @@ const dequal = require('fast-deep-equal')
 const imports = require('../')
 const serializeError = imports.serializeError
 const getMessageFromCode = imports.getMessageFromCode
-const errors = imports.errors
+const errors = imports.rpcErrors
 
 const jsonRpcErrorValues = require('../src/JsonRpcError').errorValues
 

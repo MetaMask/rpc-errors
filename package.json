@@ -7,7 +7,7 @@
     "test": "node test",
     "lint": "./node_modules/.bin/eslint index.js",
     "lint:fix": "./node_modules/.bin/eslint index.js --fix",
-    "prepare": "npm run lint:fix"
+    "prepare": "npm run lint:fix && npm run test"
   },
   "repository": {
     "type": "git",

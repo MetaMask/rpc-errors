@@ -1,25 +1,29 @@
 
-export interface JsonRpcError<T> {
+export interface IJsonRpcError<T> {
   code: number; // must be an integer
   message: string;
   data?: T;
   stack?: any; // non-standard but not forbidden, and useful if it exists
 }
 
-export interface EthJsonRpcError<T> extends JsonRpcError<T> {}
+export interface IEthJsonRpcError<T> extends IJsonRpcError<T> {}
 
-export interface rpcErrors {
-  parse: (message?: string | null, data?: any) => JsonRpcError<any>,
-  invalidRequest: (message?: string | null, data?: any) => JsonRpcError<any>,
-  invalidParams: (message?: string | null, data?: any) => JsonRpcError<any>,
-  methodNotFound: (message?: string | null, data?: any) => JsonRpcError<any>,
-  internal: (message?: string | null, data?: any) => JsonRpcError<any>,
-  server: (code: number, message?: string | null, data?: any) => JsonRpcError<any>,
+export interface ISerializeError {
+  (error: any, string?: defaultMessage): IJsonRpcError<any>
+}
+
+export interface IRpcErrors {
+  parse: (message?: string | null, data?: any) => IJsonRpcError<any>,
+  invalidRequest: (message?: string | null, data?: any) => IJsonRpcError<any>,
+  invalidParams: (message?: string | null, data?: any) => IJsonRpcError<any>,
+  methodNotFound: (message?: string | null, data?: any) => IJsonRpcError<any>,
+  internal: (message?: string | null, data?: any) => IJsonRpcError<any>,
+  server: (code: number, message?: string | null, data?: any) => IJsonRpcError<any>,
   eth: {
-    deniedRequestAccounts: (message?: string | null, data?: any) => EthJsonRpcError<any>,
-    deniedCreateAccount: (message?: string | null, data?: any) => EthJsonRpcError<any>,
-    unauthorized: (message?: string | null, data?: any) => EthJsonRpcError<any>,
-    unsupportedMethod: (message?: string | null, data?: any) => EthJsonRpcError<any>,
-    nonStandard: (code: number, message: string | null, data?: any) => EthJsonRpcError<any>,
+    deniedRequestAccounts: (message?: string | null, data?: any) => IEthJsonRpcError<any>,
+    deniedCreateAccount: (message?: string | null, data?: any) => IEthJsonRpcError<any>,
+    unauthorized: (message?: string | null, data?: any) => IEthJsonRpcError<any>,
+    unsupportedMethod: (message?: string | null, data?: any) => IEthJsonRpcError<any>,
+    nonStandard: (code: number, message: string | null, data?: any) => IEthJsonRpcError<any>,
   }
 }

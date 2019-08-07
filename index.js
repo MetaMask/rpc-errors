@@ -10,8 +10,8 @@ module.exports = {
   serializeError,
   getMessageFromCode,
 }
-module.exports.errors = jsonRpc.errors
-module.exports.errors.eth = ethJsonRpc.errors
+module.exports.rpcErrors = jsonRpc.errors
+module.exports.rpcErrors.eth = ethJsonRpc.errors
 
 /**
  * Serializes the given error to a ETH JSON RPC-compatible error object.

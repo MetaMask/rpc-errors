@@ -3,7 +3,7 @@ const test = require('tape')
 const dequal = require('fast-deep-equal')
 
 const imports = require('../')
-const errors = imports.errors
+const errors = imports.rpcErrors
 const JsonRpcError = imports.JsonRpcError
 const EthJsonRpcError = imports.EthJsonRpcError
 const jsonRpcErrorValues = imports.JSON_RPC_ERROR_VALUES

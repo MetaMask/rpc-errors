@@ -20,30 +20,42 @@ Import using ES6 syntax (no default) or Node `require`.
 ### Errors API
 
 ```js
-import { errors } from 'eth-json-rpc-errors'
+import { rpcErrors } from 'eth-json-rpc-errors'
 
 // standard JSON RPC 2.0 errors namespaced directly under errors
-response.error = errors.methodNotFound(someMessage, someUsefulData)
+response.error = rpcErrors.methodNotFound(optionalCustomMessage, optionalData)
 
 // ETH JSON RPC errors namespaced under errors.eth
-response.error = errors.eth.deniedRequestAccounts(someMessage, someUsefulData)
+response.error = rpcErrors.eth.unauthorized(optionalCustomMessage, optionalData)
 
 // the message can be falsy or a string
 // a falsy message will produce an error with a default message
-response.error = errors.eth.deniedRequestAccounts(null, someUsefulData)
+response.error = rpcErrors.eth.unauthorized(null, optionalData)
 
-// omitting the second argument will produce an error without a "data" property
-response.error = errors.eth.deniedRequestAccounts()
+// omitting the data argument will produce an error without a "data" property
+response.error = rpcErrors.eth.unauthorized(optionalCustomMessage)
+
+// both arguments can be omitted for almost all errors
+response.error = rpcErrors.eth.unauthorized()
+response.error = rpcErrors.methodNotFound()
+
+// the JSON RPC 2.0 server error requires a valid code
+response.error = rpcErrors.server(-32031, optionalCustomMessage, optionalData)
+
+// there's an option for nonStandard ETH errors
+// it requires a valid code and a string message
+response.error = rpcErrors.eth.nonStandard(1001, requiredMessage, optionalData)
 ```
 
 ### Other Exports
 ```js
 // TypeScript interfaces
-import { IRpcErrors, IJsonRpcError, IEthJsonRpcError } from 'eth-json-rpc-errors'
+import {
+  IRpcErrors, IJsonRpcError, IEthJsonRpcError, ISerializeError
+} from 'eth-json-rpc-errors'
 
 // classes
-const JsonRpcError = require('eth-json-rpc-errors').JsonRpcError
-const EthJsonRpcError = require('eth-json-rpc-errors').EthJsonRpcError
+import { JsonRpcError, EthJsonRpcError } from 'eth-json-rpc-errors'
 
 // serializeError
 // this is useful for ensuring your errors are standardized
@@ -54,4 +66,5 @@ response.error = serializeError(anything)
 ```
 
 ## License
+
 MIT
