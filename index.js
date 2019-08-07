@@ -19,11 +19,11 @@ module.exports.default.eth = ethJsonRpc.errors
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.originalError property.
  * Non-standard: adds a 'stack' property if it exists on the given error.
- * 
+ *
  * @param  {object} error the error to serialize
  * @param  {string} defaultMessage optional default message if error has no message
  */
-function serializeError(error, defaultMessage) {
+function serializeError (error, defaultMessage) {
 
   const serialized = {}
 
@@ -49,18 +49,18 @@ function serializeError(error, defaultMessage) {
   return serialized
 }
 
-function isValidCode(code) {
+function isValidCode (code) {
   return (
     Number.isInteger(code) &&
     (jsonRpc.isValidCode(code) || ethJsonRpc.isValidCode(code))
   )
 }
 
-function getMessageFromCode(code) {
+function getMessageFromCode (code) {
   return jsonRpc.getMessageFromCode(code) || ethJsonRpc.getMessageFromCode(code)
 }
 
-function assignOriginalError(error) {
+function assignOriginalError (error) {
   if (typeof error === 'object' && !Array.isArray(error)) {
     return Object.assign({}, error)
   }
