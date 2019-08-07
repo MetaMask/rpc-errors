@@ -21,6 +21,7 @@ class JsonRpcError extends Error {
       message: this.message,
     }
     if (this.data !== undefined) serialized.data = this.data
+    if (this.stack) serialized.stack = this.stack
     return serialized
   }
 }
