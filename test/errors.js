@@ -3,7 +3,7 @@ const test = require('tape')
 const dequal = require('fast-deep-equal')
 
 const imports = require('../')
-const errors = imports.default
+const errors = imports.errors
 const JsonRpcError = imports.JsonRpcError
 const EthJsonRpcError = imports.EthJsonRpcError
 const jsonRpcErrorValues = imports.JSON_RPC_ERROR_VALUES
@@ -13,7 +13,11 @@ const serverErrorMessage = require('../src/JsonRpcError').SERVER_ERROR_MESSAGE
 
 const dummyData = { foo: 'bar' }
 
-// we just iterate over all keys on the default export and call and check
+const SERVER_ERROR_CODE = -32098
+const CUSTOM_ERROR_CODE = 1001
+const CUSTOM_ERROR_MESSAGE = 'foo'
+
+// we just iterate over all keys on the errors object and call and check
 // each error in turn
 test('test exported object for correctness', t => {
 
@@ -21,7 +25,9 @@ test('test exported object for correctness', t => {
   Object.keys(errors).forEach(k => {
     if (k !== 'eth') {
       if (k === 'server') {
-        validateError(t, errors[k](-32098, null, { ...dummyData }), k, dummyData)
+        validateError(t, errors[k](
+          SERVER_ERROR_CODE, null, { ...dummyData }), k, dummyData
+        )
       } else validateError(t, errors[k](null, { ...dummyData }), k, dummyData)
     }
   })
@@ -29,7 +35,13 @@ test('test exported object for correctness', t => {
 
   t.comment('Begin: ETH JSON RPC')
   Object.keys(errors.eth).forEach(k => {
-    validateError(t, errors.eth[k](null, { ...dummyData }), k, dummyData)
+    if (k === 'nonStandard') {
+      validateError(t, errors.eth[k](
+        CUSTOM_ERROR_CODE, CUSTOM_ERROR_MESSAGE, { ...dummyData }), k, dummyData
+      )
+    } else {
+      validateError(t, errors.eth[k](null, { ...dummyData }), k, dummyData)
+    }
   })
   t.comment('End: ETH JSON RPC')
   t.end()
@@ -44,11 +56,20 @@ function validateError(t, err, key, data) {
 
   if (err instanceof EthJsonRpcError) {
     t.ok(err.code >= 1000 && err.code < 5000, 'code has valid value')
-    t.ok(
-      err.code === ethJsonRpcErrorValues[key].code &&
-      err.message === ethJsonRpcErrorValues[key].message,
-      'code and message values correspond for error type'
-    )
+
+    if (key === 'nonStandard') {
+      t.ok(
+        err.code === CUSTOM_ERROR_CODE &&
+        err.message === CUSTOM_ERROR_MESSAGE,
+        'code and message values correspond for error type'
+      )
+    } else {
+      t.ok(
+        err.code === ethJsonRpcErrorValues[key].code &&
+        err.message === ethJsonRpcErrorValues[key].message,
+        'code and message values correspond for error type'
+      )
+    }
   } else if (err instanceof JsonRpcError) {
 
     t.ok(
@@ -57,16 +78,16 @@ function validateError(t, err, key, data) {
       'code has valid value'
     )
 
-    if (key !== 'server') {
+    if (key === 'server') {
       t.ok(
-        err.code === jsonRpcErrorValues[key].code &&
-        err.message === jsonRpcErrorValues[key].message,
+        err.code <= -32000 && err.code >= -32099 &&
+        err.message === serverErrorMessage,
         'code and message values correspond for error type'
       )
     } else {
       t.ok(
-        err.code <= -32000 && err.code >= -32099 &&
-        err.message === serverErrorMessage,
+        err.code === jsonRpcErrorValues[key].code &&
+        err.message === jsonRpcErrorValues[key].message,
         'code and message values correspond for error type'
       )
     }

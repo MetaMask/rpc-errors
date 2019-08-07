@@ -5,3 +5,21 @@ export interface JsonRpcError<T> {
   data?: T;
   stack?: any; // non-standard but not forbidden, and useful if it exists
 }
+
+export interface EthJsonRpcError<T> extends JsonRpcError<T> {}
+
+export interface errors {
+  parse: (message: string, data: any) => JsonRpcError<any>,
+  invalidRequest: (message: string, data: any) => JsonRpcError<any>,
+  invalidParams: (message: string, data: any) => JsonRpcError<any>,
+  methodNotFound: (message: string, data: any) => JsonRpcError<any>,
+  internal: (message: string, data: any) => JsonRpcError<any>,
+  server: (code: number, message: string, data: any) => JsonRpcError<any>,
+  eth: {
+    deniedRequestAccounts: (message: string, data: any) => EthJsonRpcError<any>,
+    deniedCreateAccount: (message: string, data: any) => EthJsonRpcError<any>,
+    unauthorized: (message: string, data: any) => EthJsonRpcError<any>,
+    unsupportedMethod: (message: string, data: any) => EthJsonRpcError<any>,
+    nonStandard: (code: number, message: string, data: any) => EthJsonRpcError<any>,
+  }
+}

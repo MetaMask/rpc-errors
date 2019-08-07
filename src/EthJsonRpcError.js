@@ -104,6 +104,9 @@ module.exports = {
     unsupportedMethod: (message, data) => {
       return new UnsupportedMethodError(message, data)
     },
+    nonStandard: (code, message, data) => {
+      return new EthJsonRpcError(code, message, data)
+    },
   },
   EthJsonRpcError,
   errorValues,
