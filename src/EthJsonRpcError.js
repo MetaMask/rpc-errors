@@ -3,7 +3,7 @@ const JsonRpcError = require('./JsonRpcError').JsonRpcError
 
 class EthJsonRpcError extends JsonRpcError {
   constructor(code, message, data) {
-    if (!Number.isInteger(code) || code < 1000 || code > 4999) {
+    if (!isValidCode(code)) {
       throw new Error(
         '"code" must be an integer such that: 1000 <= code <= 4999'
       )
@@ -15,8 +15,8 @@ class EthJsonRpcError extends JsonRpcError {
 class DeniedRequestAccountsError extends EthJsonRpcError {
   constructor(message, data) {
     super(
-      ethJsonRpcErrorValues.deniedRequestAccounts.code,
-      message || ethJsonRpcErrorValues.deniedRequestAccounts.message,
+      errorValues.deniedRequestAccounts.code,
+      message || errorValues.deniedRequestAccounts.message,
       data
     )
   }
@@ -25,8 +25,8 @@ class DeniedRequestAccountsError extends EthJsonRpcError {
 class DeniedCreateAccountError extends EthJsonRpcError {
   constructor(message, data) {
     super(
-      ethJsonRpcErrorValues.deniedCreateAccount.code,
-      message || ethJsonRpcErrorValues.deniedCreateAccount.message,
+      errorValues.deniedCreateAccount.code,
+      message || errorValues.deniedCreateAccount.message,
       data
     )
   }
@@ -35,8 +35,8 @@ class DeniedCreateAccountError extends EthJsonRpcError {
 class UnauthorizedError extends EthJsonRpcError {
   constructor(message, data) {
     super(
-      ethJsonRpcErrorValues.unauthorized.code,
-      message || ethJsonRpcErrorValues.unauthorized.message,
+      errorValues.unauthorized.code,
+      message || errorValues.unauthorized.message,
       data
     )
   }
@@ -45,14 +45,14 @@ class UnauthorizedError extends EthJsonRpcError {
 class UnsupportedMethodError extends EthJsonRpcError {
   constructor(message, data) {
     super(
-      ethJsonRpcErrorValues.unsupportedMethod.code,
-      message || ethJsonRpcErrorValues.unsupportedMethod.message,
+      errorValues.unsupportedMethod.code,
+      message || errorValues.unsupportedMethod.message,
       data
     )
   }
 }
 
-const ethJsonRpcErrorValues = {
+const errorValues = {
   deniedRequestAccounts: {
     code: 4001,
     message: 'User denied authorizing any accounts.',
@@ -71,8 +71,27 @@ const ethJsonRpcErrorValues = {
   },
 }
 
+function isValidCode(code) {
+  return Number.isInteger(code) && code >= 1000 && code <= 4999
+}
+
+function getMessageFromCode(code) {
+  switch (code) {
+    case 4001:
+      return errorValues.deniedRequestAccounts.message
+    case 4010:
+      return errorValues.deniedCreateAccount.message
+    case 4100:
+      return errorValues.unauthorized.message
+    case 4200:
+      return errorValues.unsupportedMethod.message
+    default:
+      return null
+  }
+}
+
 module.exports = {
-  default: {
+  errors: {
     deniedRequestAccounts: (message, data) => {
       return new DeniedRequestAccountsError(message, data)
     },
@@ -87,5 +106,7 @@ module.exports = {
     },
   },
   EthJsonRpcError,
-  ethJsonRpcErrorValues,
+  errorValues,
+  isValidCode,
+  getMessageFromCode,
 }

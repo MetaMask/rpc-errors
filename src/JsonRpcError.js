@@ -28,8 +28,8 @@ class JsonRpcError extends Error {
 class ParseError extends JsonRpcError {
   constructor(message, data) {
     super(
-      jsonRpcErrorValues.parse.code,
-      message || jsonRpcErrorValues.parse.message,
+      errorValues.parse.code,
+      message || errorValues.parse.message,
       data
     )
   }
@@ -38,8 +38,8 @@ class ParseError extends JsonRpcError {
 class InvalidRequestError extends JsonRpcError {
   constructor(message, data) {
     super(
-      jsonRpcErrorValues.invalidRequest.code,
-      message || jsonRpcErrorValues.invalidRequest.message,
+      errorValues.invalidRequest.code,
+      message || errorValues.invalidRequest.message,
       data
     )
   }
@@ -48,8 +48,8 @@ class InvalidRequestError extends JsonRpcError {
 class MethodNotFoundError extends JsonRpcError {
   constructor(message, data) {
     super(
-      jsonRpcErrorValues.methodNotFound.code,
-      message || jsonRpcErrorValues.methodNotFound.message,
+      errorValues.methodNotFound.code,
+      message || errorValues.methodNotFound.message,
       data
     )
   }
@@ -58,8 +58,8 @@ class MethodNotFoundError extends JsonRpcError {
 class InvalidParamsError extends JsonRpcError {
   constructor(message, data) {
     super(
-      jsonRpcErrorValues.invalidParams.code,
-      message || jsonRpcErrorValues.invalidParams.message,
+      errorValues.invalidParams.code,
+      message || errorValues.invalidParams.message,
       data
     )
   }
@@ -68,8 +68,8 @@ class InvalidParamsError extends JsonRpcError {
 class InternalError extends JsonRpcError {
   constructor(message, data) {
     super(
-      jsonRpcErrorValues.internal.code,
-      message || jsonRpcErrorValues.internal.message,
+      errorValues.internal.code,
+      message || errorValues.internal.message,
       data
     )
   }
@@ -83,12 +83,16 @@ class ServerError extends JsonRpcError {
       )
     }
     super(
-      code, message || 'Unspecified server error.', data
+      code, message || SERVER_ERROR_MESSAGE, data
     )
   }
 }
 
-const jsonRpcErrorValues = {
+const SERVER_ERROR_MESSAGE = 'Unspecified server error.'
+
+const jsonRpcErrorCodes = [-32700, -32600, -32601, -32602, -32603]
+
+const errorValues = {
   parse: {
     code: -32700,
     message: 'Invalid JSON was received by the server. An error occurred on the server while parsing the JSON text.',
@@ -111,8 +115,31 @@ const jsonRpcErrorValues = {
   },
 }
 
+function isValidCode(code) {
+  return jsonRpcErrorCodes.includes(code) || (code >= -32099 && code <= -32000)
+}
+
+function getMessageFromCode(code) {
+  switch (code) {
+    case -32700:
+      return errorValues.parse.message
+    case -32600:
+      return errorValues.invalidRequest.message
+    case -32601:
+      return errorValues.methodNotFound.message
+    case -32602:
+      return errorValues.invalidParams.message
+    case -32603:
+      return errorValues.internal.message
+    default:
+      break
+  }
+  if (isValidCode(code)) return SERVER_ERROR_MESSAGE
+  return null
+}
+
 module.exports = {
-  default: {
+  errors: {
     parse: (message, data) => new ParseError(message, data),
     invalidRequest: (message, data) => new InvalidRequestError(message, data),
     invalidParams: (message, data) => new InvalidParamsError(message, data),
@@ -121,5 +148,9 @@ module.exports = {
     server: (code, message, data) => new ServerError(code, message, data),
   },
   JsonRpcError,
-  jsonRpcErrorValues,
+  errorValues,
+  jsonRpcErrorCodes,
+  isValidCode,
+  getMessageFromCode,
+  SERVER_ERROR_MESSAGE,
 }

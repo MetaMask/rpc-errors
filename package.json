@@ -1,6 +1,6 @@
 {
-  "name": "eth-json-rpc-error",
-  "version": "0.0.0",
+  "name": "eth-json-rpc-errors",
+  "version": "0.1.0",
   "description": "Ethereum JSON RPC errors and standard JSON RPC 2.0 errors.",
   "main": "index.js",
   "scripts": {
@@ -25,12 +25,9 @@
     "url": "https://github.com/MetaMask/eth-json-rpc-errors/issues"
   },
   "homepage": "https://github.com/MetaMask/eth-json-rpc-errors#readme",
-  "dependencies": {
-    "fast-deep-equal": "^2.0.1",
-    "json-rpc-error": "^2.0.0"
-  },
   "devDependencies": {
     "eslint": "^6.1.0",
+    "fast-deep-equal": "^2.0.1",
     "tape": "^4.11.0"
   }
 }
