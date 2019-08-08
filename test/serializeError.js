@@ -4,10 +4,10 @@ const dequal = require('fast-deep-equal')
 
 const imports = require('../')
 const serializeError = imports.serializeError
-const getMessageFromCode = imports.getMessageFromCode
+const getMessageFromCode = require('../src/utils').getMessageFromCode
 const errors = imports.rpcErrors
 
-const jsonRpcErrorValues = require('../src/JsonRpcError').errorValues
+const jsonRpcCodes = require('../src/JsonRpcError').CODES
 
 const dummyData = { foo: 'bar' }
 const dummyMessage = 'baz'
@@ -29,8 +29,8 @@ test('invalid error: non-object', t => {
     dequal(
       result,
       {
-        code: jsonRpcErrorValues.internal.code,
-        message: jsonRpcErrorValues.internal.message,
+        code: jsonRpcCodes.internal,
+        message: getMessageFromCode(jsonRpcCodes.internal),
         data: { originalError: invalidError0 }
       }
     ),
@@ -45,8 +45,8 @@ test('invalid error: array', t => {
     dequal(
       result,
       {
-        code: jsonRpcErrorValues.internal.code,
-        message: jsonRpcErrorValues.internal.message,
+        code: jsonRpcCodes.internal,
+        message: getMessageFromCode(jsonRpcCodes.internal),
         data: { originalError: invalidError1 }
       }
     ),
@@ -61,8 +61,8 @@ test('invalid error: invalid code', t => {
     dequal(
       result,
       {
-        code: jsonRpcErrorValues.internal.code,
-        message: jsonRpcErrorValues.internal.message,
+        code: jsonRpcCodes.internal,
+        message: getMessageFromCode(jsonRpcCodes.internal),
         data: { originalError: { ...invalidError2 } }
       }
     ),
@@ -140,8 +140,8 @@ test('valid error: instantiated error', t => {
     dequal(
       result,
       {
-        code: jsonRpcErrorValues.parse.code,
-        message: jsonRpcErrorValues.parse.message,
+        code: jsonRpcCodes.parse,
+        message: getMessageFromCode(jsonRpcCodes.parse),
         stack: validError2.stack,
       }
     ),
@@ -156,7 +156,7 @@ test('valid error: instantiated error with custom message and data', t => {
     dequal(
       result,
       {
-        code: jsonRpcErrorValues.parse.code,
+        code: jsonRpcCodes.parse,
         message: validError3.message,
         data: { ...validError3.data },
         stack: validError3.stack,

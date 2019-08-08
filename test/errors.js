@@ -6,10 +6,12 @@ const imports = require('../')
 const errors = imports.rpcErrors
 const JsonRpcError = imports.JsonRpcError
 const EthJsonRpcError = imports.EthJsonRpcError
-const jsonRpcErrorValues = imports.JSON_RPC_ERROR_VALUES
-const ethJsonRpcErrorValues = imports.ETH_JSON_RPC_ERROR_VALUES
-const jsonRpcCodes = require('../src/JsonRpcError').jsonRpcErrorCodes
-const serverErrorMessage = require('../src/JsonRpcError').SERVER_ERROR_MESSAGE
+const getMessageFromCode = require('../src/utils').getMessageFromCode
+const jsonRpcCodes = require('../src/JsonRpcError').CODES
+const ethJsonRpcCodes = require('../src/EthJsonRpcError').CODES
+const serverErrorMessage = require('../src/utils').JSONRPC_SERVER_ERROR_MESSAGE
+
+const jsonRpcCodeValues = Object.values(jsonRpcCodes)
 
 const dummyData = { foo: 'bar' }
 
@@ -65,15 +67,15 @@ function validateError(t, err, key, data) {
       )
     } else {
       t.ok(
-        err.code === ethJsonRpcErrorValues[key].code &&
-        err.message === ethJsonRpcErrorValues[key].message,
+        err.code === ethJsonRpcCodes[key] &&
+        err.message === getMessageFromCode(ethJsonRpcCodes[key]),
         'code and message values correspond for error type'
       )
     }
   } else if (err instanceof JsonRpcError) {
 
     t.ok(
-      jsonRpcCodes.includes(err.code) ||
+      jsonRpcCodeValues.includes(err.code) ||
       err.code <= -32000 && err.code >= -32099,
       'code has valid value'
     )
@@ -86,8 +88,8 @@ function validateError(t, err, key, data) {
       )
     } else {
       t.ok(
-        err.code === jsonRpcErrorValues[key].code &&
-        err.message === jsonRpcErrorValues[key].message,
+        err.code === jsonRpcCodes[key] &&
+        err.message === getMessageFromCode(jsonRpcCodes[key]),
         'code and message values correspond for error type'
       )
     }

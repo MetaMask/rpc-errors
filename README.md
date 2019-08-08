@@ -63,6 +63,11 @@ const serializeError = require('eth-json-rpc-errors').serializeError
 // if the argument is not a valid error per any supported spec, it will be
 // added as error.data.originalError
 response.error = serializeError(anything)
+// you can add a default message and/or code
+response.error = serializeError(anything, defaultMessage)
+response.error = serializeError(anything, defaultMessage, defaultCode)
+// it is recommended that you specify a default message since not all valid
+// codes have a specific message at this time
 ```
 
 ## License

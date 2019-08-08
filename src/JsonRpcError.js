@@ -1,4 +1,14 @@
 
+const getMessageFromCode = require('./utils').getMessageFromCode
+
+const CODES = {
+  parse: -32700,
+  invalidRequest: -32600,
+  methodNotFound: -32601,
+  invalidParams: -32602,
+  internal: -32603,
+}
+
 class JsonRpcError extends Error {
 
   constructor (code, message, data) {
@@ -29,8 +39,8 @@ class JsonRpcError extends Error {
 class ParseError extends JsonRpcError {
   constructor(message, data) {
     super(
-      errorValues.parse.code,
-      message || errorValues.parse.message,
+      CODES.parse,
+      message || getMessageFromCode(CODES.parse),
       data
     )
   }
@@ -39,8 +49,8 @@ class ParseError extends JsonRpcError {
 class InvalidRequestError extends JsonRpcError {
   constructor(message, data) {
     super(
-      errorValues.invalidRequest.code,
-      message || errorValues.invalidRequest.message,
+      CODES.invalidRequest,
+      message || getMessageFromCode(CODES.invalidRequest),
       data
     )
   }
@@ -49,8 +59,8 @@ class InvalidRequestError extends JsonRpcError {
 class MethodNotFoundError extends JsonRpcError {
   constructor(message, data) {
     super(
-      errorValues.methodNotFound.code,
-      message || errorValues.methodNotFound.message,
+      CODES.methodNotFound,
+      message || getMessageFromCode(CODES.methodNotFound),
       data
     )
   }
@@ -59,8 +69,8 @@ class MethodNotFoundError extends JsonRpcError {
 class InvalidParamsError extends JsonRpcError {
   constructor(message, data) {
     super(
-      errorValues.invalidParams.code,
-      message || errorValues.invalidParams.message,
+      CODES.invalidParams,
+      message || getMessageFromCode(CODES.invalidParams),
       data
     )
   }
@@ -69,8 +79,8 @@ class InvalidParamsError extends JsonRpcError {
 class InternalError extends JsonRpcError {
   constructor(message, data) {
     super(
-      errorValues.internal.code,
-      message || errorValues.internal.message,
+      CODES.internal,
+      message || getMessageFromCode(CODES.internal),
       data
     )
   }
@@ -84,59 +94,9 @@ class ServerError extends JsonRpcError {
       )
     }
     super(
-      code, message || SERVER_ERROR_MESSAGE, data
+      code, message || getMessageFromCode(code), data
     )
   }
-}
-
-const SERVER_ERROR_MESSAGE = 'Unspecified server error.'
-
-const jsonRpcErrorCodes = [-32700, -32600, -32601, -32602, -32603]
-
-const errorValues = {
-  parse: {
-    code: -32700,
-    message: 'Invalid JSON was received by the server. An error occurred on the server while parsing the JSON text.',
-  },
-  invalidRequest: {
-    code: -32600,
-    message: 'The JSON sent is not a valid Request object.',
-  },
-  methodNotFound: {
-    code: -32601,
-    message: 'The method does not exist / is not available.',
-  },
-  invalidParams: {
-    code: -32602,
-    message: 'Invalid method parameter(s).',
-  },
-  internal: {
-    code: -32603,
-    message: 'Internal JSON-RPC error.',
-  },
-}
-
-function isValidCode(code) {
-  return (code >= -32099 && code <= -32000) || jsonRpcErrorCodes.includes(code)
-}
-
-function getMessageFromCode(code) {
-  switch (code) {
-    case -32700:
-      return errorValues.parse.message
-    case -32600:
-      return errorValues.invalidRequest.message
-    case -32601:
-      return errorValues.methodNotFound.message
-    case -32602:
-      return errorValues.invalidParams.message
-    case -32603:
-      return errorValues.internal.message
-    default:
-      break
-  }
-  if (isValidCode(code)) return SERVER_ERROR_MESSAGE
-  return null
 }
 
 module.exports = {
@@ -149,9 +109,5 @@ module.exports = {
     server: (code, message, data) => new ServerError(code, message, data),
   },
   JsonRpcError,
-  errorValues,
-  jsonRpcErrorCodes,
-  isValidCode,
-  getMessageFromCode,
-  SERVER_ERROR_MESSAGE,
+  CODES,
 }

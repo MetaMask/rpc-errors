@@ -1,14 +1,14 @@
 
 const jsonRpc = require('./src/JsonRpcError')
 const ethJsonRpc = require('./src/ethJsonRpcError')
+const { getMessageFromCode, isValidCode } = require('./src/utils')
+const errorValues = require('./src/errorValues.json')
 
 module.exports = {
   JsonRpcError: jsonRpc.JsonRpcError,
   EthJsonRpcError: ethJsonRpc.EthJsonRpcError,
-  JSON_RPC_ERROR_VALUES: jsonRpc.errorValues,
-  ETH_JSON_RPC_ERROR_VALUES: ethJsonRpc.errorValues,
   serializeError,
-  getMessageFromCode,
+  ERROR_VALUES: errorValues,
 }
 module.exports.rpcErrors = jsonRpc.errors
 module.exports.rpcErrors.eth = ethJsonRpc.errors
@@ -23,7 +23,7 @@ module.exports.rpcErrors.eth = ethJsonRpc.errors
  * @param  {object} error the error to serialize
  * @param  {string} defaultMessage optional default message if error has no message
  */
-function serializeError (error, defaultMessage) {
+function serializeError (error, defaultMessage, defaultCode) {
 
   const serialized = {}
 
@@ -40,24 +40,15 @@ function serializeError (error, defaultMessage) {
     }
 
   } else {
-    serialized.code = jsonRpc.errorValues.internal.code
-    serialized.message = defaultMessage || jsonRpc.errorValues.internal.message
+    serialized.code = defaultCode || jsonRpc.CODES.internal
+    serialized.message = (
+      defaultMessage || getMessageFromCode(serialized.code)
+    )
     serialized.data = { originalError: assignOriginalError(error) }
   }
 
   if (error.stack) serialized.stack = error.stack
   return serialized
-}
-
-function isValidCode (code) {
-  return (
-    Number.isInteger(code) &&
-    (jsonRpc.isValidCode(code) || ethJsonRpc.isValidCode(code))
-  )
-}
-
-function getMessageFromCode (code) {
-  return jsonRpc.getMessageFromCode(code) || ethJsonRpc.getMessageFromCode(code)
 }
 
 function assignOriginalError (error) {
