@@ -1,13 +1,6 @@
 
 const getMessageFromCode = require('./utils').getMessageFromCode
-
-const CODES = {
-  parse: -32700,
-  invalidRequest: -32600,
-  methodNotFound: -32601,
-  invalidParams: -32602,
-  internal: -32603,
-}
+const CODES = require('./errorCodes.json').jsonRpc
 
 class JsonRpcError extends Error {
 
@@ -109,5 +102,4 @@ module.exports = {
     server: (code, message, data) => new ServerError(code, message, data),
   },
   JsonRpcError,
-  CODES,
 }

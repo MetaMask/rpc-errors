@@ -3,12 +3,7 @@ const JsonRpcError = require('./JsonRpcError').JsonRpcError
 
 const getMessageFromCode = require('./utils').getMessageFromCode
 
-const CODES = {
-  deniedRequestAccounts: 4001,
-  deniedCreateAccount: 4010,
-  unauthorized: 4100,
-  unsupportedMethod: 4200,
-}
+const CODES = require('./errorCodes.json').eth
 
 function _isValidCode(code) {
   return Number.isInteger(code) && code >= 1000 && code <= 4999
@@ -85,5 +80,4 @@ module.exports = {
     },
   },
   EthJsonRpcError,
-  CODES,
 }

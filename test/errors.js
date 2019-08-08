@@ -7,9 +7,10 @@ const errors = imports.rpcErrors
 const JsonRpcError = imports.JsonRpcError
 const EthJsonRpcError = imports.EthJsonRpcError
 const getMessageFromCode = require('../src/utils').getMessageFromCode
-const jsonRpcCodes = require('../src/JsonRpcError').CODES
-const ethJsonRpcCodes = require('../src/EthJsonRpcError').CODES
-const serverErrorMessage = require('../src/utils').JSONRPC_SERVER_ERROR_MESSAGE
+const CODES = require('../src/errorCodes.json')
+const jsonRpcCodes = CODES.jsonRpc
+const ethJsonRpcCodes = CODES.eth
+const serverErrorMessage = require('../src/utils').JSON_RPC_SERVER_ERROR_MESSAGE
 
 const jsonRpcCodeValues = Object.values(jsonRpcCodes)
 

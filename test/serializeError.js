@@ -7,7 +7,7 @@ const serializeError = imports.serializeError
 const getMessageFromCode = require('../src/utils').getMessageFromCode
 const errors = imports.rpcErrors
 
-const jsonRpcCodes = require('../src/JsonRpcError').CODES
+const jsonRpcCodes = require('../src/errorCodes.json').jsonRpc
 
 const dummyData = { foo: 'bar' }
 const dummyMessage = 'baz'

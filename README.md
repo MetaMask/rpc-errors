@@ -44,30 +44,43 @@ response.error = rpcErrors.server(-32031, optionalCustomMessage, optionalData)
 
 // there's an option for nonStandard ETH errors
 // it requires a valid code and a string message
+// valid codes integers i such that 1000 <= i <= 4999
 response.error = rpcErrors.eth.nonStandard(1001, requiredMessage, optionalData)
 ```
 
 ### Other Exports
 ```js
-// TypeScript interfaces
+/**
+ * TypeScript interfaces
+ */
 import {
   IRpcErrors, IJsonRpcError, IEthJsonRpcError, ISerializeError
 } from 'eth-json-rpc-errors'
 
-// classes
+/**
+ * Classes
+ */
 import { JsonRpcError, EthJsonRpcError } from 'eth-json-rpc-errors'
 
-// serializeError
+/**
+ * serializeError
+ */
 // this is useful for ensuring your errors are standardized
-const serializeError = require('eth-json-rpc-errors').serializeError
+import { serializeError } from 'eth-json-rpc-errors'
+
 // if the argument is not a valid error per any supported spec, it will be
 // added as error.data.originalError
-response.error = serializeError(anything)
-// you can add a default message and/or code
-response.error = serializeError(anything, defaultMessage)
-response.error = serializeError(anything, defaultMessage, defaultCode)
-// it is recommended that you specify a default message since not all valid
-// codes have a specific message at this time
+response.error = serializeError(maybeAnError)
+
+// you can add a custom fallback error code and message if the 
+const fallbackError = { code: 4999, message: 'My custom error.' }
+response.error = serializeError(maybeAnError, fallbackError)
+
+// the default fallback is:
+{
+  code: -32603,
+  message: 'Internal JSON-RPC error.'
+}
 ```
 
 ## License

@@ -8,8 +8,10 @@ export interface IJsonRpcError<T> {
 
 export interface IEthJsonRpcError<T> extends IJsonRpcError<T> {}
 
+type DefaultError = { code: number, message: string }
+
 export interface ISerializeError {
-  (error: any, defaultMessage?: string | null, defaultCode?: number | null): IJsonRpcError<any>
+  (error: any, fallbackError?: DefaultError): IJsonRpcError<any>
 }
 
 export interface IRpcErrors {
@@ -31,7 +33,7 @@ export interface IRpcErrors {
 // maybe export these some day
 
 // export interface IGetMessageFromCode {
-//   (error: any, defaultMessage?: string): string
+//   (error: any, fallbackMessage?: string): string
 // }
 
 // export interface IIsValidCode {
