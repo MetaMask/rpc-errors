@@ -1,6 +1,6 @@
 
 const jsonRpc = require('./src/JsonRpcError')
-const ethJsonRpc = require('./src/ethJsonRpcError')
+const ethJsonRpc = require('./src/EthJsonRpcError')
 const {
   serializeError, getMessageFromCode,
 } = require('./src/utils')
