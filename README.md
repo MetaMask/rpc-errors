@@ -23,16 +23,21 @@ Import using ES6 syntax (no default) or Node `require`.
 import { rpcErrors } from 'eth-json-rpc-errors'
 
 // standard JSON RPC 2.0 errors namespaced directly under errors
-response.error = rpcErrors.methodNotFound(optionalCustomMessage, optionalData)
+response.error = rpcErrors.methodNotFound(
+  optionalCustomMessage, optionalData
+)
 
 // ETH JSON RPC errors namespaced under errors.eth
-response.error = rpcErrors.eth.unauthorized(optionalCustomMessage, optionalData)
+response.error = rpcErrors.eth.unauthorized(
+  optionalCustomMessage, optionalData
+)
 
 // the message can be falsy or a string
 // a falsy message will produce an error with a default message
 response.error = rpcErrors.eth.unauthorized(null, optionalData)
 
-// omitting the data argument will produce an error without a "data" property
+// omitting the data argument will produce an error without a
+// "data" property
 response.error = rpcErrors.eth.unauthorized(optionalCustomMessage)
 
 // both arguments can be omitted for almost all errors
@@ -40,12 +45,16 @@ response.error = rpcErrors.eth.unauthorized()
 response.error = rpcErrors.methodNotFound()
 
 // the JSON RPC 2.0 server error requires a valid code
-response.error = rpcErrors.server(-32031, optionalCustomMessage, optionalData)
+response.error = rpcErrors.server(
+  -32031, optionalCustomMessage, optionalData
+)
 
 // there's an option for nonStandard ETH errors
 // it requires a valid code and a string message
-// valid codes integers i such that 1000 <= i <= 4999
-response.error = rpcErrors.eth.nonStandard(1001, requiredMessage, optionalData)
+// valid codes are integers i such that: 1000 <= i <= 4999
+response.error = rpcErrors.eth.nonStandard(
+  1001, requiredMessage, optionalData
+)
 ```
 
 ### Other Exports
@@ -68,8 +77,8 @@ import { JsonRpcError, EthJsonRpcError } from 'eth-json-rpc-errors'
 // this is useful for ensuring your errors are standardized
 import { serializeError } from 'eth-json-rpc-errors'
 
-// if the argument is not a valid error per any supported spec, it will be
-// added as error.data.originalError
+// if the argument is not a valid error per any supported spec,
+// it will be added as error.data.originalError
 response.error = serializeError(maybeAnError)
 
 // you can add a custom fallback error code and message if the 
@@ -81,6 +90,25 @@ response.error = serializeError(maybeAnError, fallbackError)
   code: -32603,
   message: 'Internal JSON-RPC error.'
 }
+
+/**
+ * getMessageFromCode & ERROR_CODES
+ */
+// get the default message, or null if it does not exist, for the
+// given code
+import { getMessageFromCode, ERROR_CODES } from 'eth-json-rpc-errors'
+const message = getMessageFromCode(someCode) // string | null
+
+// {
+//   jsonRpc: { errorName: code, ... },
+//   eth: { errorName: code, ... },
+// }
+const code1 = ERROR_CODES.jsonRpc.parse
+const code2 = ERROR_CODES.eth.deniedCreateAccount
+
+// all codes in ERROR_CODES have default messages
+const message1 = getMessageFromCode(code1)
+const message2 = getMessageFromCode(code2)
 ```
 
 ## License

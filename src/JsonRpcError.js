@@ -29,77 +29,35 @@ class JsonRpcError extends Error {
   }
 }
 
-class ParseError extends JsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.parse,
-      message || getMessageFromCode(CODES.parse),
-      data
-    )
-  }
-}
-
-class InvalidRequestError extends JsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.invalidRequest,
-      message || getMessageFromCode(CODES.invalidRequest),
-      data
-    )
-  }
-}
-
-class MethodNotFoundError extends JsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.methodNotFound,
-      message || getMessageFromCode(CODES.methodNotFound),
-      data
-    )
-  }
-}
-
-class InvalidParamsError extends JsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.invalidParams,
-      message || getMessageFromCode(CODES.invalidParams),
-      data
-    )
-  }
-}
-
-class InternalError extends JsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.internal,
-      message || getMessageFromCode(CODES.internal),
-      data
-    )
-  }
-}
-
-class ServerError extends JsonRpcError {
-  constructor(code, message, data) {
-    if (!Number.isInteger(code) || code > -32000 || code < -32099) {
-      throw new Error(
-        '"code" must be an integer such that: -32099 <= code <= -32000'
-      )
-    }
-    super(
-      code, message || getMessageFromCode(code), data
-    )
-  }
+function getError(code, message, data) {
+  return new JsonRpcError(
+    code,
+    message || getMessageFromCode(code),
+    data
+  )
 }
 
 module.exports = {
   errors: {
-    parse: (message, data) => new ParseError(message, data),
-    invalidRequest: (message, data) => new InvalidRequestError(message, data),
-    invalidParams: (message, data) => new InvalidParamsError(message, data),
-    methodNotFound: (message, data) => new MethodNotFoundError(message, data),
-    internal: (message, data) => new InternalError(message, data),
-    server: (code, message, data) => new ServerError(code, message, data),
+    parse: (message, data) => getError(CODES.parse, message, data),
+    invalidRequest: (message, data) => getError(
+      CODES.invalidRequest, message, data
+    ),
+    invalidParams: (message, data) => getError(
+      CODES.invalidParams, message, data
+    ),
+    methodNotFound: (message, data) => getError(
+      CODES.methodNotFound, message, data
+    ),
+    internal: (message, data) => getError(CODES.internal, message, data),
+    server: (code, message, data) => {
+      if (!Number.isInteger(code) || code > -32000 || code < -32099) {
+        throw new Error(
+          '"code" must be an integer such that: -32099 <= code <= -32000'
+        )
+      }
+      return getError(code, message, data)
+    },
   },
   JsonRpcError,
 }

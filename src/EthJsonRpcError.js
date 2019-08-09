@@ -21,59 +21,28 @@ class EthJsonRpcError extends JsonRpcError {
   }
 }
 
-class DeniedRequestAccountsError extends EthJsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.deniedRequestAccounts,
-      message || getMessageFromCode(CODES.deniedRequestAccounts),
-      data
-    )
-  }
+function getError(code, message, data) {
+  return new EthJsonRpcError(
+    code,
+    message || getMessageFromCode(code),
+    data
+  )
 }
 
-class DeniedCreateAccountError extends EthJsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.deniedCreateAccount,
-      message || getMessageFromCode(CODES.deniedCreateAccount),
-      data
-    )
-  }
-}
-
-class UnauthorizedError extends EthJsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.unauthorized,
-      message || getMessageFromCode(CODES.unauthorized),
-      data
-    )
-  }
-}
-
-class UnsupportedMethodError extends EthJsonRpcError {
-  constructor(message, data) {
-    super(
-      CODES.unsupportedMethod,
-      message || getMessageFromCode(CODES.unsupportedMethod),
-      data
-    )
-  }
-}
 
 module.exports = {
   errors: {
     deniedRequestAccounts: (message, data) => {
-      return new DeniedRequestAccountsError(message, data)
+      return getError(CODES.deniedRequestAccounts, message, data)
     },
     deniedCreateAccount: (message, data) => {
-      return new DeniedCreateAccountError(message, data)
+      return getError(CODES.deniedCreateAccount, message, data)
     },
     unauthorized: (message, data) => {
-      return new UnauthorizedError(message, data)
+      return getError(CODES.unauthorized, message, data)
     },
     unsupportedMethod: (message, data) => {
-      return new UnsupportedMethodError(message, data)
+      return getError(CODES.unsupportedMethod, message, data)
     },
     nonStandard: (code, message, data) => {
       return new EthJsonRpcError(code, message, data)

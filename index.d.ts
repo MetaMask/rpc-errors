@@ -14,6 +14,10 @@ export interface ISerializeError {
   (error: any, fallbackError?: DefaultError): IJsonRpcError<any>
 }
 
+export interface IGetMessageFromCode {
+  (error: any, fallbackMessage?: string): string
+}
+
 export interface IRpcErrors {
   parse: (message?: string | null, data?: any) => IJsonRpcError<any>,
   invalidRequest: (message?: string | null, data?: any) => IJsonRpcError<any>,
@@ -30,11 +34,7 @@ export interface IRpcErrors {
   }
 }
 
-// maybe export these some day
-
-// export interface IGetMessageFromCode {
-//   (error: any, fallbackMessage?: string): string
-// }
+// maybe export this once valid codes and messages can be extended at runtime
 
 // export interface IIsValidCode {
 //   (number: code): boolean
