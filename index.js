@@ -2,9 +2,8 @@
 const jsonRpc = require('./src/JsonRpcError')
 const ethJsonRpc = require('./src/ethJsonRpcError')
 const {
-  serializeError, getMessageFromCode
+  serializeError, getMessageFromCode,
 } = require('./src/utils')
-const errorValues = require('./src/errorValues.json')
 const errorCodes = require('./src/errorCodes.json')
 
 module.exports = {
