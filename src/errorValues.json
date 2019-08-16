@@ -21,15 +21,11 @@
   },
   "4001": {
     "standard": "EIP 1193",
-    "message": "User denied authorizing any accounts."
-  },
-  "4010": {
-    "standard": "EIP 1193",
-    "message": "User denied creating a new account."
+    "message": "User rejected the request."
   },
   "4100": {
     "standard": "EIP 1193",
-    "message": "The requested account has not been authorized by the user."
+    "message": "The requested account and/or method has not been authorized by the user."
   },
   "4200": {
     "standard": "EIP 1193",

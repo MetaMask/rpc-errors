@@ -71,6 +71,7 @@ function isValidCode(code) {
 function serializeError (error, fallbackError = FALLBACK_ERROR) {
 
   if (
+    !fallbackError || 
     !Number.isInteger(fallbackError.code) ||
     typeof fallbackError.message !== 'string'
   ) {

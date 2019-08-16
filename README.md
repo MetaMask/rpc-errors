@@ -9,7 +9,7 @@ Errors for [JSON RPC 2.0](https://www.jsonrpc.org/specification) and [ETH JSON R
 - All [JSON RPC 2.0](https://www.jsonrpc.org/specification) errors (see *"5.1 Error object"*)
 - ETH JSON RPC
   - Proposed errors in [EIP 1193](https://eips.ethereum.org/EIPS/eip-1193) (see *"Error object and codes"*)
-    - Does not yet support [`CloseEvent` errors or status codes](https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes).
+    - Does **not** yet support [`CloseEvent` errors or status codes](https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes).
 
 ## Usage
 
@@ -22,12 +22,12 @@ Import using ES6 syntax (no default) or Node `require`.
 ```js
 import { rpcErrors } from 'eth-json-rpc-errors'
 
-// standard JSON RPC 2.0 errors namespaced directly under errors
+// standard JSON RPC 2.0 errors namespaced directly under rpcErrors
 response.error = rpcErrors.methodNotFound(
   optionalCustomMessage, optionalData
 )
 
-// ETH JSON RPC errors namespaced under errors.eth
+// ETH JSON RPC errors namespaced under rpcErrors.eth
 response.error = rpcErrors.eth.unauthorized(
   optionalCustomMessage, optionalData
 )
@@ -100,11 +100,11 @@ import { getMessageFromCode, ERROR_CODES } from 'eth-json-rpc-errors'
 const message = getMessageFromCode(someCode) // string | null
 
 // {
-//   jsonRpc: { errorName: code, ... },
-//   eth: { errorName: code, ... },
+//   jsonRpc: { [errorName]: code, ... },
+//   eth: { [errorName]: code, ... },
 // }
 const code1 = ERROR_CODES.jsonRpc.parse
-const code2 = ERROR_CODES.eth.deniedCreateAccount
+const code2 = ERROR_CODES.eth.rejectedByUser
 
 // all codes in ERROR_CODES have default messages
 const message1 = getMessageFromCode(code1)

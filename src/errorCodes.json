@@ -7,8 +7,7 @@
       "internal": -32603
   },
   "eth": {
-    "deniedRequestAccounts": 4001,
-    "deniedCreateAccount": 4010,
+    "rejectedByUser": 4001,
     "unauthorized": 4100,
     "unsupportedMethod": 4200
   }

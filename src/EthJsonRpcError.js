@@ -32,11 +32,8 @@ function getError(code, message, data) {
 
 module.exports = {
   errors: {
-    deniedRequestAccounts: (message, data) => {
-      return getError(CODES.deniedRequestAccounts, message, data)
-    },
-    deniedCreateAccount: (message, data) => {
-      return getError(CODES.deniedCreateAccount, message, data)
+    rejectedByUser: (message, data) => {
+      return getError(CODES.rejectedByUser, message, data)
     },
     unauthorized: (message, data) => {
       return getError(CODES.unauthorized, message, data)
