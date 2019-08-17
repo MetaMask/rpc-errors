@@ -1,19 +1,41 @@
 
-const jsonRpc = require('./src/JsonRpcError')
-const ethJsonRpc = require('./src/EthJsonRpcError')
+const { JsonRpcError, EthJsonRpcError } = require('./src/classes')
 const {
   serializeError, getMessageFromCode,
 } = require('./src/utils')
-const errorCodes = require('./src/errorCodes.json')
-
-const rpcErrors = jsonRpc.errors
-rpcErrors.eth = ethJsonRpc.errors
+const errors = require('./src/errors')
+const ERROR_CODES = require('./src/errorCodes.json')
 
 module.exports = {
-  rpcErrors,
-  JsonRpcError: jsonRpc.JsonRpcError,
-  EthJsonRpcError: ethJsonRpc.EthJsonRpcError,
+  errors,
+  JsonRpcError,
+  EthJsonRpcError,
   serializeError,
   getMessageFromCode,
-  ERROR_CODES: errorCodes,
+  /** @type ErrorCodes */
+  ERROR_CODES,
 }
+
+// Types
+
+/**
+ * @typedef {Object} EthJsonRpcErrorCodes
+ * @property {number} userRejectedRequest
+ * @property {number} unauthorized
+ * @property {number} unsupportedMethod
+ */
+
+/**
+ * @typedef {Object} JsonRpcErrorCodes
+ * @property {number} parse
+ * @property {number} invalidRequest
+ * @property {number} invalidParams
+ * @property {number} methodNotFound
+ * @property {number} internal
+ */
+
+/**
+ * @typedef ErrorCodes
+ * @property {JsonRpcErrorCodes} jsonRpc
+ * @property {EthJsonRpcErrorCodes} eth
+ */

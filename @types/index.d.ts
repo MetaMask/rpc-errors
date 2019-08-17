@@ -26,10 +26,10 @@ export interface IRpcErrors {
   internal: (message?: string | null, data?: any) => IJsonRpcError<any>,
   server: (code: number, message?: string | null, data?: any) => IJsonRpcError<any>,
   eth: {
-    rejectedByUser: (message?: string | null, data?: any) => IEthJsonRpcError<any>,
+    userRejectedRequest: (message?: string | null, data?: any) => IEthJsonRpcError<any>,
     unauthorized: (message?: string | null, data?: any) => IEthJsonRpcError<any>,
     unsupportedMethod: (message?: string | null, data?: any) => IEthJsonRpcError<any>,
-    nonStandard: (code: number, message: string | null, data?: any) => IEthJsonRpcError<any>,
+    custom: (code: number, message: string | null, data?: any) => IEthJsonRpcError<any>,
   }
 }
 

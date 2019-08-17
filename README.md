@@ -49,10 +49,10 @@ response.error = rpcErrors.server(
   -32031, optionalCustomMessage, optionalData
 )
 
-// there's an option for nonStandard ETH errors
+// there's an option for custom ETH errors
 // it requires a valid code and a string message
 // valid codes are integers i such that: 1000 <= i <= 4999
-response.error = rpcErrors.eth.nonStandard(
+response.error = rpcErrors.eth.custom(
   1001, requiredMessage, optionalData
 )
 ```
@@ -64,7 +64,7 @@ response.error = rpcErrors.eth.nonStandard(
  */
 import {
   IRpcErrors, IJsonRpcError, IEthJsonRpcError, ISerializeError
-} from 'eth-json-rpc-errors'
+} from 'eth-json-rpc-errors/@types'
 
 /**
  * Classes
@@ -94,17 +94,23 @@ response.error = serializeError(maybeAnError, fallbackError)
 /**
  * getMessageFromCode & ERROR_CODES
  */
-// get the default message, or null if it does not exist, for the
-// given code
 import { getMessageFromCode, ERROR_CODES } from 'eth-json-rpc-errors'
-const message = getMessageFromCode(someCode) // string | null
+
+// get the default message string for the given code, or a fallback message if
+// no message exists for the given code
+const message = getMessageFromCode(someCode)
+
+// you can specify your own fallback message
+const message = getMessageFromCode(someCode, myFallback)
+// it can be anything, use at your own peril
+const message = getMessageFromCode(someCode, null)
 
 // {
 //   jsonRpc: { [errorName]: code, ... },
 //   eth: { [errorName]: code, ... },
 // }
 const code1 = ERROR_CODES.jsonRpc.parse
-const code2 = ERROR_CODES.eth.rejectedByUser
+const code2 = ERROR_CODES.eth.userRejectedRequest
 
 // all codes in ERROR_CODES have default messages
 const message1 = getMessageFromCode(code1)

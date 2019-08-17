@@ -30,5 +30,8 @@
     "eslint": "^6.1.0",
     "fast-deep-equal": "^2.0.1",
     "tape": "^4.11.0"
+  },
+  "dependencies": {
+    "fast-safe-stringify": "^2.0.6"
   }
 }

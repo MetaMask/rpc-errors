@@ -2,12 +2,10 @@
 const test = require('tape')
 const dequal = require('fast-deep-equal')
 
-const imports = require('../')
-const serializeError = imports.serializeError
+const { errors: rpcErrors, serializeError, ERROR_CODES } = require('../')
 const getMessageFromCode = require('../src/utils').getMessageFromCode
-const errors = imports.rpcErrors
 
-const jsonRpcCodes = require('../src/errorCodes.json').jsonRpc
+const jsonRpcCodes = ERROR_CODES.jsonRpc
 
 const dummyData = { foo: 'bar' }
 const dummyMessage = 'baz'
@@ -17,11 +15,13 @@ const invalidError1 = ['foo', 'bar', 3]
 const invalidError2 = { code: 34 }
 const invalidError3 = { code: 4001 }
 const invalidError4 = { code: 4001, message: 3, data: { ...dummyData } }
+const invalidError5 = null
+const invalidError6 = undefined
 
 const validError0 = { code: 4001, message: dummyMessage }
 const validError1 = { code: 4001, message: dummyMessage, data: { ...dummyData } }
-const validError2 = errors.parse()
-const validError3 = errors.parse(dummyMessage, { ...dummyData })
+const validError2 = rpcErrors.parse()
+const validError3 = rpcErrors.parse(dummyMessage, { ...dummyData })
 
 test('invalid error: non-object', t => {
   const result = serializeError(invalidError0)
@@ -32,6 +32,38 @@ test('invalid error: non-object', t => {
         code: jsonRpcCodes.internal,
         message: getMessageFromCode(jsonRpcCodes.internal),
         data: { originalError: invalidError0 }
+      }
+    ),
+    'serialized error matches expected result'
+  )
+  t.end()
+})
+
+test('invalid error: null', t => {
+  const result = serializeError(invalidError5)
+  t.ok(
+    dequal(
+      result,
+      {
+        code: jsonRpcCodes.internal,
+        message: getMessageFromCode(jsonRpcCodes.internal),
+        data: { originalError: invalidError5 }
+      }
+    ),
+    'serialized error matches expected result'
+  )
+  t.end()
+})
+
+test('invalid error: undefined', t => {
+  const result = serializeError(invalidError6)
+  t.ok(
+    dequal(
+      result,
+      {
+        code: jsonRpcCodes.internal,
+        message: getMessageFromCode(jsonRpcCodes.internal),
+        data: { originalError: invalidError6 }
       }
     ),
     'serialized error matches expected result'

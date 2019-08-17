@@ -7,7 +7,7 @@
       "internal": -32603
   },
   "eth": {
-    "rejectedByUser": 4001,
+    "userRejectedRequest": 4001,
     "unauthorized": 4100,
     "unsupportedMethod": 4200
   }

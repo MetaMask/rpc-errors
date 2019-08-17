@@ -2,14 +2,12 @@
 const test = require('tape')
 const dequal = require('fast-deep-equal')
 
-const imports = require('../')
-const errors = imports.rpcErrors
-const JsonRpcError = imports.JsonRpcError
-const EthJsonRpcError = imports.EthJsonRpcError
+const {
+  errors: rpcErrors, JsonRpcError, EthJsonRpcError, ERROR_CODES
+} = require('../')
 const getMessageFromCode = require('../src/utils').getMessageFromCode
-const CODES = require('../src/errorCodes.json')
-const jsonRpcCodes = CODES.jsonRpc
-const ethJsonRpcCodes = CODES.eth
+const jsonRpcCodes = ERROR_CODES.jsonRpc
+const ethJsonRpcCodes = ERROR_CODES.eth
 const serverErrorMessage = require('../src/utils').JSON_RPC_SERVER_ERROR_MESSAGE
 
 const jsonRpcCodeValues = Object.values(jsonRpcCodes)
@@ -25,42 +23,60 @@ const CUSTOM_ERROR_MESSAGE = 'foo'
 test('test exported object for correctness', t => {
 
   t.comment('Begin: JSON RPC 2.0')
-  Object.keys(errors).forEach(k => {
+  Object.keys(rpcErrors).forEach(k => {
     if (k !== 'eth') {
       if (k === 'server') {
-        validateError(t, errors[k](
-          SERVER_ERROR_CODE, null, { ...dummyData }), k, dummyData
+        validateError(
+          rpcErrors[k](SERVER_ERROR_CODE, null, { ...dummyData }),
+          k, dummyData, t
         )
-      } else validateError(t, errors[k](null, { ...dummyData }), k, dummyData)
+      } else validateError(
+        rpcErrors[k](null, { ...dummyData }),
+        k, dummyData, t
+      )
     }
   })
   t.comment('End: JSON RPC 2.0')
 
   t.comment('Begin: ETH JSON RPC')
-  Object.keys(errors.eth).forEach(k => {
-    if (k === 'nonStandard') {
-      validateError(t, errors.eth[k](
-        CUSTOM_ERROR_CODE, CUSTOM_ERROR_MESSAGE, { ...dummyData }), k, dummyData
+  Object.keys(rpcErrors.eth).forEach(k => {
+    if (k === 'custom') {
+      validateError(
+        rpcErrors.eth[k](
+          CUSTOM_ERROR_CODE, CUSTOM_ERROR_MESSAGE, { ...dummyData }
+        ),
+        k, dummyData, t, true
       )
     } else {
-      validateError(t, errors.eth[k](null, { ...dummyData }), k, dummyData)
+      validateError(
+        rpcErrors.eth[k](null, { ...dummyData }),
+        k, dummyData, t, true
+      )
     }
   })
   t.comment('End: ETH JSON RPC')
   t.end()
 })
 
-function validateError(t, err, key, data) {
+function validateError(err, key, data, t, isEth = false) {
 
   t.comment(`testing: ${key}`)
+  t.ok(
+    (
+      err instanceof Error &&
+      err instanceof JsonRpcError &&
+      isEth ? err instanceof EthJsonRpcError : true
+    ),
+    'error has correct inheritance'
+  )
   t.ok(Number.isInteger(err.code), 'code is an integer')
-  t.ok(typeof err.message === 'string', 'message is a string')
+  t.ok(err.message && typeof err.message === 'string', 'message is a string')
   t.ok(dequal(err.data, data), 'data is as provided')
 
   if (err instanceof EthJsonRpcError) {
     t.ok(err.code >= 1000 && err.code < 5000, 'code has valid value')
 
-    if (key === 'nonStandard') {
+    if (key === 'custom') {
       t.ok(
         err.code === CUSTOM_ERROR_CODE &&
         err.message === CUSTOM_ERROR_MESSAGE,

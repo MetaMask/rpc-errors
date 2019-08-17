@@ -1,6 +1,7 @@
 
 const errorValues = require('./errorValues.json')
 const FALLBACK_ERROR_CODE = require('./errorCodes.json').jsonRpc.internal
+const { JsonRpcError } = require('./classes')
 
 const JSON_RPC_SERVER_ERROR_MESSAGE = 'Unspecified server error.'
 
@@ -11,16 +12,14 @@ const FALLBACK_ERROR = {
   message: getMessageFromCode(FALLBACK_ERROR_CODE)
 }
 
-const isJsonRpcServerError = code => (
-  code >= -32099 && code <= -32000
-)
-
 /**
- * Gets the message for a given code.
- * @param  {} code
- * @param  {} fallbackMessage
+ * Gets the message for a given code, or a fallback message if the code has
+ * no corresponding message.
+ * @param {number} code - The integer error code.
+ * @param {string} fallbackMessage - The fallback message.
+ * @return {string} The corresponding message or the fallback message.
  */
-function getMessageFromCode(code, fallbackMessage) {
+function getMessageFromCode(code, fallbackMessage = FALLBACK_MESSAGE) {
 
   if (Number.isInteger(code)) {
 
@@ -33,13 +32,14 @@ function getMessageFromCode(code, fallbackMessage) {
     // // EIP 1193 Status Codes
     // if (code >= 4000 && code <= 4999) return Something?
   }
-  return fallbackMessage || FALLBACK_MESSAGE
+  return fallbackMessage
 }
 
 /**
  * Returns whether the given code is valid.
  * A code is only valid if it has a message.
- * @param  {number} code the code to check
+ * @param {number} code - The code to check
+ * @return {boolean} true if the code is valid, false otherwise.
  */
 function isValidCode(code) {
 
@@ -58,15 +58,16 @@ function isValidCode(code) {
 }
 
 /**
- * Serializes the given error to a ETH JSON RPC-compatible error object.
+ * Serializes the given error to an ETH JSON RPC-compatible error object.
  * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.originalError property.
- * Non-standard: adds a 'stack' property if it exists on the given error.
+ * Adds a 'stack' property if it exists on the given error.
  *
- * @param  {object} error the error to serialize
- * @param  {object} fallbackError custom fallback error values if the given
- * error is invalid
+ * @param {any} error - The error to serialize.
+ * @param {object} fallbackError - The custom fallback error values if the
+ * given error is invalid.
+ * @return {object} A standardized error object.
  */
 function serializeError (error, fallbackError = FALLBACK_ERROR) {
 
@@ -80,13 +81,17 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
     )
   }
 
+  if (typeof error === 'object' && error instanceof JsonRpcError) {
+    return error.serialize()
+  }
+
   const serialized = {}
 
-  if (isValidCode(error.code)) {
+  if (error && isValidCode(error.code)) {
 
     serialized.code = error.code
 
-    if (typeof error.message === 'string') {
+    if (error.message && typeof error.message === 'string') {
       serialized.message = error.message
       if (error.hasOwnProperty('data')) serialized.data = error.data
     } else {
@@ -100,16 +105,24 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
     serialized.data = { originalError: assignOriginalError(error) }
   }
 
-  if (error.stack) serialized.stack = error.stack
+  if (error && error.stack) serialized.stack = error.stack
   return serialized
 }
 
+// Internal
+
+function isJsonRpcServerError (code) {
+  return code >= -32099 && code <= -32000
+}
+
 function assignOriginalError (error) {
-  if (typeof error === 'object' && !Array.isArray(error)) {
+  if (error && typeof error === 'object' && !Array.isArray(error)) {
     return Object.assign({}, error)
   }
   return error
 }
+
+// Exports
 
 module.exports = {
   getMessageFromCode,
