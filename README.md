@@ -2,8 +2,6 @@
 
 Errors for [JSON RPC 2.0](https://www.jsonrpc.org/specification) and [ETH JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC).
 
-**Warning:** In beta. Wait for `1.0.0` release before using in production.
-
 ## Supported Errors
 
 - All [JSON RPC 2.0](https://www.jsonrpc.org/specification) errors (see *"5.1 Error object"*)
@@ -20,7 +18,7 @@ Import using ES6 syntax (no default) or Node `require`.
 ### Errors API
 
 ```js
-import { rpcErrors } from 'eth-json-rpc-errors'
+import { errors as rpcErrors } from 'eth-json-rpc-errors'
 
 // standard JSON RPC 2.0 errors namespaced directly under rpcErrors
 response.error = rpcErrors.methodNotFound(
@@ -98,12 +96,12 @@ import { getMessageFromCode, ERROR_CODES } from 'eth-json-rpc-errors'
 
 // get the default message string for the given code, or a fallback message if
 // no message exists for the given code
-const message = getMessageFromCode(someCode)
+const message1 = getMessageFromCode(someCode)
 
 // you can specify your own fallback message
-const message = getMessageFromCode(someCode, myFallback)
+const message2 = getMessageFromCode(someCode, myFallback)
 // it can be anything, use at your own peril
-const message = getMessageFromCode(someCode, null)
+const message3 = getMessageFromCode(someCode, null)
 
 // {
 //   jsonRpc: { [errorName]: code, ... },
@@ -113,8 +111,8 @@ const code1 = ERROR_CODES.jsonRpc.parse
 const code2 = ERROR_CODES.eth.userRejectedRequest
 
 // all codes in ERROR_CODES have default messages
-const message1 = getMessageFromCode(code1)
-const message2 = getMessageFromCode(code2)
+const message4 = getMessageFromCode(code1)
+const message5 = getMessageFromCode(code2)
 ```
 
 ## License
