@@ -101,7 +101,11 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
 
   } else {
     serialized.code = fallbackError.code
-    serialized.message = fallbackError.message
+    serialized.message = (
+      error && error.message
+        ? error.message
+        : fallbackError.message
+    )
     serialized.data = { originalError: assignOriginalError(error) }
   }
 
