@@ -17,6 +17,7 @@ const invalidError3 = { code: 4001 }
 const invalidError4 = { code: 4001, message: 3, data: { ...dummyData } }
 const invalidError5 = null
 const invalidError6 = undefined
+const invalidError7 = { code: 34, message: dummyMessage , data: { ...dummyData } }
 
 const validError0 = { code: 4001, message: dummyMessage }
 const validError1 = { code: 4001, message: dummyMessage, data: { ...dummyData } }
@@ -128,6 +129,22 @@ test('invalid error: non-string message with data', t => {
         code: 4001,
         message: getMessageFromCode(4001),
         data: { originalError: { ...invalidError4 } }
+      }
+    ),
+    'serialized error matches expected result'
+  )
+  t.end()
+})
+
+test('invalid error: invalid code with string message', t => {
+  const result = serializeError(invalidError7)
+  t.ok(
+    dequal(
+      result,
+      {
+        code: jsonRpcCodes.internal,
+        message: dummyMessage,
+        data: { originalError: { ...invalidError7 } }
       }
     ),
     'serialized error matches expected result'
