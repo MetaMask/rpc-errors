@@ -1,142 +1,249 @@
 
-const { JsonRpcError, EthJsonRpcError } = require('./classes')
+const { EthereumRpcError, EthereumProviderError } = require('./classes')
 const { getMessageFromCode } = require('./utils')
 const ERROR_CODES = require('./errorCodes.json')
 
 module.exports = {
-  /**
-   * Get a JSON RPC 2.0 Parse error.
-   * @param {string} [message] - A custom message.
-   * @param {any} [data] - Error data.
-   * @return {JsonRpcError} The error.
-   */
-  parse: (message, data) => getJsonRpcError(
-    ERROR_CODES.jsonRpc.parse, message, data
-  ),
+  rpc: {
+    /**
+     * Get a JSON RPC 2.0 Parse error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    parse: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.parse, opts
+    ),
 
-  /**
-   * Get a JSON RPC 2.0 Invalid Request error.
-   * @param {string} [message] - A custom message.
-   * @param {any} [data] - Error data.
-   * @return {JsonRpcError} The error.
-   */
-  invalidRequest: (message, data) => getJsonRpcError(
-    ERROR_CODES.jsonRpc.invalidRequest, message, data
-  ),
+    /**
+     * Get a JSON RPC 2.0 Invalid Request error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    invalidRequest: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.invalidRequest, opts
+    ),
 
-  /**
-   * Get a JSON RPC 2.0 Invalid Params error.
-   * @param {string} [message] - A custom message.
-   * @param {any} [data] - Error data.
-   * @return {JsonRpcError} The error.
-   */
-  invalidParams: (message, data) => getJsonRpcError(
-    ERROR_CODES.jsonRpc.invalidParams, message, data
-  ),
+    /**
+     * Get a JSON RPC 2.0 Invalid Params error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    invalidParams: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.invalidParams, opts
+    ),
 
-  /**
-   * Get a JSON RPC 2.0 Method Not Found error.
-   * @param {string} [message] - A custom message.
-   * @param {any} [data] - Error data.
-   * @return {JsonRpcError} The error.
-   */
-  methodNotFound: (message, data) => getJsonRpcError(
-    ERROR_CODES.jsonRpc.methodNotFound, message, data
-  ),
+    /**
+     * Get a JSON RPC 2.0 Method Not Found error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    methodNotFound: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.methodNotFound, opts
+    ),
 
-  /**
-   * Get a JSON RPC 2.0 Internal error.
-   * @param {string} [message] - A custom message.
-   * @param {any} [data] - Error data.
-   * @return {JsonRpcError} The error.
-   */
-  internal: (message, data) => getJsonRpcError(
-    ERROR_CODES.jsonRpc.internal, message, data
-  ),
+    /**
+     * Get a JSON RPC 2.0 Internal error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    internal: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.internal, opts
+    ),
 
-  /**
-   * Get a JSON RPC 2.0 Server error.
-   * Permits integer error codes in the [ -32099 <= -32000 ] range.
-   * @param {number} code - The integer error code.
-   * @param {string} [message] - A custom message.
-   * @param {any} [data] - Error data.
-   * @return {JsonRpcError} The error.
-   */
-  server: (code, message, data) => {
-    if (!Number.isInteger(code) || code > -32000 || code < -32099) {
-      throw new Error(
-        '"code" must be an integer such that: -32099 <= code <= -32000'
-      )
-    }
-    return getJsonRpcError(code, message, data)
+    /**
+     * Get a JSON RPC 2.0 Server error.
+     * Permits integer error codes in the [ -32099 <= -32005 ] range.
+     * Codes -32000 through -32004 are reserved by EIP 1474.
+     * 
+     * @param {Object|string} opts - Options object
+     * @param {number} opts.code - The error code
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    server: (opts) => {
+      if (typeof opts !== 'object' || Array.isArray(opts)) {
+        throw new Error('Ethereum RPC Server errors must provide single object argument.')
+      }
+      const { code } = opts
+      if (!Number.isInteger(code) || code > -32005 || code < -32099) {
+        throw new Error(
+          '"code" must be an integer such that: -32099 <= code <= -32005'
+        )
+      }
+      return getEthJsonRpcError(code, opts)
+    },
+
+    /**
+     * Get an Ethereum JSON RPC Invalid Input error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    invalidInput: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.invalidInput, opts
+    ),
+
+    /**
+     * Get an Ethereum JSON RPC Resource Not Found error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    resourceNotFound: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.resourceNotFound, opts
+    ),
+
+    /**
+     * Get an Ethereum JSON RPC Resource Unavailable error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    resourceUnavailable: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.resourceUnavailable, opts
+    ),
+
+    /**
+     * Get an Ethereum JSON RPC Transaction Rejected error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    transactionRejected: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.transactionRejected, opts
+    ),
+
+    /**
+     * Get an Ethereum JSON RPC Method Not Supported error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
+     */
+    methodNotSupported: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.methodNotSupported, opts
+    ),
   },
-  eth: {
+
+  provider: {
     /**
-     * Get an Ethereum JSON RPC User Rejected Request error.
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthJsonRpcError} The error.
+     * Get an Ethereum Provider User Rejected Request error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} - The error
      */
-    userRejectedRequest: (message, data) => {
-      return getEthJsonRpcError(
-        ERROR_CODES.eth.userRejectedRequest, message, data
+    userRejectedRequest: (opts) => {
+      return getEthProviderError(
+        ERROR_CODES.provider.userRejectedRequest, opts
       )
     },
 
     /**
-     * Get an Ethereum JSON RPC Unauthorized error.
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthJsonRpcError} The error.
+     * Get an Ethereum Provider Unauthorized error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} - The error
      */
-    unauthorized: (message, data) => {
-      return getEthJsonRpcError(
-        ERROR_CODES.eth.unauthorized, message, data
+    unauthorized: (opts) => {
+      return getEthProviderError(
+        ERROR_CODES.provider.unauthorized, opts
       )
     },
 
     /**
-     * Get an Ethereum JSON RPC Unsupported Method error.
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthJsonRpcError} The error.
+     * Get an Ethereum Provider Unsupported Method error.
+     * 
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} - The error
      */
-    unsupportedMethod: (message, data) => {
-      return getEthJsonRpcError(
-        ERROR_CODES.eth.unsupportedMethod, message, data
+    unsupportedMethod: (opts) => {
+      return getEthProviderError(
+        ERROR_CODES.provider.unsupportedMethod, opts
       )
     },
 
     /**
-     * Get a custom Ethereum JSON RPC error.
-     * @param {string} code - The error code.
-     * @param {string} message - The error message.
-     * @param {any} [data] - Error data.
-     * @return {EthJsonRpcError} The error.
+     * Get a custom Ethereum Provider error.
+     * 
+     * @param {Object|string} opts - Options object
+     * @param {number} opts.code - The error code
+     * @param {string} opts.message - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} - The error
      */
-    custom: (code, message, data) => {
+    custom: (opts) => {
+      if (typeof opts !== 'object' || Array.isArray(opts)) {
+        throw new Error('Ethereum Provider custom errors must provide single object argument.')
+      }
+      const { code, message, data } = opts
       if (!message || typeof message !== 'string') throw new Error(
         '"message" must be a nonempty string'
       )
-      return new EthJsonRpcError(code, message, data)
+      return new EthereumProviderError(code, message, data)
     },
   },
 }
 
 // Internal
 
-function getJsonRpcError(code, message, data) {
-  return new JsonRpcError(
+function getEthJsonRpcError(code, opts) {
+  const [ message, data ] = validateOpts(opts)
+  return new EthereumRpcError(
     code,
     message || getMessageFromCode(code),
     data
   )
 }
 
-function getEthJsonRpcError(code, message, data) {
-  return new EthJsonRpcError(
+function getEthProviderError(code, opts) {
+  const [ message, data ] = validateOpts(opts)
+  return new EthereumProviderError(
     code,
     message || getMessageFromCode(code),
     data
   )
+}
+
+function validateOpts (opts) {
+  let message, data
+  if (opts) {
+    if (typeof opts === 'string') {
+      message = opts
+    } else if (opts && typeof opts === 'object' && !Array.isArray(opts)) {
+      message = opts.message
+      data = opts.data
+    }
+  }
+  return [ message, data ]
 }

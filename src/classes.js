@@ -3,13 +3,15 @@ const safeStringify = require('fast-safe-stringify')
 
 /**
  * @class JsonRpcError
- * Error subclass implementing JSON RPC 2.0 errors.
+ * Error subclass implementing JSON RPC 2.0 errors and Ethereum RPC errors
+ * per EIP 1474.
  * Permits any integer error code.
  */
-class JsonRpcError extends Error {
+class EthereumRpcError extends Error {
 
   /**
-   * Create a JSON RPC error.
+   * Create an Ethereum JSON RPC error.
+   * 
    * @param {number} code - The integer error code.
    * @param {string} message - The string message.
    * @param {any} [data] - The error data.
@@ -30,6 +32,7 @@ class JsonRpcError extends Error {
 
   /**
    * Returns a plain object with all public class properties.
+   * 
    * @returns {object} The serialized error. 
    */
   serialize() {
@@ -45,6 +48,7 @@ class JsonRpcError extends Error {
   /**
    * Return a string representation of the serialized error, omitting
    * any circular references.
+   * 
    * @returns {string} The serialized error as a string.
    */
   toString() {
@@ -57,19 +61,20 @@ class JsonRpcError extends Error {
 }
 
 /**
- * @class EthJsonRpcError
- * Error subclass implementing Ethereum JSON RPC errors.
+ * @class EthereumRpcError
+ * Error subclass implementing Ethereum Provider errors per EIP 1193.
  * Permits integer error codes in the [ 1000 <= 4999 ] range.
  */
-class EthJsonRpcError extends JsonRpcError {
+class EthereumProviderError extends EthereumRpcError {
   /**
    * Create an Ethereum JSON RPC error.
+   * 
    * @param {number} code - The integer error code, in the [ 1000 <= 4999 ] range.
    * @param {string} message - The string message.
    * @param {any} [data] - The error data.
    */
   constructor(code, message, data) {
-    if (!isValidEthCode(code)) {
+    if (!isValidEthProviderCode(code)) {
       throw new Error(
         '"code" must be an integer such that: 1000 <= code <= 4999'
       )
@@ -80,7 +85,7 @@ class EthJsonRpcError extends JsonRpcError {
 
 // Internal
 
-function isValidEthCode(code) {
+function isValidEthProviderCode(code) {
   return Number.isInteger(code) && code >= 1000 && code <= 4999
 }
 
@@ -94,6 +99,6 @@ function stringifyReplacer(_, value) {
 // Exports
 
 module.exports =  {
-  JsonRpcError,
-  EthJsonRpcError,
+  EthereumRpcError,
+  EthereumProviderError
 }

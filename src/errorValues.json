@@ -19,6 +19,26 @@
     "standard": "JSON RPC 2.0",
     "message": "Internal JSON-RPC error."
   },
+  "-32000": {
+    "standard": "EIP 1474",
+    "message": "Invalid input."
+  },
+  "-32001": {
+    "standard": "EIP 1474",
+    "message": "Resource not found."
+  },
+  "-32002": {
+    "standard": "EIP 1474",
+    "message": "Resource unavailable."
+  },
+  "-32003": {
+    "standard": "EIP 1474",
+    "message": "Transaction rejected."
+  },
+  "-32004": {
+    "standard": "EIP 1474",
+    "message": "Method not supported."
+  },
   "4001": {
     "standard": "EIP 1193",
     "message": "User rejected the request."
