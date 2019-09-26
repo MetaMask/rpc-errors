@@ -1,11 +1,11 @@
 
 const errorValues = require('./errorValues.json')
-const FALLBACK_ERROR_CODE = require('./errorCodes.json').jsonRpc.internal
-const { JsonRpcError } = require('./classes')
+const FALLBACK_ERROR_CODE = require('./errorCodes.json').rpc.internal
+const { EthereumRpcError } = require('./classes')
 
 const JSON_RPC_SERVER_ERROR_MESSAGE = 'Unspecified server error.'
 
-const FALLBACK_MESSAGE = 'Unspecified error message. This is  bug, please report it.'
+const FALLBACK_MESSAGE = 'Unspecified error message. This is a bug, please report it.'
 
 const FALLBACK_ERROR = {
   code: FALLBACK_ERROR_CODE,
@@ -15,6 +15,7 @@ const FALLBACK_ERROR = {
 /**
  * Gets the message for a given code, or a fallback message if the code has
  * no corresponding message.
+ * 
  * @param {number} code - The integer error code.
  * @param {string} fallbackMessage - The fallback message.
  * @return {string} The corresponding message or the fallback message.
@@ -38,6 +39,7 @@ function getMessageFromCode(code, fallbackMessage = FALLBACK_MESSAGE) {
 /**
  * Returns whether the given code is valid.
  * A code is only valid if it has a message.
+ * 
  * @param {number} code - The code to check
  * @return {boolean} true if the code is valid, false otherwise.
  */
@@ -58,7 +60,7 @@ function isValidCode(code) {
 }
 
 /**
- * Serializes the given error to an ETH JSON RPC-compatible error object.
+ * Serializes the given error to an Ethereum JSON RPC-compatible error object.
  * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.originalError property.
@@ -81,7 +83,7 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
     )
   }
 
-  if (typeof error === 'object' && error instanceof JsonRpcError) {
+  if (typeof error === 'object' && error instanceof EthereumRpcError) {
     return error.serialize()
   }
 

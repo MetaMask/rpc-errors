@@ -2,10 +2,10 @@
 const test = require('tape')
 const dequal = require('fast-deep-equal')
 
-const { errors: rpcErrors, serializeError, ERROR_CODES } = require('../')
+const { ethErrors, serializeError, ERROR_CODES } = require('../')
 const getMessageFromCode = require('../src/utils').getMessageFromCode
 
-const jsonRpcCodes = ERROR_CODES.jsonRpc
+const rpcCodes = ERROR_CODES.rpc
 
 const dummyData = { foo: 'bar' }
 const dummyMessage = 'baz'
@@ -21,8 +21,12 @@ const invalidError7 = { code: 34, message: dummyMessage , data: { ...dummyData }
 
 const validError0 = { code: 4001, message: dummyMessage }
 const validError1 = { code: 4001, message: dummyMessage, data: { ...dummyData } }
-const validError2 = rpcErrors.parse()
-const validError3 = rpcErrors.parse(dummyMessage, { ...dummyData })
+const validError2 = ethErrors.rpc.parse()
+const validError3 = ethErrors.rpc.parse(dummyMessage)
+const validError4 = ethErrors.rpc.parse({
+  message: dummyMessage,
+  data: { ...dummyData }
+})
 
 test('invalid error: non-object', t => {
   const result = serializeError(invalidError0)
@@ -30,8 +34,8 @@ test('invalid error: non-object', t => {
     dequal(
       result,
       {
-        code: jsonRpcCodes.internal,
-        message: getMessageFromCode(jsonRpcCodes.internal),
+        code: rpcCodes.internal,
+        message: getMessageFromCode(rpcCodes.internal),
         data: { originalError: invalidError0 }
       }
     ),
@@ -46,8 +50,8 @@ test('invalid error: null', t => {
     dequal(
       result,
       {
-        code: jsonRpcCodes.internal,
-        message: getMessageFromCode(jsonRpcCodes.internal),
+        code: rpcCodes.internal,
+        message: getMessageFromCode(rpcCodes.internal),
         data: { originalError: invalidError5 }
       }
     ),
@@ -62,8 +66,8 @@ test('invalid error: undefined', t => {
     dequal(
       result,
       {
-        code: jsonRpcCodes.internal,
-        message: getMessageFromCode(jsonRpcCodes.internal),
+        code: rpcCodes.internal,
+        message: getMessageFromCode(rpcCodes.internal),
         data: { originalError: invalidError6 }
       }
     ),
@@ -78,8 +82,8 @@ test('invalid error: array', t => {
     dequal(
       result,
       {
-        code: jsonRpcCodes.internal,
-        message: getMessageFromCode(jsonRpcCodes.internal),
+        code: rpcCodes.internal,
+        message: getMessageFromCode(rpcCodes.internal),
         data: { originalError: invalidError1 }
       }
     ),
@@ -94,8 +98,8 @@ test('invalid error: invalid code', t => {
     dequal(
       result,
       {
-        code: jsonRpcCodes.internal,
-        message: getMessageFromCode(jsonRpcCodes.internal),
+        code: rpcCodes.internal,
+        message: getMessageFromCode(rpcCodes.internal),
         data: { originalError: { ...invalidError2 } }
       }
     ),
@@ -142,7 +146,7 @@ test('invalid error: invalid code with string message', t => {
     dequal(
       result,
       {
-        code: jsonRpcCodes.internal,
+        code: rpcCodes.internal,
         message: dummyMessage,
         data: { originalError: { ...invalidError7 } }
       }
@@ -189,8 +193,8 @@ test('valid error: instantiated error', t => {
     dequal(
       result,
       {
-        code: jsonRpcCodes.parse,
-        message: getMessageFromCode(jsonRpcCodes.parse),
+        code: rpcCodes.parse,
+        message: getMessageFromCode(rpcCodes.parse),
         stack: validError2.stack,
       }
     ),
@@ -199,16 +203,32 @@ test('valid error: instantiated error', t => {
   t.end()
 })
 
-test('valid error: instantiated error with custom message and data', t => {
+test('valid error: instantiated error', t => {
   const result = serializeError(validError3)
   t.ok(
     dequal(
       result,
       {
-        code: jsonRpcCodes.parse,
-        message: validError3.message,
-        data: { ...validError3.data },
+        code: rpcCodes.parse,
+        message: dummyMessage,
         stack: validError3.stack,
+      }
+    ),
+    'serialized error matches expected result'
+  )
+  t.end()
+})
+
+test('valid error: instantiated error with custom message and data', t => {
+  const result = serializeError(validError4)
+  t.ok(
+    dequal(
+      result,
+      {
+        code: rpcCodes.parse,
+        message: validError4.message,
+        data: { ...validError4.data },
+        stack: validError4.stack,
       }
     ),
     'serialized error matches expected result'

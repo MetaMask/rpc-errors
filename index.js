@@ -1,15 +1,15 @@
 
-const { JsonRpcError, EthJsonRpcError } = require('./src/classes')
+const { EthereumRpcError, EthereumProviderError } = require('./src/classes')
 const {
   serializeError, getMessageFromCode,
 } = require('./src/utils')
-const errors = require('./src/errors')
+const ethErrors = require('./src/errors')
 const ERROR_CODES = require('./src/errorCodes.json')
 
 module.exports = {
-  errors,
-  JsonRpcError,
-  EthJsonRpcError,
+  ethErrors,
+  EthereumRpcError,
+  EthereumProviderError,
   serializeError,
   getMessageFromCode,
   /** @type ErrorCodes */
@@ -19,23 +19,28 @@ module.exports = {
 // Types
 
 /**
- * @typedef {Object} EthJsonRpcErrorCodes
+ * @typedef {Object} EthereumProviderErrorCodes
  * @property {number} userRejectedRequest
  * @property {number} unauthorized
  * @property {number} unsupportedMethod
  */
 
 /**
- * @typedef {Object} JsonRpcErrorCodes
+ * @typedef {Object} EthereumRpcErrorCodes
  * @property {number} parse
  * @property {number} invalidRequest
  * @property {number} invalidParams
  * @property {number} methodNotFound
  * @property {number} internal
+ * @property {number} invalidInput
+ * @property {number} resourceNotFound
+ * @property {number} resourceUnavailable
+ * @property {number} transactionRejected
+ * @property {number} methodNotSupported
  */
 
 /**
  * @typedef ErrorCodes
- * @property {JsonRpcErrorCodes} jsonRpc
- * @property {EthJsonRpcErrorCodes} eth
+ * @property {EthereumRpcErrorCodes} rpc
+ * @property {EthereumProviderErrorCodes} provider
  */
