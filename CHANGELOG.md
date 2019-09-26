@@ -27,7 +27,7 @@
       - `ethErrors.provider.custom` must receive a single of the form:
         - `{ code: number, message: string, data?: any }
 - **TypeScript**
-  - Updated affected TypeScript interfaces
+  - Updated affected interfaces
 
 ## 1.1.0
 - `serializeError`
