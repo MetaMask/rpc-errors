@@ -6,6 +6,8 @@
   - `JsonRpcError` renamed `EthereumRpcError`
   - `EthJsonRpcError` renamed `EthereumProviderError`
     - It is still a subclass of `EthereumRpcError`
+  - **TypeScript**
+    - Renamed affected interfaces
 - `ethErrors`
   - Added missing
   [EIP 1474 errors](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md)
@@ -25,7 +27,7 @@
       - `ethErrors.provider.custom` must receive a single of the form:
         - `{ code: number, message: string, data?: any }
 - **TypeScript**
-  - Updated affected TypeScript interfaces and names
+  - Updated affected TypeScript interfaces
 
 ## 1.1.0
 - `serializeError`
