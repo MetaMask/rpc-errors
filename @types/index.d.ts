@@ -10,6 +10,20 @@ export interface IEthereumProviderError<T> extends IEthereumRpcError<T> {}
 
 type DefaultError = { code: number, message: string }
 
+export interface IErrorOptions {
+  message?: string | null,
+  data?: any,
+}
+
+export interface IRpcServerErrorOptions extends IErrorOptions {
+  code: number,
+}
+
+export interface IProviderCustomErrorOptions extends IErrorOptions {
+  code: number,
+  message: string,
+}
+
 export interface ISerializeError {
   (error: any, fallbackError?: DefaultError): IEthereumRpcError<any>
 }
@@ -18,25 +32,25 @@ export interface IGetMessageFromCode {
   (error: any, fallbackMessage?: string): string
 }
 
-export interface IRpcErrors {
+export interface IEthErrors {
   rpc: {
-    invalidInput: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    resourceNotFound: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    resourceUnavailable: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    transactionRejected: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    methodNotSupported: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    parse: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    invalidRequest: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    invalidParams: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    methodNotFound: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    internal: (message?: string | null, data?: any) => IEthereumRpcError<any>,
-    server: (code: number, message?: string | null, data?: any) => IEthereumRpcError<any>,
+    invalidInput: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    resourceNotFound: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    resourceUnavailable: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    transactionRejected: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    methodNotSupported: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    parse: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    invalidRequest: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    invalidParams: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    methodNotFound: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    internal: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    server: (opts: IRpcServerErrorOptions) => IEthereumRpcError<any>,
   },
   provider: {
-    userRejectedRequest: (message?: string | null, data?: any) => IEthereumProviderError<any>,
-    unauthorized: (message?: string | null, data?: any) => IEthereumProviderError<any>,
-    unsupportedMethod: (message?: string | null, data?: any) => IEthereumProviderError<any>,
-    custom: (code: number, message: string | null, data?: any) => IEthereumProviderError<any>,
+    userRejectedRequest: (opts?: string | IErrorOptions) => IEthereumProviderError<any>,
+    unauthorized: (opts?: string | IErrorOptions) => IEthereumProviderError<any>,
+    unsupportedMethod: (opts?: string | IErrorOptions) => IEthereumProviderError<any>,
+    custom: (opts: IProviderCustomErrorOptions) => IEthereumProviderError<any>,
   }
 }
 

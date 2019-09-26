@@ -1,74 +1,80 @@
 # eth-json-rpc-errors
 
-Errors for [JSON RPC 2.0](https://www.jsonrpc.org/specification) and [ETH JSON RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC).
+Errors for the
+[Ethereum JSON RPC](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md) 
+and
+[Ethereum Provider](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md),
+and [making unknown errors compliant with either spec](#parsing-unknown-errors).
+
+## Basic Usage
+```js
+import { ethErrors } from 'eth-json-rpc-errors'
+
+throw ethErrors.provider.unauthorized()
+// or
+throw ethErrors.provider.unauthorized('my custom message')
+```
 
 ## Supported Errors
 
-- All [JSON RPC 2.0](https://www.jsonrpc.org/specification) errors (see *"5.1 Error object"*)
-- ETH JSON RPC
-  - Proposed errors in [EIP 1193](https://eips.ethereum.org/EIPS/eip-1193) (see *"Error object and codes"*)
+- Ethereum JSON RPC
+  - Per [EIP 1474](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md#error-codes)
+    - This includes all
+    [JSON RPC 2.0 errors](https://www.jsonrpc.org/specification#error_object)
+- Ethereum Provider errors
+  - Per [EIP 1193](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md#error-object-and-codes)
     - Does **not** yet support [`CloseEvent` errors or status codes](https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes).
 
 ## Usage
 
 Installation: `npm install eth-json-rpc-errors`
 
-Import using ES6 syntax (no default) or Node `require`.
+Import using ES6 syntax (no default export) or Node `require`.
 
 ### Errors API
 
 ```js
-import { errors as ethErrors } from 'eth-json-rpc-errors'
+import { ethErrors } from 'eth-json-rpc-errors'
 
-// standard JSON RPC 2.0 errors namespaced directly under ethErrors
-response.error = ethErrors.rpc.methodNotFound(
-  optionalCustomMessage, optionalData
-)
+// Ethereum RPC errors are namespaced under "ethErrors.rpc"
+response.error = ethErrors.rpc.methodNotFound({
+  message: optionalCustomMessage, data: optionalData
+})
 
 // ETH JSON RPC errors namespaced under ethErrors.provider
-response.error = ethErrors.provider.unauthorized(
-  optionalCustomMessage, optionalData
-)
+response.error = ethErrors.provider.unauthorized({
+  message: optionalCustomMessage, data: optionalData
+})
 
-// the message can be falsy or a string
-// a falsy message will produce an error with a default message
-response.error = ethErrors.provider.unauthorized(null, optionalData)
+// each error getter takes a single "opts" argument
+// for most errors, this can be replaced with a single string, which becomes
+// the error message
+response.error = ethErrors.provider.unauthorized(customMessage)
+
+// if an error getter accepts a single string, all arguments can be omitted
+response.error = ethErrors.provider.unauthorized()
+response.error = ethErrors.provider.unauthorized({})
+
+// omitting the message will produce an error with a default message per
+// the relevant spec
 
 // omitting the data argument will produce an error without a
 // "data" property
-response.error = ethErrors.provider.unauthorized(optionalCustomMessage)
-
-// both arguments can be omitted for almost all errors
-response.error = ethErrors.provider.unauthorized()
-response.error = ethErrors.rpc.methodNotFound()
 
 // the JSON RPC 2.0 server error requires a valid code
-response.error = ethErrors.rpc.server(
-  -32031, optionalCustomMessage, optionalData
-)
+response.error = ethErrors.rpc.server({
+  code: -32031
+})
 
-// there's an option for custom ETH errors
-// it requires a valid code and a string message
+// custom Ethereum Provider errors require a valid code and message
 // valid codes are integers i such that: 1000 <= i <= 4999
-response.error = ethErrors.provider.custom(
-  1001, requiredMessage, optionalData
-)
+response.error = ethErrors.provider.custom({
+  code: 1001, message: 'foo'
+})
 ```
 
-### Other Exports
+### Parsing Unknown Errors
 ```js
-/**
- * TypeScript interfaces
- */
-import {
-  IRpcErrors, IJsonRpcError, IEthJsonRpcError, ISerializeError
-} from 'eth-json-rpc-errors/@types'
-
-/**
- * Classes
- */
-import { JsonRpcError, EthereumRpcError } from 'eth-json-rpc-errors'
-
 /**
  * serializeError
  */
@@ -79,15 +85,36 @@ import { serializeError } from 'eth-json-rpc-errors'
 // it will be added as error.data.originalError
 response.error = serializeError(maybeAnError)
 
-// you can add a custom fallback error code and message if the 
+// you can add a custom fallback error code and message if desired 
 const fallbackError = { code: 4999, message: 'My custom error.' }
 response.error = serializeError(maybeAnError, fallbackError)
+
+// Note: if the original error has a "message" property, it will take
+// precedence over the fallback error's message
 
 // the default fallback is:
 {
   code: -32603,
   message: 'Internal JSON-RPC error.'
 }
+```
+
+### Other Exports
+```js
+/**
+ * TypeScript interfaces
+ */
+import {
+  // these describe to the corresponding exports from index.js
+  IEthErrors, IEthereumRpcError, IEthereumProviderError, ISerializeError,
+  // these describe the options argument to error getters in ethErrors 
+  IErrorOptions, IRpcServerErrorOptions, IProviderCustomErrorOptions
+} from 'eth-json-rpc-errors/@types'
+
+/**
+ * Classes
+ */
+import { EthereumRpcError, EthereumProviderError } from 'eth-json-rpc-errors'
 
 /**
  * getMessageFromCode & ERROR_CODES

@@ -8,9 +8,10 @@ module.exports = {
     /**
      * Get a JSON RPC 2.0 Parse error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     parse: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.parse, opts
@@ -19,9 +20,10 @@ module.exports = {
     /**
      * Get a JSON RPC 2.0 Invalid Request error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     invalidRequest: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.invalidRequest, opts
@@ -30,9 +32,10 @@ module.exports = {
     /**
      * Get a JSON RPC 2.0 Invalid Params error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     invalidParams: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.invalidParams, opts
@@ -41,9 +44,10 @@ module.exports = {
     /**
      * Get a JSON RPC 2.0 Method Not Found error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     methodNotFound: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.methodNotFound, opts
@@ -52,9 +56,10 @@ module.exports = {
     /**
      * Get a JSON RPC 2.0 Internal error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     internal: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.internal, opts
@@ -65,10 +70,11 @@ module.exports = {
      * Permits integer error codes in the [ -32099 <= -32005 ] range.
      * Codes -32000 through -32004 are reserved by EIP 1474.
      * 
-     * @param {number} [code] - The integer error code.
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} opts - Options object
+     * @param {number} opts.code - The error code
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     server: (opts) => {
       if (typeof opts !== 'object' || Array.isArray(opts)) {
@@ -86,9 +92,10 @@ module.exports = {
     /**
      * Get an Ethereum JSON RPC Invalid Input error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     invalidInput: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.invalidInput, opts
@@ -97,9 +104,10 @@ module.exports = {
     /**
      * Get an Ethereum JSON RPC Resource Not Found error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     resourceNotFound: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.resourceNotFound, opts
@@ -108,9 +116,10 @@ module.exports = {
     /**
      * Get an Ethereum JSON RPC Resource Unavailable error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     resourceUnavailable: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.resourceUnavailable, opts
@@ -119,9 +128,10 @@ module.exports = {
     /**
      * Get an Ethereum JSON RPC Transaction Rejected error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     transactionRejected: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.transactionRejected, opts
@@ -130,9 +140,10 @@ module.exports = {
     /**
      * Get an Ethereum JSON RPC Method Not Supported error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumRpcError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} - The error
      */
     methodNotSupported: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.methodNotSupported, opts
@@ -143,9 +154,10 @@ module.exports = {
     /**
      * Get an Ethereum Provider User Rejected Request error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumProviderError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} - The error
      */
     userRejectedRequest: (opts) => {
       return getEthProviderError(
@@ -156,9 +168,10 @@ module.exports = {
     /**
      * Get an Ethereum Provider Unauthorized error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumProviderError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} - The error
      */
     unauthorized: (opts) => {
       return getEthProviderError(
@@ -169,9 +182,10 @@ module.exports = {
     /**
      * Get an Ethereum Provider Unsupported Method error.
      * 
-     * @param {string} [message] - A custom message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumProviderError} The error.
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} - The error
      */
     unsupportedMethod: (opts) => {
       return getEthProviderError(
@@ -180,12 +194,13 @@ module.exports = {
     },
 
     /**
-     * Get a custom Ethereum provider error.
+     * Get a custom Ethereum Provider error.
      * 
-     * @param {string} [code] - The error code.
-     * @param {string} [message] - The error message.
-     * @param {any} [data] - Error data.
-     * @return {EthereumProviderError} The error.
+     * @param {Object|string} opts - Options object
+     * @param {number} opts.code - The error code
+     * @param {string} opts.message - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} - The error
      */
     custom: (opts) => {
       if (typeof opts !== 'object' || Array.isArray(opts)) {
