@@ -75,9 +75,6 @@ response.error = ethErrors.provider.custom({
 
 ### Parsing Unknown Errors
 ```js
-/**
- * serializeError
- */
 // this is useful for ensuring your errors are standardized
 import { serializeError } from 'eth-json-rpc-errors'
 
