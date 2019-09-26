@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node test",
+    "test:coverage": "nyc tape test",
     "lint": "./node_modules/.bin/eslint index.js",
     "lint:fix": "./node_modules/.bin/eslint index.js --fix",
     "prepare": "npm run lint:fix && npm run test"
@@ -29,6 +30,7 @@
   "devDependencies": {
     "eslint": "^6.1.0",
     "fast-deep-equal": "^2.0.1",
+    "nyc": "^14.1.1",
     "tape": "^4.11.0"
   },
   "dependencies": {
