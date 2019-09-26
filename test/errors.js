@@ -29,13 +29,63 @@ test('ensure exported object accepts a single string argument where appropriate'
   t.end()
 })
 
-test('ensure exported does not accept single string argument for some errors', t => {
-  t.throws(() => {
-    ethErrors.rpc.server('bar')
-  }, 'RPC Server error throws')
-  t.throws(() => {
-    ethErrors.provider.custom('bar')
-  }, 'Provider custom error throws')
+test('custom provider error options', t => {
+  t.throws(
+    () => {
+      ethErrors.provider.custom('bar')
+    },
+    /Ethereum Provider custom errors must/,
+    'does not accept non-object argument'
+  )
+
+  t.throws(
+    () => {
+      ethErrors.provider.custom({ code: 4009, message: 2 })
+    },
+    /"message" must be/,
+    'does not accept nonstring message'
+  )
+
+  t.throws(
+    () => {
+      ethErrors.provider.custom({ code: 4009, message: '' })
+    },
+    /"message" must be/,
+    'does not accept empty message'
+  )
+
+  const err = ethErrors.provider.custom({ code: 4009, message: 'foo' })
+  t.ok(err instanceof EthereumProviderError)
+  t.end()
+})
+
+test('server rpc error options', t => {
+  t.throws(
+    () => {
+      ethErrors.rpc.server('bar')
+    },
+    /Ethereum RPC Server errors must/,
+    'does not accept non-object argument'
+  )
+
+  t.throws(
+    () => {
+      ethErrors.rpc.server({ code: 'bar'})
+    },
+    /"code" must be/,
+    'does not accept non-string code'
+  )
+
+  t.throws(
+    () => {
+      ethErrors.rpc.server({ code: 1})
+    },
+    /"code" must be/,
+    'does not accept out-of-range code'
+  )
+
+  const err = ethErrors.rpc.server({ code: -32006, message: 'foo' })
+  t.ok(err instanceof EthereumRpcError)
   t.end()
 })
 
