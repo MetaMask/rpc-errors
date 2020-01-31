@@ -1,12 +1,13 @@
 # eth-json-rpc-errors
 
 Errors for the
-[Ethereum JSON RPC](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md) 
+[Ethereum JSON RPC](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md)
 and
 [Ethereum Provider](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md),
 and [making unknown errors compliant with either spec](#parsing-unknown-errors).
 
 ## Basic Usage
+
 ```js
 import { ethErrors } from 'eth-json-rpc-errors'
 
@@ -27,7 +28,7 @@ throw ethErrors.provider.unauthorized('my custom message')
 
 ## Usage
 
-Installation: `npm install eth-json-rpc-errors`
+Installation: `npm install eth-json-rpc-errors` or `yarn add eth-json-rpc-errors`
 
 Import using ES6 syntax (no default export) or Node `require`.
 
@@ -74,6 +75,7 @@ response.error = ethErrors.provider.custom({
 ```
 
 ### Parsing Unknown Errors
+
 ```js
 // this is useful for ensuring your errors are standardized
 import { serializeError } from 'eth-json-rpc-errors'
@@ -82,7 +84,7 @@ import { serializeError } from 'eth-json-rpc-errors'
 // it will be added as error.data.originalError
 response.error = serializeError(maybeAnError)
 
-// you can add a custom fallback error code and message if desired 
+// you can add a custom fallback error code and message if desired
 const fallbackError = { code: 4999, message: 'My custom error.' }
 response.error = serializeError(maybeAnError, fallbackError)
 
@@ -97,6 +99,7 @@ response.error = serializeError(maybeAnError, fallbackError)
 ```
 
 ### Other Exports
+
 ```js
 /**
  * TypeScript interfaces
@@ -104,7 +107,7 @@ response.error = serializeError(maybeAnError, fallbackError)
 import {
   // these describe to the corresponding exports from index.js
   IEthErrors, IEthereumRpcError, IEthereumProviderError, ISerializeError,
-  // these describe the options argument to error getters in ethErrors 
+  // these describe the options argument to error getters in ethErrors
   IErrorOptions, IRpcServerErrorOptions, IProviderCustomErrorOptions
 } from 'eth-json-rpc-errors/@types'
 

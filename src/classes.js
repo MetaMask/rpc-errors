@@ -66,6 +66,7 @@ class EthereumRpcError extends Error {
  * Permits integer error codes in the [ 1000 <= 4999 ] range.
  */
 class EthereumProviderError extends EthereumRpcError {
+
   /**
    * Create an Ethereum JSON RPC error.
    * 
@@ -74,11 +75,13 @@ class EthereumProviderError extends EthereumRpcError {
    * @param {any} [data] - The error data.
    */
   constructor(code, message, data) {
+
     if (!isValidEthProviderCode(code)) {
       throw new Error(
         '"code" must be an integer such that: 1000 <= code <= 4999'
       )
     }
+
     super(code, message, data)
   }
 }

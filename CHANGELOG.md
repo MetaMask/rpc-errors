@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2.0.0 (Current)
+
 - **Exports**
   - `errors` renamed `ethErrors`
   - `JsonRpcError` renamed `EthereumRpcError`
@@ -30,6 +31,7 @@
   - Updated affected interfaces
 
 ## 1.1.0
+
 - `serializeError`
   - If the object passed to the function has a `.message` property,
   it will preferred over the `.message` property of the fallback error when

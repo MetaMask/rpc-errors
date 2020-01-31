@@ -18,7 +18,7 @@ const FALLBACK_ERROR = {
  * 
  * @param {number} code - The integer error code
  * @param {string} fallbackMessage - The fallback message
- * @return {string} - The corresponding message or the fallback message
+ * @return {string} The corresponding message or the fallback message
  */
 function getMessageFromCode(code, fallbackMessage = FALLBACK_MESSAGE) {
 
