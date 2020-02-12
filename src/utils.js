@@ -83,7 +83,7 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
     )
   }
 
-  if (typeof error === 'object' && error instanceof EthereumRpcError) {
+  if (error instanceof EthereumRpcError) {
     return error.serialize()
   }
 
