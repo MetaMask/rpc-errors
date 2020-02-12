@@ -77,7 +77,7 @@ module.exports = {
      * @returns {EthereumRpcError} The error
      */
     server: (opts) => {
-      if (typeof opts !== 'object' || Array.isArray(opts)) {
+      if (!opts || typeof opts !== 'object' || Array.isArray(opts)) {
         throw new Error('Ethereum RPC Server errors must provide single object argument.')
       }
       const { code } = opts
@@ -203,7 +203,7 @@ module.exports = {
      * @returns {EthereumProviderError} The error
      */
     custom: (opts) => {
-      if (typeof opts !== 'object' || Array.isArray(opts)) {
+      if (!opts || typeof opts !== 'object' || Array.isArray(opts)) {
         throw new Error('Ethereum Provider custom errors must provide single object argument.')
       }
       const { code, message, data } = opts
@@ -240,7 +240,7 @@ function validateOpts (opts) {
   if (opts) {
     if (typeof opts === 'string') {
       message = opts
-    } else if (opts && typeof opts === 'object' && !Array.isArray(opts)) {
+    } else if (typeof opts === 'object' && !Array.isArray(opts)) {
       message = opts.message
       data = opts.data
     }
