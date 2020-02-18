@@ -4,6 +4,7 @@
   "description": "Ethereum JSON RPC and Provider errors.",
   "main": "index.js",
   "scripts": {
+    "build": "echo",
     "test": "node test",
     "test:coverage": "nyc tape test",
     "lint": "eslint index.js",
