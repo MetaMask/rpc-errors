@@ -4,11 +4,11 @@
   "description": "Ethereum JSON RPC and Provider errors.",
   "main": "index.js",
   "scripts": {
+    "build": "echo",
     "test": "node test",
     "test:coverage": "nyc tape test",
-    "lint": "./node_modules/.bin/eslint index.js",
-    "lint:fix": "./node_modules/.bin/eslint index.js --fix",
-    "prepare": "yarn lint:fix && yarn test"
+    "lint": "eslint index.js",
+    "lint:fix": "eslint index.js --fix"
   },
   "repository": {
     "type": "git",
