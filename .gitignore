@@ -1,3 +1,6 @@
+*.js
+*.map
+*.d.ts
 
 # misc
 .DS_Store

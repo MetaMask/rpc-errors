@@ -2,13 +2,13 @@
   "name": "eth-json-rpc-errors",
   "version": "2.0.2",
   "description": "Ethereum JSON RPC and Provider errors.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "build": "echo",
-    "test": "node test",
-    "test:coverage": "nyc tape test",
-    "lint": "eslint index.js",
-    "lint:fix": "eslint index.js --fix"
+    "build": "tsc --project .",
+    "test": "yarn build && tape test/**/*.js",
+    "test:coverage": "yarn build && nyc tape test/**/*.js",
+    "lint": "eslint --ext .ts,.js .",
+    "lint:fix": "eslint --ext .ts,.js --fix ."
   },
   "repository": {
     "type": "git",
@@ -28,10 +28,16 @@
   },
   "homepage": "https://github.com/MetaMask/eth-json-rpc-errors#readme",
   "devDependencies": {
-    "eslint": "^6.1.0",
+    "@metamask/eslint-config": "^2.0.0",
+    "@types/tape": "^4.2.34",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.1",
     "fast-deep-equal": "^2.0.1",
     "nyc": "^14.1.1",
-    "tape": "^4.11.0"
+    "tape": "^4.11.0",
+    "typescript": "^3.8.2"
   },
   "dependencies": {
     "fast-safe-stringify": "^2.0.6"
