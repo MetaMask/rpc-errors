@@ -1,6 +1,6 @@
-# eth-json-rpc-errors
+# eth-rpc-errors
 
-Errors for the
+Ethereum RPC errors, including for
 [Ethereum JSON RPC](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md)
 and
 [Ethereum Provider](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md),
@@ -9,7 +9,7 @@ and [making unknown errors compliant with either spec](#parsing-unknown-errors).
 ## Basic Usage
 
 ```js
-import { ethErrors } from 'eth-json-rpc-errors'
+import { ethErrors } from 'eth-rpc-errors'
 
 throw ethErrors.provider.unauthorized()
 // or
@@ -19,30 +19,30 @@ throw ethErrors.provider.unauthorized('my custom message')
 ## Supported Errors
 
 - Ethereum JSON RPC
-  - Per [EIP 1474](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md#error-codes)
+  - Per [EIP 1474](https://eips.ethereum.org/EIPS/eip-1474#error-codes)
     - This includes all
     [JSON RPC 2.0 errors](https://www.jsonrpc.org/specification#error_object)
 - Ethereum Provider errors
-  - Per [EIP 1193](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md#error-object-and-codes)
+  - Per [EIP 1193](https://eips.ethereum.org/EIPS/eip-1193#provider-errors)
     - Does **not** yet support [`CloseEvent` errors or status codes](https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes).
 
 ## Usage
 
-Installation: `npm install eth-json-rpc-errors` or `yarn add eth-json-rpc-errors`
+Installation: `npm install eth-rpc-errors` or `yarn add eth-rpc-errors`
 
-Import using ES6 syntax (no default export) or Node `require`.
+`import` or `require` as normal (no default export).
 
 ### Errors API
 
 ```js
-import { ethErrors } from 'eth-json-rpc-errors'
+import { ethErrors } from 'eth-rpc-errors'
 
 // Ethereum RPC errors are namespaced under "ethErrors.rpc"
 response.error = ethErrors.rpc.methodNotFound({
   message: optionalCustomMessage, data: optionalData
 })
 
-// ETH JSON RPC errors namespaced under ethErrors.provider
+// Provider errors namespaced under ethErrors.provider
 response.error = ethErrors.provider.unauthorized({
   message: optionalCustomMessage, data: optionalData
 })
@@ -78,7 +78,7 @@ response.error = ethErrors.provider.custom({
 
 ```js
 // this is useful for ensuring your errors are standardized
-import { serializeError } from 'eth-json-rpc-errors'
+import { serializeError } from 'eth-rpc-errors'
 
 // if the argument is not a valid error per any supported spec,
 // it will be added as error.data.originalError
@@ -109,17 +109,17 @@ import {
   IEthErrors, IEthereumRpcError, IEthereumProviderError, ISerializeError,
   // these describe the options argument to error getters in ethErrors
   IErrorOptions, IRpcServerErrorOptions, IProviderCustomErrorOptions
-} from 'eth-json-rpc-errors/@types'
+} from 'eth-rpc-errors/@types'
 
 /**
  * Classes
  */
-import { EthereumRpcError, EthereumProviderError } from 'eth-json-rpc-errors'
+import { EthereumRpcError, EthereumProviderError } from 'eth-rpc-errors'
 
 /**
  * getMessageFromCode & ERROR_CODES
  */
-import { getMessageFromCode, ERROR_CODES } from 'eth-json-rpc-errors'
+import { getMessageFromCode, ERROR_CODES } from 'eth-rpc-errors'
 
 // get the default message string for the given code, or a fallback message if
 // no message exists for the given code
@@ -131,8 +131,8 @@ const message2 = getMessageFromCode(someCode, myFallback)
 const message3 = getMessageFromCode(someCode, null)
 
 // {
-//   jsonRpc: { [errorName]: code, ... },
-//   eth: { [errorName]: code, ... },
+//   rpc: { [errorName]: code, ... },
+//   provider: { [errorName]: code, ... },
 // }
 const code1 = ERROR_CODES.rpc.parse
 const code2 = ERROR_CODES.provider.userRejectedRequest

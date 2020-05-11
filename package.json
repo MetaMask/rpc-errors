@@ -1,7 +1,7 @@
 {
-  "name": "eth-json-rpc-errors",
+  "name": "eth-rpc-errors",
   "version": "2.1.0",
-  "description": "Ethereum JSON RPC and Provider errors.",
+  "description": "Ethereum RPC and Provider errors.",
   "main": "index.js",
   "scripts": {
     "build": "echo",
@@ -12,10 +12,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MetaMask/eth-json-rpc-errors.git"
+    "url": "git+https://github.com/MetaMask/eth-rpc-errors.git"
   },
   "keywords": [
-    "json",
     "rpc",
     "ethereum",
     "errors",
@@ -24,9 +23,9 @@
   "author": "Erik Marks <rekmarks@protonmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MetaMask/eth-json-rpc-errors/issues"
+    "url": "https://github.com/MetaMask/eth-rpc-errors/issues"
   },
-  "homepage": "https://github.com/MetaMask/eth-json-rpc-errors#readme",
+  "homepage": "https://github.com/MetaMask/eth-rpc-errors#readme",
   "devDependencies": {
     "@metamask/eslint-config": "^2.1.1",
     "eslint": "6.8.0",
