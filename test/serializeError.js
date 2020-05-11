@@ -2,8 +2,8 @@
 const test = require('tape')
 const dequal = require('fast-deep-equal')
 
-const { ethErrors, serializeError, ERROR_CODES } = require('../')
-const getMessageFromCode = require('../src/utils').getMessageFromCode
+const { ethErrors, serializeError, ERROR_CODES } = require('..')
+const { getMessageFromCode } = require('../src/utils')
 
 const rpcCodes = ERROR_CODES.rpc
 
@@ -17,7 +17,7 @@ const invalidError3 = { code: 4001 }
 const invalidError4 = { code: 4001, message: 3, data: { ...dummyData } }
 const invalidError5 = null
 const invalidError6 = undefined
-const invalidError7 = { code: 34, message: dummyMessage , data: { ...dummyData } }
+const invalidError7 = { code: 34, message: dummyMessage, data: { ...dummyData } }
 
 const validError0 = { code: 4001, message: dummyMessage }
 const validError1 = { code: 4001, message: dummyMessage, data: { ...dummyData } }
@@ -25,10 +25,10 @@ const validError2 = ethErrors.rpc.parse()
 const validError3 = ethErrors.rpc.parse(dummyMessage)
 const validError4 = ethErrors.rpc.parse({
   message: dummyMessage,
-  data: { ...dummyData }
+  data: { ...dummyData },
 })
 
-test('invalid error: non-object', t => {
+test('invalid error: non-object', (t) => {
   const result = serializeError(invalidError0)
   t.ok(
     dequal(
@@ -36,15 +36,15 @@ test('invalid error: non-object', t => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: invalidError0 }
-      }
+        data: { originalError: invalidError0 },
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('invalid error: null', t => {
+test('invalid error: null', (t) => {
   const result = serializeError(invalidError5)
   t.ok(
     dequal(
@@ -52,15 +52,15 @@ test('invalid error: null', t => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: invalidError5 }
-      }
+        data: { originalError: invalidError5 },
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('invalid error: undefined', t => {
+test('invalid error: undefined', (t) => {
   const result = serializeError(invalidError6)
   t.ok(
     dequal(
@@ -68,15 +68,15 @@ test('invalid error: undefined', t => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: invalidError6 }
-      }
+        data: { originalError: invalidError6 },
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('invalid error: array', t => {
+test('invalid error: array', (t) => {
   const result = serializeError(invalidError1)
   t.ok(
     dequal(
@@ -84,15 +84,15 @@ test('invalid error: array', t => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: invalidError1 }
-      }
+        data: { originalError: invalidError1 },
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('invalid error: invalid code', t => {
+test('invalid error: invalid code', (t) => {
   const result = serializeError(invalidError2)
   t.ok(
     dequal(
@@ -100,15 +100,15 @@ test('invalid error: invalid code', t => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: { ...invalidError2 } }
-      }
+        data: { originalError: { ...invalidError2 } },
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('invalid error: valid code, undefined message', t => {
+test('invalid error: valid code, undefined message', (t) => {
   const result = serializeError(invalidError3)
   t.ok(
     dequal(
@@ -116,15 +116,15 @@ test('invalid error: valid code, undefined message', t => {
       {
         code: 4001,
         message: getMessageFromCode(4001),
-        data: { originalError: { ...invalidError3 } }
-      }
+        data: { originalError: { ...invalidError3 } },
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('invalid error: non-string message with data', t => {
+test('invalid error: non-string message with data', (t) => {
   const result = serializeError(invalidError4)
   t.ok(
     dequal(
@@ -132,15 +132,15 @@ test('invalid error: non-string message with data', t => {
       {
         code: 4001,
         message: getMessageFromCode(4001),
-        data: { originalError: { ...invalidError4 } }
-      }
+        data: { originalError: { ...invalidError4 } },
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('invalid error: invalid code with string message', t => {
+test('invalid error: invalid code with string message', (t) => {
   const result = serializeError(invalidError7)
   t.ok(
     dequal(
@@ -148,15 +148,15 @@ test('invalid error: invalid code with string message', t => {
       {
         code: rpcCodes.internal,
         message: dummyMessage,
-        data: { originalError: { ...invalidError7 } }
-      }
+        data: { originalError: { ...invalidError7 } },
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('valid error: code and message only', t => {
+test('valid error: code and message only', (t) => {
   const result = serializeError(validError0)
   t.ok(
     dequal(
@@ -164,14 +164,14 @@ test('valid error: code and message only', t => {
       {
         code: 4001,
         message: validError0.message,
-      }
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('valid error: code, message, and data', t => {
+test('valid error: code, message, and data', (t) => {
   const result = serializeError(validError1)
   t.ok(
     dequal(
@@ -180,14 +180,14 @@ test('valid error: code, message, and data', t => {
         code: 4001,
         message: validError1.message,
         data: { ...validError1.data },
-      }
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('valid error: instantiated error', t => {
+test('valid error: instantiated error', (t) => {
   const result = serializeError(validError2)
   t.ok(
     dequal(
@@ -196,14 +196,14 @@ test('valid error: instantiated error', t => {
         code: rpcCodes.parse,
         message: getMessageFromCode(rpcCodes.parse),
         stack: validError2.stack,
-      }
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('valid error: instantiated error', t => {
+test('valid error: instantiated error', (t) => {
   const result = serializeError(validError3)
   t.ok(
     dequal(
@@ -212,14 +212,14 @@ test('valid error: instantiated error', t => {
         code: rpcCodes.parse,
         message: dummyMessage,
         stack: validError3.stack,
-      }
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
 
-test('valid error: instantiated error with custom message and data', t => {
+test('valid error: instantiated error with custom message and data', (t) => {
   const result = serializeError(validError4)
   t.ok(
     dequal(
@@ -229,9 +229,9 @@ test('valid error: instantiated error with custom message and data', t => {
         message: validError4.message,
         data: { ...validError4.data },
         stack: validError4.stack,
-      }
+      },
     ),
-    'serialized error matches expected result'
+    'serialized error matches expected result',
   )
   t.end()
 })
