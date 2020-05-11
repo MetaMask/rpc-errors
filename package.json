@@ -28,10 +28,10 @@
   },
   "homepage": "https://github.com/MetaMask/eth-json-rpc-errors#readme",
   "devDependencies": {
-    "eslint": "^6.1.0",
+    "eslint": "6.8.0",
     "fast-deep-equal": "^2.0.1",
-    "nyc": "^14.1.1",
-    "tape": "^4.11.0"
+    "nyc": "^15.0.1",
+    "tape": "^5.0.0"
   },
   "dependencies": {
     "fast-safe-stringify": "^2.0.6"
