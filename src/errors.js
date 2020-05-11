@@ -152,14 +152,14 @@ module.exports = {
 
     /**
      * Get an Ethereum JSON RPC Limit Exceeded (-32005) error.
-     * 
+     *
      * @param {Object|string} [opts] - Options object or error message string
      * @param {string} [opts.message] - The error message
      * @param {any} [opts.data] - Error data
      * @returns {EthereumRpcError} The error
      */
     limitExceeded: (opts) => getEthJsonRpcError(
-      ERROR_CODES.rpc.limitExceeded, opts
+      ERROR_CODES.rpc.limitExceeded, opts,
     ),
   },
 
@@ -209,7 +209,7 @@ module.exports = {
 
     /**
      * Get an Ethereum Provider Not Connected (4900) error.
-     * 
+     *
      * @param {Object|string} [opts] - Options object or error message string
      * @param {string} [opts.message] - The error message
      * @param {any} [opts.data] - Error data
@@ -217,13 +217,13 @@ module.exports = {
      */
     disconnected: (opts) => {
       return getEthProviderError(
-        ERROR_CODES.provider.disconnected, opts
+        ERROR_CODES.provider.disconnected, opts,
       )
     },
 
     /**
      * Get an Ethereum Provider Chain Not Connected (4901) error.
-     * 
+     *
      * @param {Object|string} [opts] - Options object or error message string
      * @param {string} [opts.message] - The error message
      * @param {any} [opts.data] - Error data
@@ -231,7 +231,7 @@ module.exports = {
      */
     chainDisconnected: (opts) => {
       return getEthProviderError(
-        ERROR_CODES.provider.chainDisconnected, opts
+        ERROR_CODES.provider.chainDisconnected, opts,
       )
     },
 
