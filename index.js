@@ -12,6 +12,7 @@ module.exports = {
   EthereumProviderError,
   serializeError,
   getMessageFromCode,
+
   /** @type ErrorCodes */
   ERROR_CODES,
 }
