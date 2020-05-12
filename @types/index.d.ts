@@ -15,6 +15,8 @@ export interface IErrorOptions {
   data?: any,
 }
 
+export type ErrorArg = IErrorOptions | string;
+
 export interface IRpcServerErrorOptions extends IErrorOptions {
   code: number,
 }
@@ -34,28 +36,25 @@ export interface IGetMessageFromCode {
 
 export interface IEthErrors {
   rpc: {
-    invalidInput: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    resourceNotFound: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    resourceUnavailable: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    transactionRejected: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    methodNotSupported: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    parse: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    invalidRequest: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    invalidParams: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    methodNotFound: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
-    internal: (opts?: string | IErrorOptions) => IEthereumRpcError<any>,
+    invalidInput: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    resourceNotFound: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    resourceUnavailable: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    transactionRejected: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    methodNotSupported: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    limitExceeded: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    parse: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    invalidRequest: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    invalidParams: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    methodNotFound: (opts?: ErrorArg) => IEthereumRpcError<any>,
+    internal: (opts?: ErrorArg) => IEthereumRpcError<any>,
     server: (opts: IRpcServerErrorOptions) => IEthereumRpcError<any>,
   },
   provider: {
-    userRejectedRequest: (opts?: string | IErrorOptions) => IEthereumProviderError<any>,
-    unauthorized: (opts?: string | IErrorOptions) => IEthereumProviderError<any>,
-    unsupportedMethod: (opts?: string | IErrorOptions) => IEthereumProviderError<any>,
+    userRejectedRequest: (opts?: ErrorArg) => IEthereumProviderError<any>,
+    unauthorized: (opts?: ErrorArg) => IEthereumProviderError<any>,
+    unsupportedMethod: (opts?: ErrorArg) => IEthereumProviderError<any>,
+    disconnected: (opts?: ErrorArg) => IEthereumProviderError<any>,
+    chainDisconnected: (opts?: ErrorArg) => IEthereumProviderError<any>,
     custom: (opts: IProviderCustomErrorOptions) => IEthereumProviderError<any>,
   }
 }
-
-// maybe export this once valid codes and messages can be extended at runtime
-
-// export interface IIsValidCode {
-//   (number: code): boolean
-// }

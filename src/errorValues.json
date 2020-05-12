@@ -39,6 +39,10 @@
     "standard": "EIP 1474",
     "message": "Method not supported."
   },
+  "-32005": {
+    "standard": "EIP 1474",
+    "message": "Request limit exceeded."
+  },
   "4001": {
     "standard": "EIP 1193",
     "message": "User rejected the request."
@@ -50,5 +54,13 @@
   "4200": {
     "standard": "EIP 1193",
     "message": "The requested method is not supported by this Ethereum provider."
+  },
+  "4900": {
+    "standard": "EIP 1193",
+    "message": "The provider is disconnected from all chains."
+  },
+  "4901": {
+    "standard": "EIP 1193",
+    "message": "The provider is disconnected from the specified chain."
   }
 }

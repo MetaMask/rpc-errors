@@ -24,6 +24,8 @@ module.exports = {
  * @property {number} userRejectedRequest
  * @property {number} unauthorized
  * @property {number} unsupportedMethod
+ * @property {number} disconnected
+ * @property {number} chainDisconnected
  */
 
 /**
@@ -32,6 +34,7 @@ module.exports = {
  * @property {number} invalidRequest
  * @property {number} invalidParams
  * @property {number} methodNotFound
+ * @property {number} limitExceeded
  * @property {number} internal
  * @property {number} invalidInput
  * @property {number} resourceNotFound

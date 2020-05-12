@@ -25,17 +25,13 @@ function getMessageFromCode (code, fallbackMessage = FALLBACK_MESSAGE) {
   if (Number.isInteger(code)) {
 
     const codeString = code.toString()
+
     if (errorValues[codeString]) {
       return errorValues[codeString].message
     }
-
     if (isJsonRpcServerError(code)) {
       return JSON_RPC_SERVER_ERROR_MESSAGE
     }
-
-    // TODO: allow valid codes and messages to be extended
-    // // EIP 1193 Status Codes
-    // if (code >= 4000 && code <= 4999) return Something?
   }
   return fallbackMessage
 }

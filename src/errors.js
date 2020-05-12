@@ -149,6 +149,18 @@ module.exports = {
     methodNotSupported: (opts) => getEthJsonRpcError(
       ERROR_CODES.rpc.methodNotSupported, opts,
     ),
+
+    /**
+     * Get an Ethereum JSON RPC Limit Exceeded (-32005) error.
+     *
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumRpcError} The error
+     */
+    limitExceeded: (opts) => getEthJsonRpcError(
+      ERROR_CODES.rpc.limitExceeded, opts,
+    ),
   },
 
   provider: {
@@ -192,6 +204,34 @@ module.exports = {
     unsupportedMethod: (opts) => {
       return getEthProviderError(
         ERROR_CODES.provider.unsupportedMethod, opts,
+      )
+    },
+
+    /**
+     * Get an Ethereum Provider Not Connected (4900) error.
+     *
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} The error
+     */
+    disconnected: (opts) => {
+      return getEthProviderError(
+        ERROR_CODES.provider.disconnected, opts,
+      )
+    },
+
+    /**
+     * Get an Ethereum Provider Chain Not Connected (4901) error.
+     *
+     * @param {Object|string} [opts] - Options object or error message string
+     * @param {string} [opts.message] - The error message
+     * @param {any} [opts.data] - Error data
+     * @returns {EthereumProviderError} The error
+     */
+    chainDisconnected: (opts) => {
+      return getEthProviderError(
+        ERROR_CODES.provider.chainDisconnected, opts,
       )
     },
 
