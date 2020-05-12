@@ -1,6 +1,6 @@
 {
   "name": "eth-rpc-errors",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Ethereum RPC and Provider errors.",
   "main": "index.js",
   "scripts": {
