@@ -2,7 +2,8 @@
   "name": "eth-rpc-errors",
   "version": "2.1.1",
   "description": "Ethereum RPC and Provider errors.",
-  "main": "index.js",
+  "license": "MIT",
+  "author": "Erik Marks <rekmarks@protonmail.com>",
   "scripts": {
     "build": "echo",
     "test": "node test",
@@ -10,22 +11,15 @@
     "lint": "eslint . --ext js,json",
     "lint:fix": "eslint . --ext js,json --fix"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MetaMask/eth-rpc-errors.git"
-  },
-  "keywords": [
-    "rpc",
-    "ethereum",
-    "errors",
-    "utility"
+  "main": "index.js",
+  "files": [
+    "@types",
+    "index.js",
+    "src"
   ],
-  "author": "Erik Marks <rekmarks@protonmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/MetaMask/eth-rpc-errors/issues"
+  "dependencies": {
+    "fast-safe-stringify": "^2.0.6"
   },
-  "homepage": "https://github.com/MetaMask/eth-rpc-errors#readme",
   "devDependencies": {
     "@metamask/eslint-config": "^2.1.1",
     "eslint": "6.8.0",
@@ -35,7 +29,18 @@
     "nyc": "^15.0.1",
     "tape": "^5.0.0"
   },
-  "dependencies": {
-    "fast-safe-stringify": "^2.0.6"
-  }
+  "bugs": {
+    "url": "https://github.com/MetaMask/eth-rpc-errors/issues"
+  },
+  "homepage": "https://github.com/MetaMask/eth-rpc-errors#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MetaMask/eth-rpc-errors.git"
+  },
+  "keywords": [
+    "rpc",
+    "ethereum",
+    "errors",
+    "utility"
+  ]
 }
