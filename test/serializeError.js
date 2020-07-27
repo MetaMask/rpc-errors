@@ -159,6 +159,25 @@ test('invalid error: invalid code with string message', (t) => {
   t.end()
 })
 
+test('invalid error: invalid code, no message, custom fallback', (t) => {
+  const result = serializeError(
+    invalidError2,
+    { fallbackError: { code: rpcCodes.methodNotFound, message: 'foo' } },
+  )
+  t.ok(
+    dequal(
+      result,
+      {
+        code: rpcCodes.methodNotFound,
+        message: 'foo',
+        data: { originalError: { ...invalidError2 } },
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
 test('valid error: code and message only', (t) => {
   const result = serializeError(validError0)
   t.ok(

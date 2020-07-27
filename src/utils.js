@@ -90,7 +90,7 @@ function serializeError (
     typeof fallbackError.message !== 'string'
   ) {
     throw new Error(
-      'fallbackError must contain integer number code and string message.',
+      'Must provide fallback error with integer number code and string message.',
     )
   }
 
