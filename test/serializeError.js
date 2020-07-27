@@ -22,11 +22,14 @@ const invalidError7 = { code: 34, message: dummyMessage, data: { ...dummyData } 
 const validError0 = { code: 4001, message: dummyMessage }
 const validError1 = { code: 4001, message: dummyMessage, data: { ...dummyData } }
 const validError2 = ethErrors.rpc.parse()
+delete validError2.stack
 const validError3 = ethErrors.rpc.parse(dummyMessage)
+delete validError3.stack
 const validError4 = ethErrors.rpc.parse({
   message: dummyMessage,
   data: { ...dummyData },
 })
+delete validError4.stack
 
 test('invalid error: non-object', (t) => {
   const result = serializeError(invalidError0)
@@ -195,7 +198,6 @@ test('valid error: instantiated error', (t) => {
       {
         code: rpcCodes.parse,
         message: getMessageFromCode(rpcCodes.parse),
-        stack: validError2.stack,
       },
     ),
     'serialized error matches expected result',
@@ -211,7 +213,6 @@ test('valid error: instantiated error', (t) => {
       {
         code: rpcCodes.parse,
         message: dummyMessage,
-        stack: validError3.stack,
       },
     ),
     'serialized error matches expected result',
@@ -228,7 +229,6 @@ test('valid error: instantiated error with custom message and data', (t) => {
         code: rpcCodes.parse,
         message: validError4.message,
         data: { ...validError4.data },
-        stack: validError4.stack,
       },
     ),
     'serialized error matches expected result',

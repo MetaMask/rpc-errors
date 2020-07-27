@@ -70,7 +70,6 @@ function isValidCode (code) {
  * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.originalError property.
- * Adds a 'stack' property if it exists on the given error.
  *
  * @param {any} error - The error to serialize.
  * @param {object} fallbackError - The custom fallback error values if the
@@ -119,9 +118,6 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
     serialized.data = { originalError: assignOriginalError(error) }
   }
 
-  if (error && error.stack) {
-    serialized.stack = error.stack
-  }
   return serialized
 }
 
