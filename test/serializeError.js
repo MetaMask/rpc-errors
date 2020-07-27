@@ -235,3 +235,77 @@ test('valid error: instantiated error with custom message and data', (t) => {
   )
   t.end()
 })
+
+test('valid error: message, data, and stack', (t) => {
+  const result = serializeError({ ...validError1, stack: 'foo' })
+  t.ok(
+    dequal(
+      result,
+      {
+        code: 4001,
+        message: validError1.message,
+        data: { ...validError1.data },
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
+test('include stack: no stack present', (t) => {
+  const result = serializeError(
+    validError1,
+    { shouldIncludeStack: true },
+  )
+  t.ok(
+    dequal(
+      result,
+      {
+        code: 4001,
+        message: validError1.message,
+        data: { ...validError1.data },
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
+test('include stack: string stack present', (t) => {
+  const result = serializeError(
+    { ...validError1, stack: 'foo' },
+    { shouldIncludeStack: true },
+  )
+  t.ok(
+    dequal(
+      result,
+      {
+        code: 4001,
+        message: validError1.message,
+        data: { ...validError1.data },
+        stack: 'foo',
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
+test('include stack: non-string stack present', (t) => {
+  const result = serializeError(
+    { ...validError1, stack: 2 },
+    { shouldIncludeStack: true },
+  )
+  t.ok(
+    dequal(
+      result,
+      {
+        code: 4001,
+        message: validError1.message,
+        data: { ...validError1.data },
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})

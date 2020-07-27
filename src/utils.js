@@ -72,11 +72,17 @@ function isValidCode (code) {
  * returned object's data.originalError property.
  *
  * @param {any} error - The error to serialize.
- * @param {object} fallbackError - The custom fallback error values if the
- * given error is invalid.
- * @return {object} A standardized error object.
+ * @param {Object} [options] - An options object.
+ * @param {Object} [options.fallbackError] - The custom fallback error values if
+ * the given error is invalid.
+ * @param {boolean} [options.shouldIncludeStack] - Whether the 'stack' property
+ * of the given error should be included on the serialized error, if present.
+ * @return {Object} A standardized, plain error object.
  */
-function serializeError (error, fallbackError = FALLBACK_ERROR) {
+function serializeError (
+  error,
+  { fallbackError = FALLBACK_ERROR, shouldIncludeStack = false } = {},
+) {
 
   if (
     !fallbackError ||
@@ -118,6 +124,9 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
     serialized.data = { originalError: assignOriginalError(error) }
   }
 
+  if (shouldIncludeStack && error && typeof error.stack === 'string') {
+    serialized.stack = error.stack
+  }
   return serialized
 }
 
