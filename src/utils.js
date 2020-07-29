@@ -70,14 +70,19 @@ function isValidCode (code) {
  * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.originalError property.
- * Adds a 'stack' property if it exists on the given error.
  *
  * @param {any} error - The error to serialize.
- * @param {object} fallbackError - The custom fallback error values if the
- * given error is invalid.
- * @return {object} A standardized error object.
+ * @param {Object} [options] - An options object.
+ * @param {Object} [options.fallbackError] - The custom fallback error values if
+ * the given error is invalid.
+ * @param {boolean} [options.shouldIncludeStack] - Whether the 'stack' property
+ * of the given error should be included on the serialized error, if present.
+ * @return {Object} A standardized, plain error object.
  */
-function serializeError (error, fallbackError = FALLBACK_ERROR) {
+function serializeError (
+  error,
+  { fallbackError = FALLBACK_ERROR, shouldIncludeStack = false } = {},
+) {
 
   if (
     !fallbackError ||
@@ -85,7 +90,7 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
     typeof fallbackError.message !== 'string'
   ) {
     throw new Error(
-      'fallbackError must contain integer number code and string message.',
+      'Must provide fallback error with integer number code and string message.',
     )
   }
 
@@ -119,7 +124,7 @@ function serializeError (error, fallbackError = FALLBACK_ERROR) {
     serialized.data = { originalError: assignOriginalError(error) }
   }
 
-  if (error && error.stack) {
+  if (shouldIncludeStack && error && typeof error.stack === 'string') {
     serialized.stack = error.stack
   }
   return serialized

@@ -26,8 +26,13 @@ export interface IProviderCustomErrorOptions extends IErrorOptions {
   message: string,
 }
 
+interface SerializeErrorOptions {
+  fallbackError?: object,
+  shouldSerializeStack?: boolean,
+}
+
 export interface ISerializeError {
-  (error: any, fallbackError?: DefaultError): IEthereumRpcError<any>
+  (error: any, options?: SerializeErrorOptions): IEthereumRpcError<any>
 }
 
 export interface IGetMessageFromCode {
