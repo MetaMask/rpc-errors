@@ -5,15 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0]
+
+### Changed
+
+- Second argument of `serializeError` is now an options object ([#22](https://github.com/MetaMask/eth-rpc-errors/pull/22))
+- Error stacks are no longer serialized by default by `serializeError` ([#22](https://github.com/MetaMask/eth-rpc-errors/pull/22))
+
 ## [2.1.0] - 2020-05-11
 
 ### Added
 
 - New/missing errors:
-  - `ethErrors.provider` ([EIP 1193](https://eips.ethereum.org/EIPS/eip-1474#provider-errors))
+  - `ethErrors.provider` ([EIP-1193](https://eips.ethereum.org/EIPS/eip-1474#provider-errors))
     - `.disconnected`, `4900`
     - `.chainDisconnected`, `4901`
-  - `ethErrors.rpc` ([EIP 1474](https://eips.ethereum.org/EIPS/eip-1474#error-codes))
+  - `ethErrors.rpc` ([EIP-1474](https://eips.ethereum.org/EIPS/eip-1474#error-codes))
     - `.limitExceeded`, `-32005`
 
 ### Changed
@@ -31,12 +38,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Renamed affected interfaces
 - `ethErrors`
   - Added missing
-  [EIP 1474 errors](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md)
+  [EIP-1474 errors](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md)
     - Added corresponding codes and messages
   - **Namespacing**
-    - EIP 1474 (which includes JSON RPC 2.0) errors now namespaced under `ethErrors.rpc`
+    - EIP-1474 (which includes JSON RPC 2.0) errors now namespaced under `ethErrors.rpc`
       - JSON RPC 2.0 errors were formerly under `errors.jsonRpc`
-    - EIP 1193 errors now namespaced under `ethErrors.provider`
+    - EIP-1193 errors now namespaced under `ethErrors.provider`
       - Formerly under `errors.eth`
   - Most error getters now take a single, *optional* `opts` argument, which
   is either a string or an object
