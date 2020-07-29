@@ -28,7 +28,7 @@ export interface IProviderCustomErrorOptions extends IErrorOptions {
 
 interface SerializeErrorOptions {
   fallbackError?: object,
-  shouldSerializeStack?: boolean,
+  shouldIncludeStack?: boolean,
 }
 
 export interface ISerializeError {
