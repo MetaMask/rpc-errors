@@ -22,11 +22,14 @@ const invalidError7 = { code: 34, message: dummyMessage, data: { ...dummyData } 
 const validError0 = { code: 4001, message: dummyMessage }
 const validError1 = { code: 4001, message: dummyMessage, data: { ...dummyData } }
 const validError2 = ethErrors.rpc.parse()
+delete validError2.stack
 const validError3 = ethErrors.rpc.parse(dummyMessage)
+delete validError3.stack
 const validError4 = ethErrors.rpc.parse({
   message: dummyMessage,
   data: { ...dummyData },
 })
+delete validError4.stack
 
 test('invalid error: non-object', (t) => {
   const result = serializeError(invalidError0)
@@ -156,6 +159,25 @@ test('invalid error: invalid code with string message', (t) => {
   t.end()
 })
 
+test('invalid error: invalid code, no message, custom fallback', (t) => {
+  const result = serializeError(
+    invalidError2,
+    { fallbackError: { code: rpcCodes.methodNotFound, message: 'foo' } },
+  )
+  t.ok(
+    dequal(
+      result,
+      {
+        code: rpcCodes.methodNotFound,
+        message: 'foo',
+        data: { originalError: { ...invalidError2 } },
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
 test('valid error: code and message only', (t) => {
   const result = serializeError(validError0)
   t.ok(
@@ -195,7 +217,6 @@ test('valid error: instantiated error', (t) => {
       {
         code: rpcCodes.parse,
         message: getMessageFromCode(rpcCodes.parse),
-        stack: validError2.stack,
       },
     ),
     'serialized error matches expected result',
@@ -211,7 +232,6 @@ test('valid error: instantiated error', (t) => {
       {
         code: rpcCodes.parse,
         message: dummyMessage,
-        stack: validError3.stack,
       },
     ),
     'serialized error matches expected result',
@@ -228,7 +248,80 @@ test('valid error: instantiated error with custom message and data', (t) => {
         code: rpcCodes.parse,
         message: validError4.message,
         data: { ...validError4.data },
-        stack: validError4.stack,
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
+test('valid error: message, data, and stack', (t) => {
+  const result = serializeError({ ...validError1, stack: 'foo' })
+  t.ok(
+    dequal(
+      result,
+      {
+        code: 4001,
+        message: validError1.message,
+        data: { ...validError1.data },
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
+test('include stack: no stack present', (t) => {
+  const result = serializeError(
+    validError1,
+    { shouldIncludeStack: true },
+  )
+  t.ok(
+    dequal(
+      result,
+      {
+        code: 4001,
+        message: validError1.message,
+        data: { ...validError1.data },
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
+test('include stack: string stack present', (t) => {
+  const result = serializeError(
+    { ...validError1, stack: 'foo' },
+    { shouldIncludeStack: true },
+  )
+  t.ok(
+    dequal(
+      result,
+      {
+        code: 4001,
+        message: validError1.message,
+        data: { ...validError1.data },
+        stack: 'foo',
+      },
+    ),
+    'serialized error matches expected result',
+  )
+  t.end()
+})
+
+test('include stack: non-string stack present', (t) => {
+  const result = serializeError(
+    { ...validError1, stack: 2 },
+    { shouldIncludeStack: true },
+  )
+  t.ok(
+    dequal(
+      result,
+      {
+        code: 4001,
+        message: validError1.message,
+        data: { ...validError1.data },
       },
     ),
     'serialized error matches expected result',
