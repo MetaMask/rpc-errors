@@ -1,27 +1,27 @@
 
-export interface IEthereumRpcError<T> {
+export interface EthereumRpcError<T> {
   code: number; // must be an integer
   message: string;
   data?: T;
   stack?: any; // non-standard but not forbidden, and useful if it exists
 }
 
-export interface IEthereumProviderError<T> extends IEthereumRpcError<T> {}
+export interface EthereumProviderError<T> extends EthereumRpcError<T> {}
 
 type DefaultError = { code: number, message: string }
 
-export interface IErrorOptions {
+export interface ErrorOptions {
   message?: string | null,
   data?: any,
 }
 
-export type ErrorArg = IErrorOptions | string;
+export type ErrorArg = ErrorOptions | string;
 
-export interface IRpcServerErrorOptions extends IErrorOptions {
+export interface RpcServerErrorOptions extends ErrorOptions {
   code: number,
 }
 
-export interface IProviderCustomErrorOptions extends IErrorOptions {
+export interface ProviderCustomErrorOptions extends ErrorOptions {
   code: number,
   message: string,
 }
@@ -31,35 +31,35 @@ interface SerializeErrorOptions {
   shouldIncludeStack?: boolean,
 }
 
-export interface ISerializeError {
-  (error: any, options?: SerializeErrorOptions): IEthereumRpcError<any>
+export interface SerializeError {
+  (error: any, options?: SerializeErrorOptions): EthereumRpcError<any>
 }
 
-export interface IGetMessageFromCode {
+export interface GetMessageFromCode {
   (error: any, fallbackMessage?: string): string
 }
 
-export interface IEthErrors {
+export interface EthErrors {
   rpc: {
-    invalidInput: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    resourceNotFound: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    resourceUnavailable: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    transactionRejected: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    methodNotSupported: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    limitExceeded: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    parse: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    invalidRequest: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    invalidParams: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    methodNotFound: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    internal: (opts?: ErrorArg) => IEthereumRpcError<any>,
-    server: (opts: IRpcServerErrorOptions) => IEthereumRpcError<any>,
+    invalidInput: (opts?: ErrorArg) => EthereumRpcError<any>,
+    resourceNotFound: (opts?: ErrorArg) => EthereumRpcError<any>,
+    resourceUnavailable: (opts?: ErrorArg) => EthereumRpcError<any>,
+    transactionRejected: (opts?: ErrorArg) => EthereumRpcError<any>,
+    methodNotSupported: (opts?: ErrorArg) => EthereumRpcError<any>,
+    limitExceeded: (opts?: ErrorArg) => EthereumRpcError<any>,
+    parse: (opts?: ErrorArg) => EthereumRpcError<any>,
+    invalidRequest: (opts?: ErrorArg) => EthereumRpcError<any>,
+    invalidParams: (opts?: ErrorArg) => EthereumRpcError<any>,
+    methodNotFound: (opts?: ErrorArg) => EthereumRpcError<any>,
+    internal: (opts?: ErrorArg) => EthereumRpcError<any>,
+    server: (opts: RpcServerErrorOptions) => EthereumRpcError<any>,
   },
   provider: {
-    userRejectedRequest: (opts?: ErrorArg) => IEthereumProviderError<any>,
-    unauthorized: (opts?: ErrorArg) => IEthereumProviderError<any>,
-    unsupportedMethod: (opts?: ErrorArg) => IEthereumProviderError<any>,
-    disconnected: (opts?: ErrorArg) => IEthereumProviderError<any>,
-    chainDisconnected: (opts?: ErrorArg) => IEthereumProviderError<any>,
-    custom: (opts: IProviderCustomErrorOptions) => IEthereumProviderError<any>,
+    userRejectedRequest: (opts?: ErrorArg) => EthereumProviderError<any>,
+    unauthorized: (opts?: ErrorArg) => EthereumProviderError<any>,
+    unsupportedMethod: (opts?: ErrorArg) => EthereumProviderError<any>,
+    disconnected: (opts?: ErrorArg) => EthereumProviderError<any>,
+    chainDisconnected: (opts?: ErrorArg) => EthereumProviderError<any>,
+    custom: (opts: ProviderCustomErrorOptions) => EthereumProviderError<any>,
   }
 }
