@@ -101,7 +101,7 @@ test('test exported object for correctness', (t) => {
         ethErrors.rpc[k]({
           code: SERVER_ERROR_CODE,
           message: null,
-          data: { ...dummyData },
+          data: Object.assign({}, dummyData),
         }),
         k, dummyData, t,
       )
@@ -109,7 +109,7 @@ test('test exported object for correctness', (t) => {
       validateError(
         ethErrors.rpc[k]({
           message: null,
-          data: { ...dummyData },
+          data: Object.assign({}, dummyData),
         }),
         k, dummyData, t,
       )
@@ -124,7 +124,7 @@ test('test exported object for correctness', (t) => {
         ethErrors.provider[k]({
           code: CUSTOM_ERROR_CODE,
           message: CUSTOM_ERROR_MESSAGE,
-          data: { ...dummyData },
+          data: Object.assign({}, dummyData),
         }),
         k, dummyData, t, true,
       )
@@ -132,7 +132,7 @@ test('test exported object for correctness', (t) => {
       validateError(
         ethErrors.provider[k]({
           message: null,
-          data: { ...dummyData },
+          data: Object.assign({}, dummyData),
         }),
         k, dummyData, t, true,
       )
