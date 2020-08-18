@@ -138,7 +138,7 @@ function isJsonRpcServerError (code) {
 
 function assignOriginalError (error) {
   if (error && typeof error === 'object' && !Array.isArray(error)) {
-    return { ...error }
+    return Object.assign({}, error)
   }
   return error
 }

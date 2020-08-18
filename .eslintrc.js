@@ -1,6 +1,6 @@
 module.exports = {
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 2017,
   },
   plugins: [
     'json',
@@ -13,4 +13,7 @@ module.exports = {
     '!.eslintrc.js',
     'node_modules/',
   ],
+  rules: {
+    'prefer-object-spread': 'off', // Requires ES2018
+  },
 }
