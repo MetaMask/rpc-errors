@@ -13,7 +13,4 @@ module.exports = {
     '!.eslintrc.js',
     'node_modules/',
   ],
-  rules: {
-    'prefer-object-spread': 'off', // Requires ES2018
-  },
 }
