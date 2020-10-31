@@ -21,7 +21,7 @@
     "fast-safe-stringify": "^2.0.6"
   },
   "devDependencies": {
-    "@metamask/eslint-config": "^2.1.1",
+    "@metamask/eslint-config": "^3.1.0",
     "eslint": "6.8.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-json": "^2.1.1",

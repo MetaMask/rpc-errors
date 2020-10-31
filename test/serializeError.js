@@ -14,20 +14,20 @@ const invalidError0 = 0
 const invalidError1 = ['foo', 'bar', 3]
 const invalidError2 = { code: 34 }
 const invalidError3 = { code: 4001 }
-const invalidError4 = { code: 4001, message: 3, data: { ...dummyData } }
+const invalidError4 = { code: 4001, message: 3, data: Object.assign({}, dummyData) }
 const invalidError5 = null
 const invalidError6 = undefined
-const invalidError7 = { code: 34, message: dummyMessage, data: { ...dummyData } }
+const invalidError7 = { code: 34, message: dummyMessage, data: Object.assign({}, dummyData) }
 
 const validError0 = { code: 4001, message: dummyMessage }
-const validError1 = { code: 4001, message: dummyMessage, data: { ...dummyData } }
+const validError1 = { code: 4001, message: dummyMessage, data: Object.assign({}, dummyData) }
 const validError2 = ethErrors.rpc.parse()
 delete validError2.stack
 const validError3 = ethErrors.rpc.parse(dummyMessage)
 delete validError3.stack
 const validError4 = ethErrors.rpc.parse({
   message: dummyMessage,
-  data: { ...dummyData },
+  data: Object.assign({}, dummyData),
 })
 delete validError4.stack
 
@@ -103,7 +103,7 @@ test('invalid error: invalid code', (t) => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: { ...invalidError2 } },
+        data: { originalError: Object.assign({}, invalidError2) },
       },
     ),
     'serialized error matches expected result',
@@ -119,7 +119,7 @@ test('invalid error: valid code, undefined message', (t) => {
       {
         code: 4001,
         message: getMessageFromCode(4001),
-        data: { originalError: { ...invalidError3 } },
+        data: { originalError: Object.assign({}, invalidError3) },
       },
     ),
     'serialized error matches expected result',
@@ -135,7 +135,7 @@ test('invalid error: non-string message with data', (t) => {
       {
         code: 4001,
         message: getMessageFromCode(4001),
-        data: { originalError: { ...invalidError4 } },
+        data: { originalError: Object.assign({}, invalidError4) },
       },
     ),
     'serialized error matches expected result',
@@ -151,7 +151,7 @@ test('invalid error: invalid code with string message', (t) => {
       {
         code: rpcCodes.internal,
         message: dummyMessage,
-        data: { originalError: { ...invalidError7 } },
+        data: { originalError: Object.assign({}, invalidError7) },
       },
     ),
     'serialized error matches expected result',
@@ -170,7 +170,7 @@ test('invalid error: invalid code, no message, custom fallback', (t) => {
       {
         code: rpcCodes.methodNotFound,
         message: 'foo',
-        data: { originalError: { ...invalidError2 } },
+        data: { originalError: Object.assign({}, invalidError2) },
       },
     ),
     'serialized error matches expected result',
@@ -201,7 +201,7 @@ test('valid error: code, message, and data', (t) => {
       {
         code: 4001,
         message: validError1.message,
-        data: { ...validError1.data },
+        data: Object.assign({}, validError1.data),
       },
     ),
     'serialized error matches expected result',
@@ -247,7 +247,7 @@ test('valid error: instantiated error with custom message and data', (t) => {
       {
         code: rpcCodes.parse,
         message: validError4.message,
-        data: { ...validError4.data },
+        data: Object.assign({}, validError4.data),
       },
     ),
     'serialized error matches expected result',
@@ -256,14 +256,14 @@ test('valid error: instantiated error with custom message and data', (t) => {
 })
 
 test('valid error: message, data, and stack', (t) => {
-  const result = serializeError({ ...validError1, stack: 'foo' })
+  const result = serializeError(Object.assign({}, validError1, { stack: 'foo' }))
   t.ok(
     dequal(
       result,
       {
         code: 4001,
         message: validError1.message,
-        data: { ...validError1.data },
+        data: Object.assign({}, validError1.data),
       },
     ),
     'serialized error matches expected result',
@@ -282,7 +282,7 @@ test('include stack: no stack present', (t) => {
       {
         code: 4001,
         message: validError1.message,
-        data: { ...validError1.data },
+        data: Object.assign({}, validError1.data),
       },
     ),
     'serialized error matches expected result',
@@ -292,7 +292,7 @@ test('include stack: no stack present', (t) => {
 
 test('include stack: string stack present', (t) => {
   const result = serializeError(
-    { ...validError1, stack: 'foo' },
+    Object.assign({}, validError1, { stack: 'foo' }),
     { shouldIncludeStack: true },
   )
   t.ok(
@@ -301,7 +301,7 @@ test('include stack: string stack present', (t) => {
       {
         code: 4001,
         message: validError1.message,
-        data: { ...validError1.data },
+        data: Object.assign({}, validError1.data),
         stack: 'foo',
       },
     ),
@@ -312,7 +312,7 @@ test('include stack: string stack present', (t) => {
 
 test('include stack: non-string stack present', (t) => {
   const result = serializeError(
-    { ...validError1, stack: 2 },
+    Object.assign({}, validError1, { stack: 2 }),
     { shouldIncludeStack: true },
   )
   t.ok(
@@ -321,7 +321,7 @@ test('include stack: non-string stack present', (t) => {
       {
         code: 4001,
         message: validError1.message,
-        data: { ...validError1.data },
+        data: Object.assign({}, validError1.data),
       },
     ),
     'serialized error matches expected result',
