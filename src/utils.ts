@@ -27,9 +27,12 @@ export function getMessageFromCode(
   if (Number.isInteger(code)) {
     const codeString = code.toString() as ErrorValueKey;
 
-    return hasKey(errorValues, codeString)
-      ? errorValues[codeString].message
-      : JSON_RPC_SERVER_ERROR_MESSAGE;
+    if (hasKey(errorValues, codeString)) {
+      return errorValues[codeString].message;
+    }
+    if (isJsonRpcServerError(code)) {
+      return JSON_RPC_SERVER_ERROR_MESSAGE;
+    }
   }
   return fallbackMessage;
 }
