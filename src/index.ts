@@ -1,4 +1,3 @@
-
 import { EthereumRpcError, EthereumProviderError } from './classes';
 import {
   serializeError, getMessageFromCode,
