@@ -19,11 +19,11 @@ throw ethErrors.provider.unauthorized('my custom message')
 ## Supported Errors
 
 - Ethereum JSON RPC
-  - Per [EIP 1474](https://eips.ethereum.org/EIPS/eip-1474#error-codes)
+  - Per [EIP-1474](https://eips.ethereum.org/EIPS/eip-1474#error-codes)
     - This includes all
     [JSON RPC 2.0 errors](https://www.jsonrpc.org/specification#error_object)
 - Ethereum Provider errors
-  - Per [EIP 1193](https://eips.ethereum.org/EIPS/eip-1193#provider-errors)
+  - Per [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193#provider-errors)
     - Does **not** yet support [`CloseEvent` errors or status codes](https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes).
 
 ## Usage
