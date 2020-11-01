@@ -15,10 +15,6 @@ type ErrorValueKey = keyof typeof errorValues;
 /**
  * Gets the message for a given code, or a fallback message if the code has
  * no corresponding message.
- *
- * @param {number} code - The integer error code
- * @param {string} fallbackMessage - The fallback message
- * @return {string} The corresponding message or the fallback message
  */
 export function getMessageFromCode(
   code: number,
@@ -40,9 +36,6 @@ export function getMessageFromCode(
 /**
  * Returns whether the given code is valid.
  * A code is only valid if it has a message.
- *
- * @param {number} code - The code to check
- * @return {boolean} true if the code is valid, false otherwise.
  */
 export function isValidCode(code: number): boolean {
   if (!Number.isInteger(code)) {
@@ -65,14 +58,6 @@ export function isValidCode(code: number): boolean {
  * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.originalError property.
- *
- * @param {any} error - The error to serialize.
- * @param {Object} [options] - An options object.
- * @param {Object} [options.fallbackError] - The custom fallback error values if
- * the given error is invalid.
- * @param {boolean} [options.shouldIncludeStack] - Whether the 'stack' property
- * of the given error should be included on the serialized error, if present.
- * @return {Object} A standardized, plain error object.
  */
 export function serializeError(
   error: unknown,
