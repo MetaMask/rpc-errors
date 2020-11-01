@@ -12,11 +12,6 @@ export const JSON_RPC_SERVER_ERROR_MESSAGE = 'Unspecified server error.';
 
 type ErrorValueKey = keyof typeof errorValues;
 
-const hasOwnProperty = (
-  obj: Record<string, unknown>,
-  key: string,
-) => Object.prototype.hasOwnProperty.call(obj, key);
-
 /**
  * Gets the message for a given code, or a fallback message if the code has
  * no corresponding message.
@@ -32,7 +27,7 @@ export function getMessageFromCode(
   if (Number.isInteger(code)) {
     const codeString = code.toString() as ErrorValueKey;
 
-    return hasOwnProperty(errorValues, codeString)
+    return hasKey(errorValues, codeString)
       ? errorValues[codeString].message
       : JSON_RPC_SERVER_ERROR_MESSAGE;
   }
@@ -109,7 +104,7 @@ export function serializeError(
     error &&
     typeof error === 'object' &&
     !Array.isArray(error) &&
-    hasOwnProperty(error as Record<string, unknown>, 'code') &&
+    hasKey(error as Record<string, unknown>, 'code') &&
     isValidCode((error as SerializedEthereumRpcError).code)
   ) {
 
@@ -119,7 +114,7 @@ export function serializeError(
     if (_error.message && typeof _error.message === 'string') {
       serialized.message = _error.message;
 
-      if (hasOwnProperty(_error, 'data')) {
+      if (hasKey(_error, 'data')) {
         serialized.data = _error.data;
       }
     } else {
@@ -161,4 +156,8 @@ function assignOriginalError(error: unknown): unknown {
     return Object.assign({}, error);
   }
   return error;
+}
+
+function hasKey(obj: Record<string, unknown>, key: string) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
 }

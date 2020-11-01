@@ -199,16 +199,16 @@ function getEthProviderError(code: number, arg: EthErrorsArg): EthereumProviderE
   );
 }
 
-function validateOpts(arg: EthErrorsArg): [] | [string] | [string, unknown?] {
+function validateOpts(arg: EthErrorsArg): [] | [string] | [string?, unknown?] {
   if (arg) {
     if (typeof arg === 'string') {
       return [arg];
     } else if (typeof arg === 'object' && !Array.isArray(arg)) {
       const { message, data } = arg;
-      if (typeof message !== 'string') {
+      if (message && typeof message !== 'string') {
         throw new Error('Must specify string message.');
       }
-      return [message as string, data];
+      return [message as string || undefined, data];
     }
   }
   return [];

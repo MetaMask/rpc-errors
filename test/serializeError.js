@@ -1,10 +1,10 @@
 const test = require('tape');
 const dequal = require('fast-deep-equal');
 
-const { ethErrors, serializeError, ERROR_CODES } = require('../dist');
+const { ethErrors, serializeError, errorCodes } = require('../dist');
 const { getMessageFromCode } = require('../dist/utils');
 
-const rpcCodes = ERROR_CODES.rpc;
+const rpcCodes = errorCodes.rpc;
 
 const dummyData = { foo: 'bar' };
 const dummyMessage = 'baz';

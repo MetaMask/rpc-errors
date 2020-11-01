@@ -2,12 +2,12 @@ const test = require('tape');
 const dequal = require('fast-deep-equal');
 
 const {
-  ethErrors, EthereumRpcError, EthereumProviderError, ERROR_CODES,
+  ethErrors, EthereumRpcError, EthereumProviderError, errorCodes,
 } = require('../dist');
 const { getMessageFromCode } = require('../dist/utils');
 
-const rpcCodes = ERROR_CODES.rpc;
-const providerCodes = ERROR_CODES.provider;
+const rpcCodes = errorCodes.rpc;
+const providerCodes = errorCodes.provider;
 const serverErrorMessage = require('../dist/utils').JSON_RPC_SERVER_ERROR_MESSAGE;
 
 const rpcCodeValues = Object.values(rpcCodes);
@@ -20,11 +20,11 @@ const CUSTOM_ERROR_MESSAGE = 'foo';
 
 test('ensure exported object accepts a single string argument where appropriate', (t) => {
   let err = ethErrors.rpc.invalidInput(CUSTOM_ERROR_MESSAGE);
-  t.ok(err.code === ERROR_CODES.rpc.invalidInput, 'code is as expected');
+  t.ok(err.code === errorCodes.rpc.invalidInput, 'code is as expected');
   t.ok(err.message === CUSTOM_ERROR_MESSAGE, 'message is as expected');
 
   err = ethErrors.provider.unauthorized(CUSTOM_ERROR_MESSAGE);
-  t.ok(err.code === ERROR_CODES.provider.unauthorized, 'code is as expected');
+  t.ok(err.code === errorCodes.provider.unauthorized, 'code is as expected');
   t.ok(err.message === CUSTOM_ERROR_MESSAGE, 'message is as expected');
   t.end();
 });
