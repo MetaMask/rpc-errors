@@ -25,10 +25,10 @@ export function getMessageFromCode(
   fallbackMessage: string = FALLBACK_MESSAGE,
 ): string {
   if (Number.isInteger(code)) {
-    const codeString = code.toString() as ErrorValueKey;
+    const codeString = code.toString();
 
     if (hasKey(errorValues, codeString)) {
-      return errorValues[codeString].message;
+      return errorValues[codeString as ErrorValueKey].message;
     }
     if (isJsonRpcServerError(code)) {
       return JSON_RPC_SERVER_ERROR_MESSAGE;
@@ -49,8 +49,8 @@ export function isValidCode(code: number): boolean {
     return false;
   }
 
-  const codeString = code.toString() as ErrorValueKey;
-  if (errorValues[codeString]) {
+  const codeString = code.toString();
+  if (errorValues[codeString as ErrorValueKey]) {
     return true;
   }
 
@@ -110,7 +110,6 @@ export function serializeError(
     hasKey(error as Record<string, unknown>, 'code') &&
     isValidCode((error as SerializedEthereumRpcError).code)
   ) {
-
     const _error = error as Partial<SerializedEthereumRpcError>;
     serialized.code = _error.code;
 

@@ -182,7 +182,7 @@ export const ethErrors = {
 // Internal
 
 function getEthJsonRpcError(code: number, arg: EthErrorsArg): EthereumRpcError {
-  const [message, data] = validateOpts(arg);
+  const [message, data] = parseOpts(arg);
   return new EthereumRpcError(
     code,
     message || getMessageFromCode(code),
@@ -191,7 +191,7 @@ function getEthJsonRpcError(code: number, arg: EthErrorsArg): EthereumRpcError {
 }
 
 function getEthProviderError(code: number, arg: EthErrorsArg): EthereumProviderError {
-  const [message, data] = validateOpts(arg);
+  const [message, data] = parseOpts(arg);
   return new EthereumProviderError(
     code,
     message || getMessageFromCode(code),
@@ -199,16 +199,17 @@ function getEthProviderError(code: number, arg: EthErrorsArg): EthereumProviderE
   );
 }
 
-function validateOpts(arg: EthErrorsArg): [] | [string] | [string?, unknown?] {
+function parseOpts(arg: EthErrorsArg): [string?, unknown?] {
   if (arg) {
     if (typeof arg === 'string') {
       return [arg];
     } else if (typeof arg === 'object' && !Array.isArray(arg)) {
       const { message, data } = arg;
+
       if (message && typeof message !== 'string') {
         throw new Error('Must specify string message.');
       }
-      return [message as string || undefined, data];
+      return [message || undefined, data];
     }
   }
   return [];
