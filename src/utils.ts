@@ -57,11 +57,6 @@ export function isValidCode(code: number): boolean {
   if (isJsonRpcServerError(code)) {
     return true;
   }
-
-  // TODO: allow valid codes and messages to be extended
-  // // EIP-1193 Status Codes
-  // if (code >= 4000 && code <= 4999) return true
-
   return false;
 }
 
