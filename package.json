@@ -9,7 +9,8 @@
     "test": "node test",
     "test:coverage": "nyc tape test",
     "lint": "eslint . --ext ts,js,json",
-    "lint:fix": "eslint . --ext ts,js,json --fix"
+    "lint:fix": "eslint . --ext ts,js,json --fix",
+    "prepublishOnly": "yarn build"
   },
   "main": "dist/index.js",
   "files": [
