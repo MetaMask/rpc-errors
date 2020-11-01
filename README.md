@@ -117,7 +117,7 @@ import {
 import { EthereumRpcError, EthereumProviderError } from 'eth-rpc-errors'
 
 /**
- * getMessageFromCode & errorCodes
+ * getMessageFromCode and errorCodes
  */
 import { getMessageFromCode, errorCodes } from 'eth-rpc-errors'
 
