@@ -6,11 +6,11 @@
   "author": "Erik Marks <rekmarks@protonmail.com>",
   "scripts": {
     "build": "tsc --project .",
-    "test": "node test",
-    "test:coverage": "nyc tape test",
+    "test": "yarn build && node test",
+    "test:coverage": "yarn build && nyc tape test",
     "lint": "eslint . --ext ts,js,json",
     "lint:fix": "eslint . --ext ts,js,json --fix",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn test"
   },
   "main": "dist/index.js",
   "files": [
