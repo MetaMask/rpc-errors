@@ -19,11 +19,11 @@ throw ethErrors.provider.unauthorized('my custom message')
 ## Supported Errors
 
 - Ethereum JSON RPC
-  - Per [EIP 1474](https://eips.ethereum.org/EIPS/eip-1474#error-codes)
+  - Per [EIP-1474](https://eips.ethereum.org/EIPS/eip-1474#error-codes)
     - This includes all
     [JSON RPC 2.0 errors](https://www.jsonrpc.org/specification#error_object)
 - Ethereum Provider errors
-  - Per [EIP 1193](https://eips.ethereum.org/EIPS/eip-1193#provider-errors)
+  - Per [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193#provider-errors)
     - Does **not** yet support [`CloseEvent` errors or status codes](https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes).
 
 ## Usage
@@ -117,9 +117,9 @@ import {
 import { EthereumRpcError, EthereumProviderError } from 'eth-rpc-errors'
 
 /**
- * getMessageFromCode & ERROR_CODES
+ * getMessageFromCode and errorCodes
  */
-import { getMessageFromCode, ERROR_CODES } from 'eth-rpc-errors'
+import { getMessageFromCode, errorCodes } from 'eth-rpc-errors'
 
 // get the default message string for the given code, or a fallback message if
 // no message exists for the given code
@@ -134,10 +134,10 @@ const message3 = getMessageFromCode(someCode, null)
 //   rpc: { [errorName]: code, ... },
 //   provider: { [errorName]: code, ... },
 // }
-const code1 = ERROR_CODES.rpc.parse
-const code2 = ERROR_CODES.provider.userRejectedRequest
+const code1 = errorCodes.rpc.parse
+const code2 = errorCodes.provider.userRejectedRequest
 
-// all codes in ERROR_CODES have default messages
+// all codes in errorCodes have default messages
 const message4 = getMessageFromCode(code1)
 const message5 = getMessageFromCode(code2)
 ```

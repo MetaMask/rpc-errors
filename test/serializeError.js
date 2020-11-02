@@ -1,38 +1,37 @@
+const test = require('tape');
+const dequal = require('fast-deep-equal');
 
-const test = require('tape')
-const dequal = require('fast-deep-equal')
+const { ethErrors, serializeError, errorCodes } = require('../dist');
+const { getMessageFromCode } = require('../dist/utils');
 
-const { ethErrors, serializeError, ERROR_CODES } = require('..')
-const { getMessageFromCode } = require('../src/utils')
+const rpcCodes = errorCodes.rpc;
 
-const rpcCodes = ERROR_CODES.rpc
+const dummyData = { foo: 'bar' };
+const dummyMessage = 'baz';
 
-const dummyData = { foo: 'bar' }
-const dummyMessage = 'baz'
+const invalidError0 = 0;
+const invalidError1 = ['foo', 'bar', 3];
+const invalidError2 = { code: 34 };
+const invalidError3 = { code: 4001 };
+const invalidError4 = { code: 4001, message: 3, data: Object.assign({}, dummyData) };
+const invalidError5 = null;
+const invalidError6 = undefined;
+const invalidError7 = { code: 34, message: dummyMessage, data: Object.assign({}, dummyData) };
 
-const invalidError0 = 0
-const invalidError1 = ['foo', 'bar', 3]
-const invalidError2 = { code: 34 }
-const invalidError3 = { code: 4001 }
-const invalidError4 = { code: 4001, message: 3, data: Object.assign({}, dummyData) }
-const invalidError5 = null
-const invalidError6 = undefined
-const invalidError7 = { code: 34, message: dummyMessage, data: Object.assign({}, dummyData) }
-
-const validError0 = { code: 4001, message: dummyMessage }
-const validError1 = { code: 4001, message: dummyMessage, data: Object.assign({}, dummyData) }
-const validError2 = ethErrors.rpc.parse()
-delete validError2.stack
-const validError3 = ethErrors.rpc.parse(dummyMessage)
-delete validError3.stack
+const validError0 = { code: 4001, message: dummyMessage };
+const validError1 = { code: 4001, message: dummyMessage, data: Object.assign({}, dummyData) };
+const validError2 = ethErrors.rpc.parse();
+delete validError2.stack;
+const validError3 = ethErrors.rpc.parse(dummyMessage);
+delete validError3.stack;
 const validError4 = ethErrors.rpc.parse({
   message: dummyMessage,
   data: Object.assign({}, dummyData),
-})
-delete validError4.stack
+});
+delete validError4.stack;
 
 test('invalid error: non-object', (t) => {
-  const result = serializeError(invalidError0)
+  const result = serializeError(invalidError0);
   t.ok(
     dequal(
       result,
@@ -43,12 +42,12 @@ test('invalid error: non-object', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('invalid error: null', (t) => {
-  const result = serializeError(invalidError5)
+  const result = serializeError(invalidError5);
   t.ok(
     dequal(
       result,
@@ -59,12 +58,12 @@ test('invalid error: null', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('invalid error: undefined', (t) => {
-  const result = serializeError(invalidError6)
+  const result = serializeError(invalidError6);
   t.ok(
     dequal(
       result,
@@ -75,12 +74,12 @@ test('invalid error: undefined', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('invalid error: array', (t) => {
-  const result = serializeError(invalidError1)
+  const result = serializeError(invalidError1);
   t.ok(
     dequal(
       result,
@@ -91,12 +90,12 @@ test('invalid error: array', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('invalid error: invalid code', (t) => {
-  const result = serializeError(invalidError2)
+  const result = serializeError(invalidError2);
   t.ok(
     dequal(
       result,
@@ -107,12 +106,12 @@ test('invalid error: invalid code', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('invalid error: valid code, undefined message', (t) => {
-  const result = serializeError(invalidError3)
+  const result = serializeError(invalidError3);
   t.ok(
     dequal(
       result,
@@ -123,12 +122,12 @@ test('invalid error: valid code, undefined message', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('invalid error: non-string message with data', (t) => {
-  const result = serializeError(invalidError4)
+  const result = serializeError(invalidError4);
   t.ok(
     dequal(
       result,
@@ -139,12 +138,12 @@ test('invalid error: non-string message with data', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('invalid error: invalid code with string message', (t) => {
-  const result = serializeError(invalidError7)
+  const result = serializeError(invalidError7);
   t.ok(
     dequal(
       result,
@@ -155,15 +154,15 @@ test('invalid error: invalid code with string message', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('invalid error: invalid code, no message, custom fallback', (t) => {
   const result = serializeError(
     invalidError2,
     { fallbackError: { code: rpcCodes.methodNotFound, message: 'foo' } },
-  )
+  );
   t.ok(
     dequal(
       result,
@@ -174,12 +173,12 @@ test('invalid error: invalid code, no message, custom fallback', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('valid error: code and message only', (t) => {
-  const result = serializeError(validError0)
+  const result = serializeError(validError0);
   t.ok(
     dequal(
       result,
@@ -189,12 +188,12 @@ test('valid error: code and message only', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('valid error: code, message, and data', (t) => {
-  const result = serializeError(validError1)
+  const result = serializeError(validError1);
   t.ok(
     dequal(
       result,
@@ -205,12 +204,12 @@ test('valid error: code, message, and data', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('valid error: instantiated error', (t) => {
-  const result = serializeError(validError2)
+  const result = serializeError(validError2);
   t.ok(
     dequal(
       result,
@@ -220,12 +219,12 @@ test('valid error: instantiated error', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('valid error: instantiated error', (t) => {
-  const result = serializeError(validError3)
+  const result = serializeError(validError3);
   t.ok(
     dequal(
       result,
@@ -235,12 +234,12 @@ test('valid error: instantiated error', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('valid error: instantiated error with custom message and data', (t) => {
-  const result = serializeError(validError4)
+  const result = serializeError(validError4);
   t.ok(
     dequal(
       result,
@@ -251,12 +250,12 @@ test('valid error: instantiated error with custom message and data', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('valid error: message, data, and stack', (t) => {
-  const result = serializeError(Object.assign({}, validError1, { stack: 'foo' }))
+  const result = serializeError(Object.assign({}, validError1, { stack: 'foo' }));
   t.ok(
     dequal(
       result,
@@ -267,15 +266,15 @@ test('valid error: message, data, and stack', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('include stack: no stack present', (t) => {
   const result = serializeError(
     validError1,
     { shouldIncludeStack: true },
-  )
+  );
   t.ok(
     dequal(
       result,
@@ -286,15 +285,15 @@ test('include stack: no stack present', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('include stack: string stack present', (t) => {
   const result = serializeError(
     Object.assign({}, validError1, { stack: 'foo' }),
     { shouldIncludeStack: true },
-  )
+  );
   t.ok(
     dequal(
       result,
@@ -306,15 +305,15 @@ test('include stack: string stack present', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
 
 test('include stack: non-string stack present', (t) => {
   const result = serializeError(
     Object.assign({}, validError1, { stack: 2 }),
     { shouldIncludeStack: true },
-  )
+  );
   t.ok(
     dequal(
       result,
@@ -325,6 +324,6 @@ test('include stack: non-string stack present', (t) => {
       },
     ),
     'serialized error matches expected result',
-  )
-  t.end()
-})
+  );
+  t.end();
+});
