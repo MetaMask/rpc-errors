@@ -40,8 +40,6 @@ export class EthereumRpcError extends Error {
 
   /**
    * Returns a plain object with all public class properties.
-   *
-   * @returns {object} The serialized error.
    */
   serialize(): SerializedEthereumRpcError {
     const serialized: SerializedEthereumRpcError = {
@@ -60,8 +58,6 @@ export class EthereumRpcError extends Error {
   /**
    * Return a string representation of the serialized error, omitting
    * any circular references.
-   *
-   * @returns {string} The serialized error as a string.
    */
   toString(): string {
     return safeStringify(
