@@ -5,12 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.0]
+## [Unreleased]
+
+## [4.0.0] - 2020-11-02
 
 ### Changed
 
-- Second argument of `serializeError` is now an options object ([#22](https://github.com/MetaMask/eth-rpc-errors/pull/22))
+- **BREAKING:** `ERROR_CODES` export renamed to `errorCodes` ([#28](https://github.com/MetaMask/eth-rpc-errors/pull/28))
+- **BREAKING:** `ethErrors` getters will now throw an error if passed a truthy, non-string `message` ([#28](https://github.com/MetaMask/eth-rpc-errors/pull/28))
+- Updated TypeScript types for all exports ([#28](https://github.com/MetaMask/eth-rpc-errors/pull/28))
+
+## [3.0.0] - 2020-07-29
+
+### Changed
+
+- **BREAKING:** Second argument of `serializeError` is now an options object ([#22](https://github.com/MetaMask/eth-rpc-errors/pull/22))
 - Error stacks are no longer serialized by default by `serializeError` ([#22](https://github.com/MetaMask/eth-rpc-errors/pull/22))
+
+## [2.1.1] - 2020-05-12
+
+### Changed
+
+- Prevent unnecessary files from being published ([#17](https://github.com/MetaMask/eth-rpc-errors/pull/17))
 
 ## [2.1.0] - 2020-05-11
 
@@ -27,7 +43,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Rename package to `eth-rpc-errors`
 
-## [2.0.0]
+## [2.0.2] - 2020-02-12
+
+### Changed
+
+- Fix faulty null checks throughout codebase ([764832d](https://github.com/MetaMask/eth-rpc-errors/commit/764832d777f9274ca5bb9a6efa6958db2b640952))
+
+## [2.0.1] - 2020-01-31
+
+### Added
+
+- Error codes in docstrings ([5452001](https://github.com/MetaMask/eth-rpc-errors/commit/545200100af05aeade62ba6b736f5080a6891bc4))
+
+## [2.0.0] - 2019-09-26
 
 - **Exports**
   - `errors` renamed `ethErrors`
@@ -57,9 +85,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **TypeScript**
   - Updated affected interfaces
 
-## [1.1.0]
+## [1.1.0] - 2019-09-16
 
 - `serializeError`
   - If the object passed to the function has a `.message` property,
   it will preferred over the `.message` property of the fallback error when
   creating the returned serialized error object
+
+[Unreleased]:https://github.com/MetaMask/controllers/compare/v4.0.0...HEAD
+[4.0.0]:https://github.com/MetaMask/controllers/compare/v3.0.0...v4.0.0
+[3.0.0]:https://github.com/MetaMask/controllers/compare/v2.1.1...v3.0.0
+[2.1.1]:https://github.com/MetaMask/controllers/compare/v2.1.0...v2.1.1
+[2.1.0]:https://github.com/MetaMask/controllers/compare/v2.0.2...v2.1.0
+[2.0.2]:https://github.com/MetaMask/controllers/compare/v2.0.1...v2.0.2
+[2.0.1]:https://github.com/MetaMask/controllers/compare/v2.0.0...v2.0.1
