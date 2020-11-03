@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2020-11-03
+
+### Changed
+
+- Updated README.md ([#30](https://github.com/MetaMask/eth-rpc-errors/pull/30))
+
 ## [4.0.0] - 2020-11-02
 
 ### Changed
@@ -92,7 +98,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it will preferred over the `.message` property of the fallback error when
   creating the returned serialized error object
 
-[Unreleased]:https://github.com/MetaMask/controllers/compare/v4.0.0...HEAD
+[Unreleased]:https://github.com/MetaMask/controllers/compare/v4.0.1...HEAD
+[4.0.1]:https://github.com/MetaMask/controllers/compare/v4.0.0...v4.0.1
 [4.0.0]:https://github.com/MetaMask/controllers/compare/v3.0.0...v4.0.0
 [3.0.0]:https://github.com/MetaMask/controllers/compare/v2.1.1...v3.0.0
 [2.1.1]:https://github.com/MetaMask/controllers/compare/v2.1.0...v2.1.1
