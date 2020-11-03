@@ -8,6 +8,8 @@ and [making unknown errors compliant with either spec](#parsing-unknown-errors).
 
 ## Basic Usage
 
+In TypeScript or JavaScript:
+
 ```js
 import { ethErrors } from 'eth-rpc-errors'
 
@@ -31,6 +33,8 @@ throw ethErrors.provider.unauthorized('my custom message')
 Installation: `npm install eth-rpc-errors` or `yarn add eth-rpc-errors`
 
 `import` or `require` as normal (no default export).
+
+The package is implemented in TypeScript, and all exports are typed.
 
 ### Errors API
 
@@ -101,16 +105,6 @@ response.error = serializeError(maybeAnError, fallbackError)
 ### Other Exports
 
 ```js
-/**
- * TypeScript interfaces
- */
-import {
-  // these describe to the corresponding exports from index.js
-  IEthErrors, IEthereumRpcError, IEthereumProviderError, ISerializeError,
-  // these describe the options argument to error getters in ethErrors
-  IErrorOptions, IRpcServerErrorOptions, IProviderCustomErrorOptions
-} from 'eth-rpc-errors/@types'
-
 /**
  * Classes
  */
