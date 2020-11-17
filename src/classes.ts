@@ -4,7 +4,7 @@ export interface SerializedEthereumRpcError {
   code: number; // must be an integer
   message: string;
   data?: unknown;
-  stack?: unknown;
+  stack?: string;
 }
 
 /**
