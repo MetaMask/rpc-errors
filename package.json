@@ -1,6 +1,6 @@
 {
   "name": "eth-rpc-errors",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Ethereum RPC and Provider errors.",
   "license": "MIT",
   "author": "Erik Marks <rekmarks@protonmail.com>",
