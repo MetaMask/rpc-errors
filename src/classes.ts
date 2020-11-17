@@ -16,7 +16,7 @@ export class EthereumRpcError<T> extends Error {
 
   public code: number;
 
-  public data: T | undefined;
+  public data?: T;
 
   constructor(code: number, message: string, data?: T) {
 
@@ -76,7 +76,7 @@ export class EthereumProviderError<T> extends EthereumRpcError<T> {
 
   /**
    * Create an Ethereum Provider JSON-RPC error.
-   * `code` must be an integer in the [ 1000 <= 4999 ] range.
+   * `code` must be an integer in the 1000 <= 4999 range.
    */
   constructor(code: number, message: string, data?: T) {
 
