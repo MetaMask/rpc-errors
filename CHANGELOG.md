@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.2] - 2020-11-17
+
+### Changed
+
+- The `data` property of `EthereumRpcError` and `EthereumProviderError` is now marked as optional rather than `T | undefined` ([#34](https://github.com/MetaMask/eth-rpc-errors/pull/34))
+
+### Fixed
+
+- `SerializedEthereumRpcError.stack` is now correctly typed as a `string`, if present ([#34](https://github.com/MetaMask/eth-rpc-errors/pull/34))
+
 ## [4.0.1] - 2020-11-03
 
 ### Changed
@@ -98,7 +108,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it will preferred over the `.message` property of the fallback error when
   creating the returned serialized error object
 
-[Unreleased]:https://github.com/MetaMask/controllers/compare/v4.0.1...HEAD
+[Unreleased]:https://github.com/MetaMask/controllers/compare/v4.0.2...HEAD
+[4.0.2]:https://github.com/MetaMask/controllers/compare/v4.0.1...v4.0.2
 [4.0.1]:https://github.com/MetaMask/controllers/compare/v4.0.0...v4.0.1
 [4.0.0]:https://github.com/MetaMask/controllers/compare/v3.0.0...v4.0.0
 [3.0.0]:https://github.com/MetaMask/controllers/compare/v2.1.1...v3.0.0
