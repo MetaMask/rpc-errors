@@ -1,3 +1,4 @@
+import safeStringify from 'fast-safe-stringify';
 import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
@@ -86,44 +87,52 @@ export function serializeError(
   if (
     error &&
     typeof error === 'object' &&
-    !Array.isArray(error) &&
-    hasKey(error as Record<string, unknown>, 'code') &&
-    isValidCode((error as SerializedEthereumRpcError).code)
+    !Array.isArray(error)
   ) {
     const _error = error as Partial<SerializedEthereumRpcError>;
-    serialized.code = _error.code;
 
-    if (_error.message && typeof _error.message === 'string') {
-      serialized.message = _error.message;
-
-      if (hasKey(_error, 'data')) {
-        serialized.data = _error.data;
-      }
+    if (
+      hasKey(_error, 'code') &&
+      isValidCode((_error as SerializedEthereumRpcError).code)
+    ) {
+      serialized.code = _error.code;
     } else {
-      serialized.message = getMessageFromCode(
-        (serialized as SerializedEthereumRpcError).code,
-      );
+      serialized.code = fallbackError.code;
+    }
 
-      serialized.data = { originalError: assignOriginalError(error) };
+    if (
+      hasKey(_error, 'message') &&
+      typeof (_error as SerializedEthereumRpcError).message === 'string'
+    ) {
+      serialized.message = _error.message;
+    } else if (serialized.code === fallbackError.code) {
+      serialized.message = fallbackError.message;
+    } else {
+      serialized.message = getMessageFromCode((
+        serialized as SerializedEthereumRpcError).code);
+    }
+
+    if (hasKey(_error, 'data')) {
+      serialized.data = _error.data;
+    }
+
+    if (
+      shouldIncludeStack &&
+      hasKey(_error, 'stack') &&
+      typeof (_error as SerializedEthereumRpcError).stack === 'string'
+    ) {
+      serialized.stack = _error.stack;
     }
   } else {
     serialized.code = fallbackError.code;
+    serialized.message = fallbackError.message;
 
-    const message = (error as any)?.message;
-
-    serialized.message = (
-      message && typeof message === 'string'
-        ? message
-        : fallbackError.message
-    );
-    serialized.data = { originalError: assignOriginalError(error) };
+    const originalError = safeStringify(error);
+    if (originalError) {
+      serialized.data = { originalError };
+    }
   }
 
-  const stack = (error as any)?.stack;
-
-  if (shouldIncludeStack && error && stack && typeof stack === 'string') {
-    serialized.stack = stack;
-  }
   return serialized as SerializedEthereumRpcError;
 }
 
@@ -131,13 +140,6 @@ export function serializeError(
 
 function isJsonRpcServerError(code: number): boolean {
   return code >= -32099 && code <= -32000;
-}
-
-function assignOriginalError(error: unknown): unknown {
-  if (error && typeof error === 'object' && !Array.isArray(error)) {
-    return Object.assign({}, error);
-  }
-  return error;
 }
 
 function hasKey(obj: Record<string, unknown>, key: string) {

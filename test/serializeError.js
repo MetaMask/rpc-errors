@@ -1,5 +1,6 @@
 const test = require('tape');
 const dequal = require('fast-deep-equal');
+const safeStringify = require('fast-safe-stringify');
 
 const { ethErrors, serializeError, errorCodes } = require('../dist');
 const { getMessageFromCode } = require('../dist/utils');
@@ -38,7 +39,7 @@ test('invalid error: non-object', (t) => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: invalidError0 },
+        data: { originalError: safeStringify(invalidError0) },
       },
     ),
     'serialized error matches expected result',
@@ -54,7 +55,7 @@ test('invalid error: null', (t) => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: invalidError5 },
+        data: { originalError: safeStringify(invalidError5) },
       },
     ),
     'serialized error matches expected result',
@@ -70,7 +71,6 @@ test('invalid error: undefined', (t) => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: invalidError6 },
       },
     ),
     'serialized error matches expected result',
@@ -86,7 +86,7 @@ test('invalid error: array', (t) => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: invalidError1 },
+        data: { originalError: safeStringify(invalidError1) },
       },
     ),
     'serialized error matches expected result',
@@ -102,7 +102,6 @@ test('invalid error: invalid code', (t) => {
       {
         code: rpcCodes.internal,
         message: getMessageFromCode(rpcCodes.internal),
-        data: { originalError: Object.assign({}, invalidError2) },
       },
     ),
     'serialized error matches expected result',
@@ -118,7 +117,6 @@ test('invalid error: valid code, undefined message', (t) => {
       {
         code: 4001,
         message: getMessageFromCode(4001),
-        data: { originalError: Object.assign({}, invalidError3) },
       },
     ),
     'serialized error matches expected result',
@@ -134,7 +132,7 @@ test('invalid error: non-string message with data', (t) => {
       {
         code: 4001,
         message: getMessageFromCode(4001),
-        data: { originalError: Object.assign({}, invalidError4) },
+        data: { ...dummyData },
       },
     ),
     'serialized error matches expected result',
@@ -150,7 +148,7 @@ test('invalid error: invalid code with string message', (t) => {
       {
         code: rpcCodes.internal,
         message: dummyMessage,
-        data: { originalError: Object.assign({}, invalidError7) },
+        data: { ...dummyData },
       },
     ),
     'serialized error matches expected result',
@@ -169,7 +167,6 @@ test('invalid error: invalid code, no message, custom fallback', (t) => {
       {
         code: rpcCodes.methodNotFound,
         message: 'foo',
-        data: { originalError: Object.assign({}, invalidError2) },
       },
     ),
     'serialized error matches expected result',
