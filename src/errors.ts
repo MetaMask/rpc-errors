@@ -21,35 +21,35 @@ export const ethErrors = {
     /**
      * Get a JSON RPC 2.0 Parse (-32700) error.
      */
-    parse: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    parse: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.parse, arg,
     ),
 
     /**
      * Get a JSON RPC 2.0 Invalid Request (-32600) error.
      */
-    invalidRequest: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    invalidRequest: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.invalidRequest, arg,
     ),
 
     /**
      * Get a JSON RPC 2.0 Invalid Params (-32602) error.
      */
-    invalidParams: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    invalidParams: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.invalidParams, arg,
     ),
 
     /**
      * Get a JSON RPC 2.0 Method Not Found (-32601) error.
      */
-    methodNotFound: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    methodNotFound: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.methodNotFound, arg,
     ),
 
     /**
      * Get a JSON RPC 2.0 Internal (-32603) error.
      */
-    internal: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    internal: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.internal, arg,
     ),
 
@@ -74,42 +74,42 @@ export const ethErrors = {
     /**
      * Get an Ethereum JSON RPC Invalid Input (-32000) error.
      */
-    invalidInput: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    invalidInput: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.invalidInput, arg,
     ),
 
     /**
      * Get an Ethereum JSON RPC Resource Not Found (-32001) error.
      */
-    resourceNotFound: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    resourceNotFound: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.resourceNotFound, arg,
     ),
 
     /**
      * Get an Ethereum JSON RPC Resource Unavailable (-32002) error.
      */
-    resourceUnavailable: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    resourceUnavailable: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.resourceUnavailable, arg,
     ),
 
     /**
      * Get an Ethereum JSON RPC Transaction Rejected (-32003) error.
      */
-    transactionRejected: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    transactionRejected: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.transactionRejected, arg,
     ),
 
     /**
      * Get an Ethereum JSON RPC Method Not Supported (-32004) error.
      */
-    methodNotSupported: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    methodNotSupported: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.methodNotSupported, arg,
     ),
 
     /**
      * Get an Ethereum JSON RPC Limit Exceeded (-32005) error.
      */
-    limitExceeded: <T>(arg: EthErrorsArg<T>) => getEthJsonRpcError(
+    limitExceeded: <T>(arg?: EthErrorsArg<T>) => getEthJsonRpcError(
       errorCodes.rpc.limitExceeded, arg,
     ),
   },
@@ -119,7 +119,7 @@ export const ethErrors = {
     /**
      * Get an Ethereum Provider User Rejected Request (4001) error.
      */
-    userRejectedRequest: <T>(arg: EthErrorsArg<T>) => {
+    userRejectedRequest: <T>(arg?: EthErrorsArg<T>) => {
       return getEthProviderError(
         errorCodes.provider.userRejectedRequest, arg,
       );
@@ -128,7 +128,7 @@ export const ethErrors = {
     /**
      * Get an Ethereum Provider Unauthorized (4100) error.
      */
-    unauthorized: <T>(arg: EthErrorsArg<T>) => {
+    unauthorized: <T>(arg?: EthErrorsArg<T>) => {
       return getEthProviderError(
         errorCodes.provider.unauthorized, arg,
       );
@@ -137,7 +137,7 @@ export const ethErrors = {
     /**
      * Get an Ethereum Provider Unsupported Method (4200) error.
      */
-    unsupportedMethod: <T>(arg: EthErrorsArg<T>) => {
+    unsupportedMethod: <T>(arg?: EthErrorsArg<T>) => {
       return getEthProviderError(
         errorCodes.provider.unsupportedMethod, arg,
       );
@@ -146,7 +146,7 @@ export const ethErrors = {
     /**
      * Get an Ethereum Provider Not Connected (4900) error.
      */
-    disconnected: <T>(arg: EthErrorsArg<T>) => {
+    disconnected: <T>(arg?: EthErrorsArg<T>) => {
       return getEthProviderError(
         errorCodes.provider.disconnected, arg,
       );
@@ -155,7 +155,7 @@ export const ethErrors = {
     /**
      * Get an Ethereum Provider Chain Not Connected (4901) error.
      */
-    chainDisconnected: <T>(arg: EthErrorsArg<T>) => {
+    chainDisconnected: <T>(arg?: EthErrorsArg<T>) => {
       return getEthProviderError(
         errorCodes.provider.chainDisconnected, arg,
       );
@@ -181,7 +181,7 @@ export const ethErrors = {
 
 // Internal
 
-function getEthJsonRpcError<T>(code: number, arg: EthErrorsArg<T>): EthereumRpcError<T> {
+function getEthJsonRpcError<T>(code: number, arg?: EthErrorsArg<T>): EthereumRpcError<T> {
   const [message, data] = parseOpts(arg);
   return new EthereumRpcError(
     code,
@@ -190,7 +190,7 @@ function getEthJsonRpcError<T>(code: number, arg: EthErrorsArg<T>): EthereumRpcE
   );
 }
 
-function getEthProviderError<T>(code: number, arg: EthErrorsArg<T>): EthereumProviderError<T> {
+function getEthProviderError<T>(code: number, arg?: EthErrorsArg<T>): EthereumProviderError<T> {
   const [message, data] = parseOpts(arg);
   return new EthereumProviderError(
     code,
@@ -199,7 +199,7 @@ function getEthProviderError<T>(code: number, arg: EthErrorsArg<T>): EthereumPro
   );
 }
 
-function parseOpts<T>(arg: EthErrorsArg<T>): [string?, T?] {
+function parseOpts<T>(arg?: EthErrorsArg<T>): [string?, T?] {
   if (arg) {
     if (typeof arg === 'string') {
       return [arg];
