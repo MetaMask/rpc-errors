@@ -7,15 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.3] - 2021-03-10
+
+### Fixed
+
+- Correctly type `ethErrors` getter function argument objects as optional ([#36](https://github.com/MetaMask/eth-rpc-errors/pull/36))
+
 ## [4.0.2] - 2020-11-17
 
 ### Changed
 
-- The `data` property of `EthereumRpcError` and `EthereumProviderError` is now marked as optional rather than `T | undefined` ([#34](https://github.com/MetaMask/eth-rpc-errors/pull/34))
+- Mark the `data` property of `EthereumRpcError` and `EthereumProviderError` as optional rather than `T | undefined` ([#34](https://github.com/MetaMask/eth-rpc-errors/pull/34))
 
 ### Fixed
 
-- `SerializedEthereumRpcError.stack` is now correctly typed as a `string`, if present ([#34](https://github.com/MetaMask/eth-rpc-errors/pull/34))
+- Correctly type `SerializedEthereumRpcError.stack` as `string`, if present ([#34](https://github.com/MetaMask/eth-rpc-errors/pull/34))
 
 ## [4.0.1] - 2020-11-03
 
