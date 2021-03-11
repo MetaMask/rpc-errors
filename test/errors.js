@@ -114,6 +114,11 @@ test('test exported object for correctness', (t) => {
       );
     }
   });
+  t.comment('Handles no argument.');
+  validateError(
+    ethErrors.rpc.internal(),
+    'internal', undefined, t,
+  );
   t.comment('End: Ethereum RPC');
 
   t.comment('Begin: Ethereum Provider');
@@ -137,6 +142,11 @@ test('test exported object for correctness', (t) => {
       );
     }
   });
+  t.comment('Handles no argument.');
+  validateError(
+    ethErrors.provider.unauthorized(),
+    'unauthorized', undefined, t, true,
+  );
   t.comment('End: Ethereum Provider');
   t.end();
 });

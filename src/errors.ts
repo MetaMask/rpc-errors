@@ -11,7 +11,7 @@ interface ServerErrorOptions<T> extends EthereumErrorOptions<T> {
   code: number;
 }
 
-type CustomErrorOptions<T> = ServerErrorOptions<T>;
+type CustomErrorArg<T> = ServerErrorOptions<T>;
 
 type EthErrorsArg<T> = EthereumErrorOptions<T> | string;
 
@@ -164,11 +164,13 @@ export const ethErrors = {
     /**
      * Get a custom Ethereum Provider error.
      */
-    custom: <T>(opts: CustomErrorOptions<T>) => {
+    custom: <T>(opts: CustomErrorArg<T>) => {
       if (!opts || typeof opts !== 'object' || Array.isArray(opts)) {
         throw new Error('Ethereum Provider custom errors must provide single object argument.');
       }
+
       const { code, message, data } = opts;
+
       if (!message || typeof message !== 'string') {
         throw new Error(
           '"message" must be a nonempty string',
