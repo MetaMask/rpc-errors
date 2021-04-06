@@ -4,6 +4,9 @@
   "description": "Ethereum RPC and Provider errors.",
   "license": "MIT",
   "author": "Erik Marks <rekmarks@protonmail.com>",
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "scripts": {
     "build": "tsc --project .",
     "test": "yarn build && node test",

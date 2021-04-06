@@ -36,6 +36,12 @@ Installation: `npm install eth-rpc-errors` or `yarn add eth-rpc-errors`
 
 The package is implemented in TypeScript, and all exports are typed.
 
+## Running tests
+
+```bash
+yarn test
+```
+
 ### Errors API
 
 ```js
