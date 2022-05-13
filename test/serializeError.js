@@ -11,12 +11,12 @@ const dummyMessage = 'baz';
 
 const invalidError0 = 0;
 const invalidError1 = ['foo', 'bar', 3];
-const invalidError2 = { code: 34 };
+const invalidError2 = { code: "Invalid code, should be an integer" };
 const invalidError3 = { code: 4001 };
 const invalidError4 = { code: 4001, message: 3, data: Object.assign({}, dummyData) };
 const invalidError5 = null;
 const invalidError6 = undefined;
-const invalidError7 = { code: 34, message: dummyMessage, data: Object.assign({}, dummyData) };
+const invalidError7 = { code: "Invalid code, should be an integer", message: dummyMessage, data: Object.assign({}, dummyData) };
 
 const validError0 = { code: 4001, message: dummyMessage };
 const validError1 = { code: 4001, message: dummyMessage, data: Object.assign({}, dummyData) };
