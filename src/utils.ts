@@ -37,10 +37,9 @@ export function getMessageFromCode(
  * Returns whether the given code is valid.
  * A code is valid if it is an integer number.
  */
- export function isValidCode(code: number): boolean {
+export function isValidCode(code: number): boolean {
   return Number.isInteger(code);
 }
-
 
 /**
  * Serializes the given error to an Ethereum JSON RPC-compatible error object.
