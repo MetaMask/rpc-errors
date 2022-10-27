@@ -51,6 +51,5 @@ jobs:
     runs-on: ubuntu-20.04
     needs:
       - build-lint-test
-      - check-workflows
     steps:
       - run: echo "Great success!"
