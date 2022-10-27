@@ -78,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error codes in docstrings ([5452001](https://github.com/MetaMask/eth-rpc-errors/commit/545200100af05aeade62ba6b736f5080a6891bc4))
 
 ## [2.0.0] - 2019-09-26
-
+### Changed
 - **Exports**
   - `errors` renamed `ethErrors`
   - `JsonRpcError` renamed `EthereumRpcError`
@@ -108,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated affected interfaces
 
 ## [1.1.0] - 2019-09-16
-
+### Changed
 - `serializeError`
   - If the object passed to the function has a `.message` property,
   it will preferred over the `.message` property of the fallback error when
