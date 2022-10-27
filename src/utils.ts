@@ -3,8 +3,7 @@ import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
-const FALLBACK_MESSAGE =
-  'Unspecified error message. This is a bug, please report it.';
+const FALLBACK_MESSAGE = 'Invalid internal error. See "data.originalError" for original value. Please report this bug.';
 const FALLBACK_ERROR: SerializedEthereumRpcError = {
   code: FALLBACK_ERROR_CODE,
   message: getMessageFromCode(FALLBACK_ERROR_CODE),
@@ -28,7 +27,7 @@ export function getMessageFromCode(
   code: number,
   fallbackMessage: string = FALLBACK_MESSAGE,
 ): string {
-  if (Number.isInteger(code)) {
+  if (isValidCode(code)) {
     const codeString = code.toString();
 
     if (hasProperty(errorValues, codeString)) {
@@ -44,26 +43,13 @@ export function getMessageFromCode(
 
 /**
  * Returns whether the given code is valid.
- * A code is only valid if it has a message.
+ * A code is valid if it is an integer.
  *
  * @param code - The error code.
  * @returns Whether the given code is valid.
  */
 export function isValidCode(code: number): boolean {
-  if (!Number.isInteger(code)) {
-    return false;
-  }
-
-  const codeString = code.toString();
-  if (errorValues[codeString as ErrorValueKey]) {
-    return true;
-  }
-
-  if (isJsonRpcServerError(code)) {
-    return true;
-  }
-
-  return false;
+  return Number.isInteger(code);
 }
 
 /**
@@ -86,7 +72,7 @@ export function serializeError(
 ): SerializedEthereumRpcError {
   if (
     !fallbackError ||
-    !Number.isInteger(fallbackError.code) ||
+    !isValidCode(fallbackError.code) ||
     typeof fallbackError.message !== 'string'
   ) {
     throw new Error(
@@ -163,6 +149,5 @@ function assignOriginalError(error: unknown): unknown {
   if (error && typeof error === 'object' && !Array.isArray(error)) {
     return Object.assign({}, error);
   }
-
   return error;
 }
