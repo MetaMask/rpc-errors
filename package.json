@@ -42,7 +42,7 @@
   "homepage": "https://github.com/MetaMask/eth-rpc-errors#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MetaMask/eth-rpc-errors.git"
+    "url": "https://github.com/MetaMask/eth-rpc-errors.git"
   },
   "keywords": [
     "rpc",
