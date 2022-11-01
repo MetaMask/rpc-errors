@@ -1,4 +1,4 @@
-import { ethErrors } from "..";
+import { ethErrors } from '..';
 
 export const dummyData = { foo: 'bar' };
 export const dummyMessage = 'baz';
@@ -35,3 +35,7 @@ export const validError4 = ethErrors.rpc.parse({
   data: Object.assign({}, dummyData),
 });
 delete validError4.stack;
+
+export const SERVER_ERROR_CODE = -32098;
+export const CUSTOM_ERROR_CODE = 1001;
+export const CUSTOM_ERROR_MESSAGE = 'foo';

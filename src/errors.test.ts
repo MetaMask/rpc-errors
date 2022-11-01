@@ -1,33 +1,34 @@
-import { getMessageFromCode, JSON_RPC_SERVER_ERROR_MESSAGE } from "./utils";
-import { ethErrors, errorCodes } from ".";
-import { dummyData } from "./__fixtures__";
+import { getMessageFromCode, JSON_RPC_SERVER_ERROR_MESSAGE } from './utils';
+import {
+  dummyData,
+  CUSTOM_ERROR_MESSAGE,
+  SERVER_ERROR_CODE,
+  CUSTOM_ERROR_CODE,
+} from './__fixtures__';
+import { ethErrors, errorCodes } from '.';
 
-const SERVER_ERROR_CODE = -32098;
-const CUSTOM_ERROR_CODE = 1001;
-const CUSTOM_ERROR_MESSAGE = "foo";
-
-describe("ethErrors.rpc.invalidInput", () => {
-  it("accepts a single string argument where appropriate", () => {
+describe('ethErrors.rpc.invalidInput', () => {
+  it('accepts a single string argument where appropriate', () => {
     const err = ethErrors.rpc.invalidInput(CUSTOM_ERROR_MESSAGE);
     expect(err.code).toBe(errorCodes.rpc.invalidInput);
     expect(err.message).toBe(CUSTOM_ERROR_MESSAGE);
   });
 });
 
-describe("ethErrors.provider.unauthorized", () => {
-  it("accepts a single string argument where appropriate", () => {
+describe('ethErrors.provider.unauthorized', () => {
+  it('accepts a single string argument where appropriate', () => {
     const err = ethErrors.provider.unauthorized(CUSTOM_ERROR_MESSAGE);
     expect(err.code).toBe(errorCodes.provider.unauthorized);
     expect(err.message).toBe(CUSTOM_ERROR_MESSAGE);
   });
 });
 
-describe("custom provider error options", () => {
+describe('custom provider error options', () => {
   expect(() => {
     // @ts-expect-error Invalid input
-    ethErrors.provider.custom("bar");
+    ethErrors.provider.custom('bar');
   }).toThrowError(
-    "Ethereum Provider custom errors must provide single object argument."
+    'Ethereum Provider custom errors must provide single object argument.',
   );
 
   expect(() => {
@@ -36,37 +37,37 @@ describe("custom provider error options", () => {
   }).toThrowError('"message" must be a nonempty string');
 
   expect(() => {
-    ethErrors.provider.custom({ code: 4009, message: "" });
+    ethErrors.provider.custom({ code: 4009, message: '' });
   }).toThrowError('"message" must be a nonempty string');
 });
 
-describe("ethError.rpc.server", () => {
-  it("throws on invalid input", () => {
+describe('ethError.rpc.server', () => {
+  it('throws on invalid input', () => {
     expect(() => {
       // @ts-expect-error Invalid input
-      ethErrors.rpc.server("bar");
+      ethErrors.rpc.server('bar');
     }).toThrowError(
-      "Ethereum RPC Server errors must provide single object argument."
+      'Ethereum RPC Server errors must provide single object argument.',
     );
 
     expect(() => {
       // @ts-expect-error Invalid input
-      ethErrors.rpc.server({ code: "bar" });
+      ethErrors.rpc.server({ code: 'bar' });
     }).toThrowError(
-      '"code" must be an integer such that: -32099 <= code <= -32005'
+      '"code" must be an integer such that: -32099 <= code <= -32005',
     );
 
     expect(() => {
       ethErrors.rpc.server({ code: 1 });
     }).toThrowError(
-      '"code" must be an integer such that: -32099 <= code <= -32005'
+      '"code" must be an integer such that: -32099 <= code <= -32005',
     );
   });
 });
 
-describe("ethError.rpc", () => {
-  it.each(Object.entries(ethErrors.rpc).filter(([key]) => key !== "server"))(
-    "%s returns appropriate value",
+describe('ethError.rpc', () => {
+  it.each(Object.entries(ethErrors.rpc).filter(([key]) => key !== 'server'))(
+    '%s returns appropriate value',
     (key, value) => {
       const createError = value as any;
       const error = createError({
@@ -77,14 +78,14 @@ describe("ethError.rpc", () => {
       const rpcCode = errorCodes.rpc[key];
       expect(
         Object.values(errorCodes.rpc).includes(error.code) ||
-          (error.code <= -32000 && error.code >= -32099)
+          (error.code <= -32000 && error.code >= -32099),
       ).toBeTruthy();
       expect(error.code).toBe(rpcCode);
       expect(error.message).toBe(getMessageFromCode(rpcCode));
-    }
+    },
   );
 
-  it("server returns appropriate value", () => {
+  it('server returns appropriate value', () => {
     const error = ethErrors.rpc.server({
       code: SERVER_ERROR_CODE,
       message: undefined,
@@ -95,23 +96,23 @@ describe("ethError.rpc", () => {
   });
 });
 
-describe("ethError.provider", () => {
+describe('ethError.provider', () => {
   it.each(
-    Object.entries(ethErrors.provider).filter(([key]) => key !== "custom")
-  )("%s returns appropriate value", (key, value) => {
+    Object.entries(ethErrors.provider).filter(([key]) => key !== 'custom'),
+  )('%s returns appropriate value', (key, value) => {
     const createError = value as any;
     const error = createError({
       message: null,
       data: Object.assign({}, dummyData),
     });
-      // @ts-expect-error TypeScript does not like indexing into this with the key
+    // @ts-expect-error TypeScript does not like indexing into this with the key
     const providerCode = errorCodes.provider[key];
     expect(error.code >= 1000 && error.code < 5000).toBeTruthy();
     expect(error.code).toBe(providerCode);
     expect(error.message).toBe(getMessageFromCode(providerCode));
   });
 
-  it("custom returns appropriate value", () => {
+  it('custom returns appropriate value', () => {
     const error = ethErrors.provider.custom({
       code: CUSTOM_ERROR_CODE,
       message: CUSTOM_ERROR_MESSAGE,
