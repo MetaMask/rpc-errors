@@ -1,9 +1,8 @@
 {
-  "name": "eth-rpc-errors",
+  "name": "@metamask/eth-rpc-errors",
   "version": "4.0.3",
   "description": "Ethereum RPC and Provider errors.",
   "license": "MIT",
-  "author": "Erik Marks <rekmarks@protonmail.com>",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -16,6 +15,7 @@
     "prepublishOnly": "yarn test"
   },
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
