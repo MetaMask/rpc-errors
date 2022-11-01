@@ -1,115 +1,117 @@
-import { getMessageFromCode, JSON_RPC_SERVER_ERROR_MESSAGE } from './utils';
-import {
-  ethErrors,
-  EthereumRpcError,
-  EthereumProviderError,
-  errorCodes,
-} from '.';
-
-const rpcCodes = errorCodes.rpc;
-const providerCodes = errorCodes.provider;
-const serverErrorMessage = JSON_RPC_SERVER_ERROR_MESSAGE;
-
-const rpcCodeValues = Object.values(rpcCodes);
-
-const dummyData = { foo: 'bar' };
+import { getMessageFromCode, JSON_RPC_SERVER_ERROR_MESSAGE } from "./utils";
+import { ethErrors, errorCodes } from ".";
+import { dummyData } from "./__fixtures__";
 
 const SERVER_ERROR_CODE = -32098;
 const CUSTOM_ERROR_CODE = 1001;
-const CUSTOM_ERROR_MESSAGE = 'foo';
+const CUSTOM_ERROR_MESSAGE = "foo";
 
-describe('ensure exported object accepts a single string argument where appropriate', () => {
-  let err = ethErrors.rpc.invalidInput(CUSTOM_ERROR_MESSAGE);
-  expect(err.code === errorCodes.rpc.invalidInput).toBeTruthy();
-  expect(err.message === CUSTOM_ERROR_MESSAGE).toBeTruthy();
-
-  err = ethErrors.provider.unauthorized(CUSTOM_ERROR_MESSAGE);
-  expect(err.code === errorCodes.provider.unauthorized).toBeTruthy();
-  expect(err.message === CUSTOM_ERROR_MESSAGE).toBeTruthy();
+describe("ethErrors.rpc.invalidInput", () => {
+  it("accepts a single string argument where appropriate", () => {
+    const err = ethErrors.rpc.invalidInput(CUSTOM_ERROR_MESSAGE);
+    expect(err.code).toBe(errorCodes.rpc.invalidInput);
+    expect(err.message).toBe(CUSTOM_ERROR_MESSAGE);
+  });
 });
 
-describe('custom provider error options', () => {
-  expect(() => {
-    ethErrors.provider.custom('bar' as any);
-  }).toThrowError(/Ethereum Provider custom errors must/u);
-
-  expect(() => {
-    ethErrors.provider.custom({ code: 4009, message: 2 } as any);
-  }).toThrowError(/"message" must be/u);
-
-  expect(() => {
-    ethErrors.provider.custom({ code: 4009, message: '' });
-  }).toThrowError(/"message" must be/u);
-
-  const err = ethErrors.provider.custom({ code: 4009, message: 'foo' });
-  expect(err instanceof EthereumProviderError).toBeTruthy();
+describe("ethErrors.provider.unauthorized", () => {
+  it("accepts a single string argument where appropriate", () => {
+    const err = ethErrors.provider.unauthorized(CUSTOM_ERROR_MESSAGE);
+    expect(err.code).toBe(errorCodes.provider.unauthorized);
+    expect(err.message).toBe(CUSTOM_ERROR_MESSAGE);
+  });
 });
 
-describe('server rpc error options', () => {
+describe("custom provider error options", () => {
   expect(() => {
-    ethErrors.rpc.server('bar' as any);
-  }).toThrowError(/Ethereum RPC Server errors must/u);
+    // @ts-expect-error Invalid input
+    ethErrors.provider.custom("bar");
+  }).toThrowError(
+    "Ethereum Provider custom errors must provide single object argument."
+  );
 
   expect(() => {
-    ethErrors.rpc.server({ code: 'bar' } as any);
-  }).toThrowError(/"code" must be/u);
+    // @ts-expect-error Invalid input
+    ethErrors.provider.custom({ code: 4009, message: 2 });
+  }).toThrowError('"message" must be a nonempty string');
 
   expect(() => {
-    ethErrors.rpc.server({ code: 1 });
-  }).toThrowError(/"code" must be/u);
-
-  const err = ethErrors.rpc.server({ code: -32006, message: 'foo' });
-  expect(err instanceof EthereumRpcError).toBeTruthy();
+    ethErrors.provider.custom({ code: 4009, message: "" });
+  }).toThrowError('"message" must be a nonempty string');
 });
 
-// we just iterate over all keys on the errors object and call and check
-// each error in turn
-describe('test exported object for correctness', () => {
-  it.each(Object.entries(ethErrors.rpc).filter(([key]) => key !== 'server'))(
-    'Ethereum RPC',
+describe("ethError.rpc.server", () => {
+  it("throws on invalid input", () => {
+    expect(() => {
+      // @ts-expect-error Invalid input
+      ethErrors.rpc.server("bar");
+    }).toThrowError(
+      "Ethereum RPC Server errors must provide single object argument."
+    );
+
+    expect(() => {
+      // @ts-expect-error Invalid input
+      ethErrors.rpc.server({ code: "bar" });
+    }).toThrowError(
+      '"code" must be an integer such that: -32099 <= code <= -32005'
+    );
+
+    expect(() => {
+      ethErrors.rpc.server({ code: 1 });
+    }).toThrowError(
+      '"code" must be an integer such that: -32099 <= code <= -32005'
+    );
+  });
+});
+
+describe("ethError.rpc", () => {
+  it.each(Object.entries(ethErrors.rpc).filter(([key]) => key !== "server"))(
+    "%s returns appropriate value",
     (key, value) => {
       const createError = value as any;
       const error = createError({
         message: null,
         data: Object.assign({}, dummyData),
       });
-      // @ts-expect-error Fix?
-      const rpcCode = rpcCodes[key];
+      // @ts-expect-error TypeScript does not like indexing into this with the key
+      const rpcCode = errorCodes.rpc[key];
       expect(
-        rpcCodeValues.includes(error.code) ||
-          (error.code <= -32000 && error.code >= -32099),
+        Object.values(errorCodes.rpc).includes(error.code) ||
+          (error.code <= -32000 && error.code >= -32099)
       ).toBeTruthy();
       expect(error.code).toBe(rpcCode);
       expect(error.message).toBe(getMessageFromCode(rpcCode));
-    },
+    }
   );
 
-  it('server', () => {
+  it("server returns appropriate value", () => {
     const error = ethErrors.rpc.server({
       code: SERVER_ERROR_CODE,
       message: undefined,
       data: Object.assign({}, dummyData),
     });
     expect(error.code <= -32000 && error.code >= -32099).toBeTruthy();
-    expect(error.message).toBe(serverErrorMessage);
+    expect(error.message).toBe(JSON_RPC_SERVER_ERROR_MESSAGE);
   });
+});
 
+describe("ethError.provider", () => {
   it.each(
-    Object.entries(ethErrors.provider).filter(([key]) => key !== 'custom'),
-  )('Ethereum Provider', (key, value) => {
+    Object.entries(ethErrors.provider).filter(([key]) => key !== "custom")
+  )("%s returns appropriate value", (key, value) => {
     const createError = value as any;
     const error = createError({
       message: null,
       data: Object.assign({}, dummyData),
     });
-    // @ts-expect-error Fix?
-    const providerCode = providerCodes[key];
+      // @ts-expect-error TypeScript does not like indexing into this with the key
+    const providerCode = errorCodes.provider[key];
     expect(error.code >= 1000 && error.code < 5000).toBeTruthy();
     expect(error.code).toBe(providerCode);
     expect(error.message).toBe(getMessageFromCode(providerCode));
   });
 
-  it('custom', () => {
+  it("custom returns appropriate value", () => {
     const error = ethErrors.provider.custom({
       code: CUSTOM_ERROR_CODE,
       message: CUSTOM_ERROR_MESSAGE,

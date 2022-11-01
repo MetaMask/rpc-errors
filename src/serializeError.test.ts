@@ -1,46 +1,26 @@
-import { getMessageFromCode, serializeError } from './utils';
-import { ethErrors, errorCodes } from '.';
+import {
+  invalidError0,
+  invalidError1,
+  invalidError2,
+  invalidError3,
+  invalidError4,
+  invalidError5,
+  invalidError6,
+  invalidError7,
+  validError0,
+  validError1,
+  validError2,
+  validError3,
+  validError4,
+  dummyMessage
+} from "./__fixtures__";
+import { getMessageFromCode, serializeError } from "./utils";
+import { errorCodes } from ".";
 
 const rpcCodes = errorCodes.rpc;
 
-const dummyData = { foo: 'bar' };
-const dummyMessage = 'baz';
-
-const invalidError0 = 0;
-const invalidError1 = ['foo', 'bar', 3];
-const invalidError2 = { code: 34 };
-const invalidError3 = { code: 4001 };
-const invalidError4 = {
-  code: 4001,
-  message: 3,
-  data: Object.assign({}, dummyData),
-};
-const invalidError5 = null;
-const invalidError6 = undefined;
-const invalidError7 = {
-  code: 34,
-  message: dummyMessage,
-  data: Object.assign({}, dummyData),
-};
-
-const validError0 = { code: 4001, message: dummyMessage };
-const validError1 = {
-  code: 4001,
-  message: dummyMessage,
-  data: Object.assign({}, dummyData),
-};
-const validError2 = ethErrors.rpc.parse();
-delete validError2.stack;
-const validError3 = ethErrors.rpc.parse(dummyMessage);
-delete validError3.stack;
-const validError4 = ethErrors.rpc.parse({
-  message: dummyMessage,
-  data: Object.assign({}, dummyData),
-});
-delete validError4.stack;
-
-describe('serializeError', () => {
-  it('invalid error: non-object', () => {
+describe("serializeError", () => {
+  it("handles invalid error: non-object", () => {
     const result = serializeError(invalidError0);
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
@@ -49,7 +29,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('invalid error: null', () => {
+  it("handles invalid error: null", () => {
     const result = serializeError(invalidError5);
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
@@ -58,7 +38,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('invalid error: undefined', () => {
+  it("handles invalid error: undefined", () => {
     const result = serializeError(invalidError6);
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
@@ -67,7 +47,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('invalid error: array', () => {
+  it("handles invalid error: array", () => {
     const result = serializeError(invalidError1);
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
@@ -76,7 +56,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('invalid error: invalid code', () => {
+  it("handles invalid error: invalid code", () => {
     const result = serializeError(invalidError2);
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
@@ -85,7 +65,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('invalid error: valid code, undefined message', () => {
+  it("handles invalid error: valid code, undefined message", () => {
     const result = serializeError(invalidError3);
     expect(result).toStrictEqual({
       code: 4001,
@@ -94,7 +74,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('invalid error: non-string message with data', () => {
+  it("handles invalid error: non-string message with data", () => {
     const result = serializeError(invalidError4);
     expect(result).toStrictEqual({
       code: 4001,
@@ -103,7 +83,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('invalid error: invalid code with string message', () => {
+  it("handles invalid error: invalid code with string message", () => {
     const result = serializeError(invalidError7);
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
@@ -112,18 +92,18 @@ describe('serializeError', () => {
     });
   });
 
-  it('invalid error: invalid code, no message, custom fallback', () => {
+  it("handles invalid error: invalid code, no message, custom fallback", () => {
     const result = serializeError(invalidError2, {
-      fallbackError: { code: rpcCodes.methodNotFound, message: 'foo' },
+      fallbackError: { code: rpcCodes.methodNotFound, message: "foo" },
     });
     expect(result).toStrictEqual({
       code: rpcCodes.methodNotFound,
-      message: 'foo',
+      message: "foo",
       data: { originalError: Object.assign({}, invalidError2) },
     });
   });
 
-  it('valid error: code and message only', () => {
+  it("handles valid error: code and message only", () => {
     const result = serializeError(validError0);
     expect(result).toStrictEqual({
       code: 4001,
@@ -131,7 +111,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('valid error: code, message, and data', () => {
+  it("handles valid error: code, message, and data", () => {
     const result = serializeError(validError1);
     expect(result).toStrictEqual({
       code: 4001,
@@ -140,7 +120,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('valid error: instantiated error', () => {
+  it("handles valid error: instantiated error", () => {
     const result = serializeError(validError2);
     expect(result).toStrictEqual({
       code: rpcCodes.parse,
@@ -148,7 +128,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('valid error: instantiated error', () => {
+  it("handles valid error: instantiated error", () => {
     const result = serializeError(validError3);
     expect(result).toStrictEqual({
       code: rpcCodes.parse,
@@ -156,7 +136,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('valid error: instantiated error with custom message and data', () => {
+  it("handles valid error: instantiated error with custom message and data", () => {
     const result = serializeError(validError4);
     expect(result).toStrictEqual({
       code: rpcCodes.parse,
@@ -165,9 +145,9 @@ describe('serializeError', () => {
     });
   });
 
-  it('valid error: message, data, and stack', () => {
+  it("handles valid error: message, data, and stack", () => {
     const result = serializeError(
-      Object.assign({}, validError1, { stack: 'foo' }),
+      Object.assign({}, validError1, { stack: "foo" })
     );
     expect(result).toStrictEqual({
       code: 4001,
@@ -176,7 +156,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('include stack: no stack present', () => {
+  it("handles including stack: no stack present", () => {
     const result = serializeError(validError1, { shouldIncludeStack: true });
     expect(result).toStrictEqual({
       code: 4001,
@@ -185,25 +165,25 @@ describe('serializeError', () => {
     });
   });
 
-  it('include stack: string stack present', () => {
+  it("handles including stack: string stack present", () => {
     const result = serializeError(
-      Object.assign({}, validError1, { stack: 'foo' }),
-      { shouldIncludeStack: true },
+      Object.assign({}, validError1, { stack: "foo" }),
+      { shouldIncludeStack: true }
     );
     expect(result).toStrictEqual({
       code: 4001,
       message: validError1.message,
       data: Object.assign({}, validError1.data),
-      stack: 'foo',
+      stack: "foo",
     });
   });
 
-  it('include stack: non-string stack present', () => {
+  it("handles including stack: non-string stack present", () => {
     const result = serializeError(
       Object.assign({}, validError1, { stack: 2 }),
       {
         shouldIncludeStack: true,
-      },
+      }
     );
     expect(result).toStrictEqual({
       code: 4001,
