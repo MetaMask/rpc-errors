@@ -18,7 +18,7 @@ const SERVER_ERROR_CODE = -32098;
 const CUSTOM_ERROR_CODE = 1001;
 const CUSTOM_ERROR_MESSAGE = 'foo';
 
-test('ensure exported object accepts a single string argument where appropriate', () => {
+describe('ensure exported object accepts a single string argument where appropriate', () => {
   let err = ethErrors.rpc.invalidInput(CUSTOM_ERROR_MESSAGE);
   expect(err.code === errorCodes.rpc.invalidInput).toBeTruthy();
   expect(err.message === CUSTOM_ERROR_MESSAGE).toBeTruthy();
@@ -28,7 +28,7 @@ test('ensure exported object accepts a single string argument where appropriate'
   expect(err.message === CUSTOM_ERROR_MESSAGE).toBeTruthy();
 });
 
-test('custom provider error options', () => {
+describe('custom provider error options', () => {
   expect(() => {
     ethErrors.provider.custom('bar' as any);
   }).toThrowError(/Ethereum Provider custom errors must/u);
@@ -45,7 +45,7 @@ test('custom provider error options', () => {
   expect(err instanceof EthereumProviderError).toBeTruthy();
 });
 
-test('server rpc error options', () => {
+describe('server rpc error options', () => {
   expect(() => {
     ethErrors.rpc.server('bar' as any);
   }).toThrowError(/Ethereum RPC Server errors must/u);
