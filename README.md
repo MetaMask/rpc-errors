@@ -1,6 +1,6 @@
-# eth-rpc-errors
+# `@metamask/rpc-errors`
 
-Ethereum RPC errors, including for
+JSON-RPC errors, including for
 [Ethereum JSON RPC](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1474.md)
 and
 [Ethereum Provider](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md),
@@ -11,7 +11,7 @@ and [making unknown errors compliant with either spec](#parsing-unknown-errors).
 In TypeScript or JavaScript:
 
 ```js
-import { ethErrors } from 'eth-rpc-errors'
+import { ethErrors } from '@metamask/rpc-errors'
 
 throw ethErrors.provider.unauthorized()
 // or
@@ -30,7 +30,7 @@ throw ethErrors.provider.unauthorized('my custom message')
 
 ## Usage
 
-Installation: `npm install eth-rpc-errors` or `yarn add eth-rpc-errors`
+Installation: `npm install @metamask/rpc-errors` or `yarn add @metamask/rpc-errors`
 
 `import` or `require` as normal (no default export).
 
@@ -45,7 +45,7 @@ yarn test
 ### Errors API
 
 ```js
-import { ethErrors } from 'eth-rpc-errors'
+import { ethErrors } from '@metamask/rpc-errors'
 
 // Ethereum RPC errors are namespaced under "ethErrors.rpc"
 response.error = ethErrors.rpc.methodNotFound({
@@ -88,7 +88,7 @@ response.error = ethErrors.provider.custom({
 
 ```js
 // this is useful for ensuring your errors are standardized
-import { serializeError } from 'eth-rpc-errors'
+import { serializeError } from '@metamask/rpc-errors'
 
 // if the argument is not a valid error per any supported spec,
 // it will be added as error.data.originalError
@@ -114,12 +114,12 @@ response.error = serializeError(maybeAnError, fallbackError)
 /**
  * Classes
  */
-import { EthereumRpcError, EthereumProviderError } from 'eth-rpc-errors'
+import { EthereumRpcError, EthereumProviderError } from '@metamask/rpc-errors'
 
 /**
  * getMessageFromCode and errorCodes
  */
-import { getMessageFromCode, errorCodes } from 'eth-rpc-errors'
+import { getMessageFromCode, errorCodes } from '@metamask/rpc-errors'
 
 // get the default message string for the given code, or a fallback message if
 // no message exists for the given code

@@ -1,5 +1,5 @@
 {
-  "name": "@metamask/eth-rpc-errors",
+  "name": "@metamask/rpc-errors",
   "version": "4.0.3",
   "description": "Ethereum RPC and Provider errors.",
   "author": "Erik Marks <rekmarks@protonmail.com>",

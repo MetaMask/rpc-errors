@@ -305,9 +305,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/eth-rpc-errors@workspace:.":
+"@metamask/rpc-errors@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@metamask/eth-rpc-errors@workspace:."
+  resolution: "@metamask/rpc-errors@workspace:."
   dependencies:
     "@lavamoat/allow-scripts": ^2.0.3
     "@metamask/auto-changelog": ^2.3.0
