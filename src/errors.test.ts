@@ -27,18 +27,18 @@ describe('custom provider error options', () => {
   expect(() => {
     // @ts-expect-error Invalid input
     ethErrors.provider.custom('bar');
-  }).toThrowError(
+  }).toThrow(
     'Ethereum Provider custom errors must provide single object argument.',
   );
 
   expect(() => {
     // @ts-expect-error Invalid input
     ethErrors.provider.custom({ code: 4009, message: 2 });
-  }).toThrowError('"message" must be a nonempty string');
+  }).toThrow('"message" must be a nonempty string');
 
   expect(() => {
     ethErrors.provider.custom({ code: 4009, message: '' });
-  }).toThrowError('"message" must be a nonempty string');
+  }).toThrow('"message" must be a nonempty string');
 });
 
 describe('ethError.rpc.server', () => {
@@ -46,22 +46,18 @@ describe('ethError.rpc.server', () => {
     expect(() => {
       // @ts-expect-error Invalid input
       ethErrors.rpc.server('bar');
-    }).toThrowError(
+    }).toThrow(
       'Ethereum RPC Server errors must provide single object argument.',
     );
 
     expect(() => {
       // @ts-expect-error Invalid input
       ethErrors.rpc.server({ code: 'bar' });
-    }).toThrowError(
-      '"code" must be an integer such that: -32099 <= code <= -32005',
-    );
+    }).toThrow('"code" must be an integer such that: -32099 <= code <= -32005');
 
     expect(() => {
       ethErrors.rpc.server({ code: 1 });
-    }).toThrowError(
-      '"code" must be an integer such that: -32099 <= code <= -32005',
-    );
+    }).toThrow('"code" must be an integer such that: -32099 <= code <= -32005');
   });
 });
 
