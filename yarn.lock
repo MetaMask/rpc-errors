@@ -894,7 +894,7 @@ __metadata:
     "@metamask/eslint-config-jest": ^10.0.0
     "@metamask/eslint-config-nodejs": ^10.0.0
     "@metamask/eslint-config-typescript": ^10.0.0
-    "@metamask/utils": ^3.2.0
+    "@metamask/utils": ^3.3.0
     "@types/jest": ^28.1.6
     "@typescript-eslint/eslint-plugin": ^5.33.1
     "@typescript-eslint/parser": ^5.33.1
@@ -911,22 +911,21 @@ __metadata:
     jest-it-up: ^2.0.2
     prettier: ^2.7.1
     prettier-plugin-packagejson: ^2.2.18
-    superstruct: ^0.16.6
+    superstruct: ^0.16.7
     ts-jest: ^28.0.7
     typedoc: ^0.23.19
     typescript: ~4.7.4
   languageName: unknown
   linkType: soft
 
-"@metamask/utils@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@metamask/utils@npm:3.2.0"
+"@metamask/utils@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@metamask/utils@npm:3.3.0"
   dependencies:
     "@types/debug": ^4.1.7
     debug: ^4.3.4
-    fast-deep-equal: ^3.1.3
-    superstruct: ^0.16.5
-  checksum: 99adcbd273c69075628913259f8c3fb843291898eba813f4f5fe0bfc060ae5955e2c69e70e15b04156793f8d84edd077d1fac3f8c3927e067d0f311eef9d4469
+    superstruct: ^0.16.7
+  checksum: 263c26722b7339fced997cc2aa38ccb34d178f532ff025c7e789818ad5ef2317439eda694a4c0bf5ff3cabdeced3c170b9ad23d2f178ddd5fd225f6ec2bce259
   languageName: node
   linkType: hard
 
@@ -5555,7 +5554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"superstruct@npm:^0.16.5, superstruct@npm:^0.16.6":
+"superstruct@npm:^0.16.7":
   version: 0.16.7
   resolution: "superstruct@npm:0.16.7"
   checksum: c8c855ff6945da8a41048c6d236de7b1af5d4d9c31742b3ee54d65647c31597488620281f65e095d5efc9e2fbdaad529b8c8f2506c12569d428467c835a21477

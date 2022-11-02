@@ -36,9 +36,9 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@metamask/utils": "^3.2.0",
+    "@metamask/utils": "^3.3.0",
     "fast-safe-stringify": "^2.0.6",
-    "superstruct": "^0.16.6"
+    "superstruct": "^0.16.7"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",

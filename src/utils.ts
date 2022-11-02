@@ -3,8 +3,9 @@ import {
   JsonRpcErrorStruct,
   isValidJson,
   isObject,
+  isJsonRpcError,
 } from '@metamask/utils';
-import { is, create } from 'superstruct';
+import { create } from 'superstruct';
 import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
@@ -77,7 +78,7 @@ export function serializeError(
   error: unknown,
   { fallbackError = FALLBACK_ERROR, shouldIncludeStack = false } = {},
 ): SerializedEthereumRpcError {
-  if (!is(fallbackError, JsonRpcErrorStruct)) {
+  if (!isJsonRpcError(fallbackError)) {
     throw new Error(
       'Must provide fallback error with integer number code and string message.',
     );
@@ -107,7 +108,7 @@ export function serializeError(
  * @returns A JSON serializable error object.
  */
 function buildError(error: unknown, fallbackError: SerializedEthereumRpcError) {
-  if (is(error, JsonRpcErrorStruct)) {
+  if (isJsonRpcError(error)) {
     return create(error, JsonRpcErrorStruct);
   }
   // If the original error is an object, we make a copy of it, this should also copy class properties to an object
