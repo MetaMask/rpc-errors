@@ -2,15 +2,27 @@
   "name": "@metamask/rpc-errors",
   "version": "4.0.3",
   "description": "Ethereum RPC and Provider errors.",
+  "keywords": [
+    "rpc",
+    "ethereum",
+    "errors",
+    "utility"
+  ],
+  "homepage": "https://github.com/MetaMask/eth-rpc-errors#readme",
+  "bugs": {
+    "url": "https://github.com/MetaMask/eth-rpc-errors/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/eth-rpc-errors.git"
   },
-  "author": "Erik Marks <rekmarks@protonmail.com>",
   "license": "MIT",
-  "engines": {
-    "node": ">=16.0.0"
-  },
+  "author": "Erik Marks <rekmarks@protonmail.com>",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "build:clean": "rimraf dist && yarn build",
@@ -23,12 +35,8 @@
     "test": "jest && jest-it-up",
     "test:watch": "jest --watch"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "dependencies": {
+    "@metamask/utils": "^3.2.0",
     "fast-safe-stringify": "^2.0.6"
   },
   "devDependencies": {
@@ -57,15 +65,8 @@
     "typedoc": "^0.23.19",
     "typescript": "~4.7.4"
   },
-  "bugs": {
-    "url": "https://github.com/MetaMask/eth-rpc-errors/issues"
-  },
-  "homepage": "https://github.com/MetaMask/eth-rpc-errors#readme",
-  "keywords": [
-    "rpc",
-    "ethereum",
-    "errors",
-    "utility"
-  ],
-  "packageManager": "yarn@3.2.4"
+  "packageManager": "yarn@3.2.4",
+  "engines": {
+    "node": ">=16.0.0"
+  }
 }

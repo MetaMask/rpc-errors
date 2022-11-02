@@ -1,3 +1,4 @@
+import { hasProperty, isPlainObject, Json } from '@metamask/utils';
 import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
@@ -17,8 +18,11 @@ type ErrorValueKey = keyof typeof errorValues;
  * Gets the message for a given code, or a fallback message if the code has
  * no corresponding message.
  *
- * @param code
- * @param fallbackMessage
+ * @param code - The error code.
+ * @param fallbackMessage - The fallback message to use if the code has no
+ * corresponding message.
+ * @returns The message for the given code, or the fallback message if the code
+ * has no corresponding message.
  */
 export function getMessageFromCode(
   code: number,
@@ -27,7 +31,7 @@ export function getMessageFromCode(
   if (Number.isInteger(code)) {
     const codeString = code.toString();
 
-    if (hasKey(errorValues, codeString)) {
+    if (hasProperty(errorValues, codeString)) {
       return errorValues[codeString as ErrorValueKey].message;
     }
 
@@ -42,7 +46,8 @@ export function getMessageFromCode(
  * Returns whether the given code is valid.
  * A code is only valid if it has a message.
  *
- * @param code
+ * @param code - The error code.
+ * @returns Whether the given code is valid.
  */
 export function isValidCode(code: number): boolean {
   if (!Number.isInteger(code)) {
@@ -57,6 +62,7 @@ export function isValidCode(code: number): boolean {
   if (isJsonRpcServerError(code)) {
     return true;
   }
+
   return false;
 }
 
@@ -66,10 +72,13 @@ export function isValidCode(code: number): boolean {
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.originalError property.
  *
- * @param error
- * @param options0
- * @param options0.fallbackError
- * @param options0.shouldIncludeStack
+ * @param error - The error to serialize.
+ * @param options - Options bag.
+ * @param options.fallbackError - The error to return if the given error is
+ * not compatible.
+ * @param options.shouldIncludeStack - Whether to include the error's stack
+ * on the returned object.
+ * @returns The serialized error.
  */
 export function serializeError(
   error: unknown,
@@ -93,26 +102,26 @@ export function serializeError(
 
   if (
     error &&
-    typeof error === 'object' &&
-    !Array.isArray(error) &&
-    hasKey(error as Record<string, unknown>, 'code') &&
+    isPlainObject(error) &&
+    hasProperty(error, 'code') &&
     isValidCode((error as SerializedEthereumRpcError).code)
   ) {
     const _error = error as Partial<SerializedEthereumRpcError>;
-    serialized.code = _error.code;
+    serialized.code = _error.code as number;
 
     if (_error.message && typeof _error.message === 'string') {
       serialized.message = _error.message;
 
-      if (hasKey(_error, 'data')) {
-        serialized.data = _error.data;
+      if (hasProperty(_error, 'data')) {
+        serialized.data = _error.data ?? null;
       }
     } else {
       serialized.message = getMessageFromCode(
         (serialized as SerializedEthereumRpcError).code,
       );
 
-      serialized.data = { originalError: assignOriginalError(error) };
+      // TODO: Verify that the original error is serializable.
+      serialized.data = { originalError: assignOriginalError(error) } as Json;
     }
   } else {
     serialized.code = fallbackError.code;
@@ -121,7 +130,9 @@ export function serializeError(
 
     serialized.message =
       message && typeof message === 'string' ? message : fallbackError.message;
-    serialized.data = { originalError: assignOriginalError(error) };
+
+    // TODO: Verify that the original error is serializable.
+    serialized.data = { originalError: assignOriginalError(error) } as Json;
   }
 
   const stack = (error as any)?.stack;
@@ -132,32 +143,26 @@ export function serializeError(
   return serialized as SerializedEthereumRpcError;
 }
 
-// Internal
-
 /**
+ * Check if the given code is a valid JSON-RPC server error code.
  *
- * @param code
+ * @param code - The error code.
+ * @returns Whether the given code is a valid JSON-RPC server error code.
  */
 function isJsonRpcServerError(code: number): boolean {
   return code >= -32099 && code <= -32000;
 }
 
 /**
+ * Create a copy of the given value if it's an object, and not an array.
  *
- * @param error
+ * @param error - The value to copy.
+ * @returns The copied value, or the original value if it's not an object.
  */
 function assignOriginalError(error: unknown): unknown {
   if (error && typeof error === 'object' && !Array.isArray(error)) {
     return Object.assign({}, error);
   }
-  return error;
-}
 
-/**
- *
- * @param obj
- * @param key
- */
-function hasKey(obj: Record<string, unknown>, key: string) {
-  return Object.prototype.hasOwnProperty.call(obj, key);
+  return error;
 }

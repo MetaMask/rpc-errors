@@ -128,7 +128,7 @@ describe('serializeError', () => {
     });
   });
 
-  it('handles valid error: instantiated error', () => {
+  it('handles valid error: other instantiated error', () => {
     const result = serializeError(validError3);
     expect(result).toStrictEqual({
       code: rpcCodes.parse,
