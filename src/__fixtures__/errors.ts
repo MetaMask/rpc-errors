@@ -5,7 +5,7 @@ export const dummyMessage = 'baz';
 
 export const invalidError0 = 0;
 export const invalidError1 = ['foo', 'bar', 3];
-export const invalidError2 = { code: 34 };
+export const invalidError2 = { code: 'foo' };
 export const invalidError3 = { code: 4001 };
 export const invalidError4 = {
   code: 4001,
@@ -15,7 +15,7 @@ export const invalidError4 = {
 export const invalidError5 = null;
 export const invalidError6 = undefined;
 export const invalidError7 = {
-  code: 34,
+  code: 'foo',
   message: dummyMessage,
   data: Object.assign({}, dummyData),
 };
