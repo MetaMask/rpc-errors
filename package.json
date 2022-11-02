@@ -1,11 +1,11 @@
 {
-  "name": "@metamask/eth-rpc-errors",
+  "name": "@metamask/rpc-errors",
   "version": "4.0.3",
   "description": "Ethereum RPC and Provider errors.",
   "author": "Erik Marks <rekmarks@protonmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "build": "tsc --project .",
