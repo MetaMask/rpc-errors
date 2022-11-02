@@ -1,9 +1,16 @@
-import { hasProperty, isPlainObject, Json } from '@metamask/utils';
+import {
+  hasProperty,
+  JsonRpcErrorStruct,
+  isValidJson,
+  isObject,
+} from '@metamask/utils';
+import { is, create } from 'superstruct';
 import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
-const FALLBACK_MESSAGE = 'Invalid internal error. See "data.originalError" for original value. Please report this bug.';
+const FALLBACK_MESSAGE =
+  'Invalid internal error. See "data.originalError" for original value. Please report this bug.';
 const FALLBACK_ERROR: SerializedEthereumRpcError = {
   code: FALLBACK_ERROR_CODE,
   message: getMessageFromCode(FALLBACK_ERROR_CODE),
@@ -70,11 +77,7 @@ export function serializeError(
   error: unknown,
   { fallbackError = FALLBACK_ERROR, shouldIncludeStack = false } = {},
 ): SerializedEthereumRpcError {
-  if (
-    !fallbackError ||
-    !isValidCode(fallbackError.code) ||
-    typeof fallbackError.message !== 'string'
-  ) {
+  if (!is(fallbackError, JsonRpcErrorStruct)) {
     throw new Error(
       'Must provide fallback error with integer number code and string message.',
     );
@@ -84,49 +87,40 @@ export function serializeError(
     return error.serialize();
   }
 
-  const serialized: Partial<SerializedEthereumRpcError> = {};
+  const serialized = buildError(
+    error,
+    fallbackError as SerializedEthereumRpcError,
+  );
 
-  if (
-    error &&
-    isPlainObject(error) &&
-    hasProperty(error, 'code') &&
-    isValidCode((error as SerializedEthereumRpcError).code)
-  ) {
-    const _error = error as Partial<SerializedEthereumRpcError>;
-    serialized.code = _error.code as number;
-
-    if (_error.message && typeof _error.message === 'string') {
-      serialized.message = _error.message;
-
-      if (hasProperty(_error, 'data')) {
-        serialized.data = _error.data ?? null;
-      }
-    } else {
-      serialized.message = getMessageFromCode(
-        (serialized as SerializedEthereumRpcError).code,
-      );
-
-      // TODO: Verify that the original error is serializable.
-      serialized.data = { originalError: assignOriginalError(error) } as Json;
-    }
-  } else {
-    serialized.code = fallbackError.code;
-
-    const message = (error as any)?.message;
-
-    serialized.message =
-      message && typeof message === 'string' ? message : fallbackError.message;
-
-    // TODO: Verify that the original error is serializable.
-    serialized.data = { originalError: assignOriginalError(error) } as Json;
+  if (!shouldIncludeStack) {
+    delete serialized.stack;
   }
 
-  const stack = (error as any)?.stack;
-
-  if (shouldIncludeStack && error && stack && typeof stack === 'string') {
-    serialized.stack = stack;
-  }
   return serialized as SerializedEthereumRpcError;
+}
+
+/**
+ * Constructs a JSON serializable object given an error and a fallbackError.
+ *
+ * @param error - The error in question.
+ * @param fallbackError - The fallback error.
+ * @returns A JSON serializable error object.
+ */
+function buildError(error: unknown, fallbackError: SerializedEthereumRpcError) {
+  if (is(error, JsonRpcErrorStruct)) {
+    return create(error, JsonRpcErrorStruct);
+  }
+  // If the original error is an object, we make a copy of it, this should also copy class properties to an object
+  const originalError = isObject(error) ? Object.assign({}, error) : error;
+  const fallbackWithOriginal = {
+    ...fallbackError,
+    data: { originalError },
+  };
+  // We only allow returning originalError if it turns out to be valid JSON
+  if (isValidJson(fallbackWithOriginal)) {
+    return fallbackWithOriginal;
+  }
+  return fallbackError;
 }
 
 /**
@@ -137,17 +131,4 @@ export function serializeError(
  */
 function isJsonRpcServerError(code: number): boolean {
   return code >= -32099 && code <= -32000;
-}
-
-/**
- * Create a copy of the given value if it's an object, and not an array.
- *
- * @param error - The value to copy.
- * @returns The copied value, or the original value if it's not an object.
- */
-function assignOriginalError(error: unknown): unknown {
-  if (error && typeof error === 'object' && !Array.isArray(error)) {
-    return Object.assign({}, error);
-  }
-  return error;
 }

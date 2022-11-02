@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "@metamask/utils": "^3.2.0",
-    "fast-safe-stringify": "^2.0.6"
+    "fast-safe-stringify": "^2.0.6",
+    "superstruct": "^0.16.6"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",

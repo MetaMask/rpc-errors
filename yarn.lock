@@ -911,6 +911,7 @@ __metadata:
     jest-it-up: ^2.0.2
     prettier: ^2.7.1
     prettier-plugin-packagejson: ^2.2.18
+    superstruct: ^0.16.6
     ts-jest: ^28.0.7
     typedoc: ^0.23.19
     typescript: ~4.7.4
@@ -5554,7 +5555,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"superstruct@npm:^0.16.5":
+"superstruct@npm:^0.16.5, superstruct@npm:^0.16.6":
   version: 0.16.7
   resolution: "superstruct@npm:0.16.7"
   checksum: c8c855ff6945da8a41048c6d236de7b1af5d4d9c31742b3ee54d65647c31597488620281f65e095d5efc9e2fbdaad529b8c8f2506c12569d428467c835a21477
