@@ -1,7 +1,5 @@
 import { EthereumRpcError, EthereumProviderError } from './classes';
-import {
-  serializeError, getMessageFromCode,
-} from './utils';
+import { serializeError, getMessageFromCode } from './utils';
 import { ethErrors } from './errors';
 import { errorCodes } from './error-constants';
 

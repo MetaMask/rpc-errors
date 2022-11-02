@@ -2,7 +2,8 @@ import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
-const FALLBACK_MESSAGE = 'Unspecified error message. This is a bug, please report it.';
+const FALLBACK_MESSAGE =
+  'Unspecified error message. This is a bug, please report it.';
 const FALLBACK_ERROR: SerializedEthereumRpcError = {
   code: FALLBACK_ERROR_CODE,
   message: getMessageFromCode(FALLBACK_ERROR_CODE),
@@ -15,6 +16,9 @@ type ErrorValueKey = keyof typeof errorValues;
 /**
  * Gets the message for a given code, or a fallback message if the code has
  * no corresponding message.
+ *
+ * @param code
+ * @param fallbackMessage
  */
 export function getMessageFromCode(
   code: number,
@@ -26,6 +30,7 @@ export function getMessageFromCode(
     if (hasKey(errorValues, codeString)) {
       return errorValues[codeString as ErrorValueKey].message;
     }
+
     if (isJsonRpcServerError(code)) {
       return JSON_RPC_SERVER_ERROR_MESSAGE;
     }
@@ -36,6 +41,8 @@ export function getMessageFromCode(
 /**
  * Returns whether the given code is valid.
  * A code is only valid if it has a message.
+ *
+ * @param code
  */
 export function isValidCode(code: number): boolean {
   if (!Number.isInteger(code)) {
@@ -58,15 +65,16 @@ export function isValidCode(code: number): boolean {
  * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.originalError property.
+ *
+ * @param error
+ * @param options0
+ * @param options0.fallbackError
+ * @param options0.shouldIncludeStack
  */
 export function serializeError(
   error: unknown,
-  {
-    fallbackError = FALLBACK_ERROR,
-    shouldIncludeStack = false,
-  } = {},
+  { fallbackError = FALLBACK_ERROR, shouldIncludeStack = false } = {},
 ): SerializedEthereumRpcError {
-
   if (
     !fallbackError ||
     !Number.isInteger(fallbackError.code) ||
@@ -111,11 +119,8 @@ export function serializeError(
 
     const message = (error as any)?.message;
 
-    serialized.message = (
-      message && typeof message === 'string'
-        ? message
-        : fallbackError.message
-    );
+    serialized.message =
+      message && typeof message === 'string' ? message : fallbackError.message;
     serialized.data = { originalError: assignOriginalError(error) };
   }
 
@@ -129,10 +134,18 @@ export function serializeError(
 
 // Internal
 
+/**
+ *
+ * @param code
+ */
 function isJsonRpcServerError(code: number): boolean {
   return code >= -32099 && code <= -32000;
 }
 
+/**
+ *
+ * @param error
+ */
 function assignOriginalError(error: unknown): unknown {
   if (error && typeof error === 'object' && !Array.isArray(error)) {
     return Object.assign({}, error);
@@ -140,6 +153,11 @@ function assignOriginalError(error: unknown): unknown {
   return error;
 }
 
+/**
+ *
+ * @param obj
+ * @param key
+ */
 function hasKey(obj: Record<string, unknown>, key: string) {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }

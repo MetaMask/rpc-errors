@@ -1,11 +1,11 @@
 import safeStringify from 'fast-safe-stringify';
 
-export interface SerializedEthereumRpcError {
+export type SerializedEthereumRpcError = {
   code: number; // must be an integer
   message: string;
   data?: unknown;
   stack?: string;
-}
+};
 
 /**
  * Error subclass implementing JSON RPC 2.0 errors and Ethereum RPC errors
@@ -13,22 +13,17 @@ export interface SerializedEthereumRpcError {
  * Permits any integer error code.
  */
 export class EthereumRpcError<T> extends Error {
-
   public code: number;
 
   public data?: T;
 
   constructor(code: number, message: string, data?: T) {
-
     if (!Number.isInteger(code)) {
-      throw new Error(
-        '"code" must be an integer.',
-      );
+      throw new Error('"code" must be an integer.');
     }
+
     if (!message || typeof message !== 'string') {
-      throw new Error(
-        '"message" must be a nonempty string.',
-      );
+      throw new Error('"message" must be a nonempty string.');
     }
 
     super(message);
@@ -49,6 +44,7 @@ export class EthereumRpcError<T> extends Error {
     if (this.data !== undefined) {
       serialized.data = this.data;
     }
+
     if (this.stack) {
       serialized.stack = this.stack;
     }
@@ -60,11 +56,7 @@ export class EthereumRpcError<T> extends Error {
    * any circular references.
    */
   toString(): string {
-    return safeStringify(
-      this.serialize(),
-      stringifyReplacer,
-      2,
-    );
+    return safeStringify(this.serialize(), stringifyReplacer, 2);
   }
 }
 
@@ -73,13 +65,15 @@ export class EthereumRpcError<T> extends Error {
  * Permits integer error codes in the [ 1000 <= 4999 ] range.
  */
 export class EthereumProviderError<T> extends EthereumRpcError<T> {
-
   /**
    * Create an Ethereum Provider JSON-RPC error.
    * `code` must be an integer in the 1000 <= 4999 range.
+   *
+   * @param code
+   * @param message
+   * @param data
    */
   constructor(code: number, message: string, data?: T) {
-
     if (!isValidEthProviderCode(code)) {
       throw new Error(
         '"code" must be an integer such that: 1000 <= code <= 4999',
@@ -92,10 +86,19 @@ export class EthereumProviderError<T> extends EthereumRpcError<T> {
 
 // Internal
 
+/**
+ *
+ * @param code
+ */
 function isValidEthProviderCode(code: number): boolean {
   return Number.isInteger(code) && code >= 1000 && code <= 4999;
 }
 
+/**
+ *
+ * @param _
+ * @param value
+ */
 function stringifyReplacer(_: unknown, value: unknown): unknown {
   if (value === '[Circular]') {
     return undefined;

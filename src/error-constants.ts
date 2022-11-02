@@ -24,7 +24,8 @@ export const errorCodes = {
 export const errorValues = {
   '-32700': {
     standard: 'JSON RPC 2.0',
-    message: 'Invalid JSON was received by the server. An error occurred on the server while parsing the JSON text.',
+    message:
+      'Invalid JSON was received by the server. An error occurred on the server while parsing the JSON text.',
   },
   '-32600': {
     standard: 'JSON RPC 2.0',
@@ -72,7 +73,8 @@ export const errorValues = {
   },
   '4100': {
     standard: 'EIP-1193',
-    message: 'The requested account and/or method has not been authorized by the user.',
+    message:
+      'The requested account and/or method has not been authorized by the user.',
   },
   '4200': {
     standard: 'EIP-1193',
