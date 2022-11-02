@@ -191,4 +191,12 @@ describe('serializeError', () => {
       data: Object.assign({}, validError1.data),
     });
   });
+
+  it('handles regular Error()', () => {
+    const result = serializeError(new Error('foo'));
+    expect(result).toStrictEqual({
+      code: errorCodes.rpc.internal,
+      message: 'foo',
+    });
+  });
 });

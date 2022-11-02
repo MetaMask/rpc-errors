@@ -5,7 +5,7 @@ import {
   isObject,
   isJsonRpcError,
 } from '@metamask/utils';
-import { create } from 'superstruct';
+import { create, is, partial } from 'superstruct';
 import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
@@ -100,6 +100,10 @@ export function serializeError(
   return serialized as SerializedEthereumRpcError;
 }
 
+const PartialJsonRpcErrorStruct = partial(JsonRpcErrorStruct);
+
+const ERROR_KEYS = Object.keys(JsonRpcErrorStruct.schema);
+
 /**
  * Constructs a JSON serializable object given an error and a fallbackError.
  *
@@ -111,16 +115,31 @@ function buildError(error: unknown, fallbackError: SerializedEthereumRpcError) {
   if (isJsonRpcError(error)) {
     return create(error, JsonRpcErrorStruct);
   }
-  // If the original error is an object, we make a copy of it, this should also copy class properties to an object
+
+  // If the original error is a partial JSON-RPC error, extract matching keys and merge with fallback error
+  if (is(error, PartialJsonRpcErrorStruct)) {
+    const subset = ERROR_KEYS.reduce((acc, key) => {
+      if (hasProperty(error, key)) {
+        // @ts-expect-error TODO: Fix type
+        acc[key] = error[key];
+      }
+      return acc;
+    }, {});
+    return { ...fallbackError, ...subset };
+  }
+
+  // TODO: If the original error is an object, we make a copy of it, this should also copy class properties to an object
   const originalError = isObject(error) ? Object.assign({}, error) : error;
   const fallbackWithOriginal = {
     ...fallbackError,
     data: { originalError },
   };
+
   // We only allow returning originalError if it turns out to be valid JSON
   if (isValidJson(fallbackWithOriginal)) {
     return fallbackWithOriginal;
   }
+
   return fallbackError;
 }
 
