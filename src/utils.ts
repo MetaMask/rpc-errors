@@ -5,15 +5,16 @@ import {
   isObject,
   isJsonRpcError,
   Json,
+  JsonRpcError,
 } from '@metamask/utils';
 import { create, is, partial } from 'superstruct';
 import { errorCodes, errorValues } from './error-constants';
-import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
+import { EthereumRpcError } from './classes';
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
   'Invalid internal error. See "data.cause" for original value. Please report this bug.';
-const FALLBACK_ERROR: SerializedEthereumRpcError = {
+const FALLBACK_ERROR: JsonRpcError = {
   code: FALLBACK_ERROR_CODE,
   message: getMessageFromCode(FALLBACK_ERROR_CODE),
 };
@@ -78,7 +79,7 @@ export function isValidCode(code: number): boolean {
 export function serializeError(
   error: unknown,
   { fallbackError = FALLBACK_ERROR, shouldIncludeStack = false } = {},
-): SerializedEthereumRpcError {
+): JsonRpcError {
   if (!isJsonRpcError(fallbackError)) {
     throw new Error(
       'Must provide fallback error with integer number code and string message.',
@@ -89,16 +90,13 @@ export function serializeError(
     return error.serialize();
   }
 
-  const serialized = buildError(
-    error,
-    fallbackError as SerializedEthereumRpcError,
-  );
+  const serialized = buildError(error, fallbackError as JsonRpcError);
 
   if (!shouldIncludeStack) {
     delete serialized.stack;
   }
 
-  return serialized as SerializedEthereumRpcError;
+  return serialized;
 }
 
 const PartialJsonRpcErrorStruct = partial(JsonRpcErrorStruct);
@@ -106,13 +104,13 @@ const PartialJsonRpcErrorStruct = partial(JsonRpcErrorStruct);
 const ERROR_KEYS = Object.keys(JsonRpcErrorStruct.schema);
 
 /**
- * Constructs a JSON serializable object given an error and a fallbackError.
+ * Construct a JSON-serializable object given an error and a `fallbackError`
  *
  * @param error - The error in question.
  * @param fallbackError - The fallback error.
  * @returns A JSON serializable error object.
  */
-function buildError(error: unknown, fallbackError: SerializedEthereumRpcError) {
+function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
   if (isJsonRpcError(error)) {
     return create(error, JsonRpcErrorStruct);
   }
@@ -136,7 +134,7 @@ function buildError(error: unknown, fallbackError: SerializedEthereumRpcError) {
     data: { cause },
   };
 
-  return fallbackWithCause;
+  return fallbackWithCause as JsonRpcError;
 }
 
 /**
