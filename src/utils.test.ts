@@ -25,7 +25,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError0 },
+      data: { cause: invalidError0 },
     });
   });
 
@@ -34,7 +34,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError5 },
+      data: { cause: invalidError5 },
     });
   });
 
@@ -43,7 +43,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError6 },
+      data: { cause: invalidError6 },
     });
   });
 
@@ -52,7 +52,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError1 },
+      data: { cause: invalidError1 },
     });
   });
 
@@ -61,7 +61,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError2 },
+      data: { cause: invalidError2 },
     });
   });
 
@@ -70,7 +70,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: 4001,
       message: getMessageFromCode(4001),
-      data: { originalError: Object.assign({}, invalidError3) },
+      data: { cause: Object.assign({}, invalidError3) },
     });
   });
 
@@ -79,7 +79,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: 4001,
       message: getMessageFromCode(4001),
-      data: { originalError: Object.assign({}, invalidError4) },
+      data: { cause: Object.assign({}, invalidError4) },
     });
   });
 
@@ -88,7 +88,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: dummyMessage,
-      data: { originalError: Object.assign({}, invalidError7) },
+      data: { cause: Object.assign({}, invalidError7) },
     });
   });
 
@@ -99,7 +99,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.methodNotFound,
       message: 'foo',
-      data: { originalError: Object.assign({}, invalidError2) },
+      data: { cause: Object.assign({}, invalidError2) },
     });
   });
 

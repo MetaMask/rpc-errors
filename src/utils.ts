@@ -4,6 +4,7 @@ import {
   isValidJson,
   isObject,
   isJsonRpcError,
+  Json,
 } from '@metamask/utils';
 import { create, is, partial } from 'superstruct';
 import { errorCodes, errorValues } from './error-constants';
@@ -11,7 +12,7 @@ import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
-  'Invalid internal error. See "data.originalError" for original value. Please report this bug.';
+  'Invalid internal error. See "data.cause" for original value. Please report this bug.';
 const FALLBACK_ERROR: SerializedEthereumRpcError = {
   code: FALLBACK_ERROR_CODE,
   message: getMessageFromCode(FALLBACK_ERROR_CODE),
@@ -64,7 +65,7 @@ export function isValidCode(code: number): boolean {
  * Serializes the given error to an Ethereum JSON RPC-compatible error object.
  * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
- * returned object's data.originalError property.
+ * returned object's data.cause property.
  *
  * @param error - The error to serialize.
  * @param options - Options bag.
@@ -129,18 +130,13 @@ function buildError(error: unknown, fallbackError: SerializedEthereumRpcError) {
   }
 
   // TODO: If the original error is an object, we make a copy of it, this should also copy class properties to an object
-  const originalError = isObject(error) ? Object.assign({}, error) : error;
-  const fallbackWithOriginal = {
+  const cause = isObject(error) ? getCause(error) : error;
+  const fallbackWithCause = {
     ...fallbackError,
-    data: { originalError },
+    data: { cause },
   };
 
-  // We only allow returning originalError if it turns out to be valid JSON
-  if (isValidJson(fallbackWithOriginal)) {
-    return fallbackWithOriginal;
-  }
-
-  return fallbackError;
+  return fallbackWithCause;
 }
 
 /**
@@ -151,4 +147,24 @@ function buildError(error: unknown, fallbackError: SerializedEthereumRpcError) {
  */
 function isJsonRpcServerError(code: number): boolean {
   return code >= -32099 && code <= -32000;
+}
+
+/**
+ * Get cause from an object or a class, extracting all properties.
+ *
+ * @param error - The error class or object.
+ * @returns An object containing all the error properties.
+ */
+function getCause<T>(error: T): Json {
+  return Object.getOwnPropertyNames(error).reduce((acc, key) => {
+    const value = error[key as keyof T];
+    if (isValidJson(value)) {
+      return {
+        ...acc,
+        [key]: value,
+      };
+    }
+
+    return acc;
+  }, {});
 }
