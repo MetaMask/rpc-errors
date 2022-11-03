@@ -6,6 +6,7 @@ import {
   isJsonRpcError,
   Json,
   JsonRpcError,
+  isNonEmptyArray,
 } from '@metamask/utils';
 import { create, is, partial } from 'superstruct';
 import { errorCodes, errorValues } from './error-constants';
@@ -34,7 +35,7 @@ type ErrorValueKey = keyof typeof errorValues;
  * has no corresponding message.
  */
 export function getMessageFromCode(
-  code: number,
+  code: unknown,
   fallbackMessage: string = FALLBACK_MESSAGE,
 ): string {
   if (isValidCode(code)) {
@@ -58,7 +59,7 @@ export function getMessageFromCode(
  * @param code - The error code.
  * @returns Whether the given code is valid.
  */
-export function isValidCode(code: number): boolean {
+export function isValidCode(code: unknown): code is number {
   return Number.isInteger(code);
 }
 
@@ -116,18 +117,25 @@ function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
   }
 
   // If the original error is a partial JSON-RPC error, extract matching keys and merge with fallback error
-  if (is(error, PartialJsonRpcErrorStruct)) {
+  if (isObject(error)) {
     const subset = ERROR_KEYS.reduce((acc, key) => {
-      if (hasProperty(error, key)) {
+      if (
+        hasProperty(error, key) &&
+        // @ts-expect-error TODO: Fix type
+        is(error[key], PartialJsonRpcErrorStruct.schema[key])
+      ) {
         // @ts-expect-error TODO: Fix type
         acc[key] = error[key];
       }
       return acc;
     }, {});
-    return { ...fallbackError, ...subset };
+    if (isNonEmptyArray(Object.keys(subset))) {
+      const message = getErrorMessage(error, fallbackError.message);
+      return { ...fallbackError, message, ...subset };
+    }
   }
 
-  // TODO: If the original error is an object, we make a copy of it, this should also copy class properties to an object
+  // If the error is not a partial, use the fallback error, but try to include the original error as `cause`
   const cause = isObject(error) ? getCause(error) : error;
   const fallbackWithCause = {
     ...fallbackError,
@@ -165,4 +173,21 @@ function getCause<T>(error: T): Json {
 
     return acc;
   }, {});
+}
+
+/**
+ * Extract a message from an error or use a fallback.
+ *
+ * @param error - The error class or object.
+ * @param fallbackMessage - The fallback message.
+ * @returns The error message.
+ */
+function getErrorMessage<T>(error: T, fallbackMessage: string): string {
+  const originalMessage =
+    isObject(error) && typeof error.message === 'string' ? error.message : null;
+  const originalCode =
+    isObject(error) && typeof error.code === 'number' ? error.code : null;
+  const rpcCodeMessage = getMessageFromCode(originalCode, fallbackMessage);
+
+  return originalMessage ?? rpcCodeMessage;
 }

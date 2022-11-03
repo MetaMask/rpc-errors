@@ -13,6 +13,7 @@ import {
   validError3,
   validError4,
   dummyMessage,
+  dummyData,
 } from './__fixtures__';
 import { getMessageFromCode, serializeError } from './utils';
 import { errorCodes } from '.';
@@ -70,7 +71,6 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: 4001,
       message: getMessageFromCode(4001),
-      data: { cause: Object.assign({}, invalidError3) },
     });
   });
 
@@ -79,7 +79,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: 4001,
       message: getMessageFromCode(4001),
-      data: { cause: Object.assign({}, invalidError4) },
+      data: Object.assign({}, dummyData),
     });
   });
 
@@ -88,7 +88,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: dummyMessage,
-      data: { cause: Object.assign({}, invalidError7) },
+      data: Object.assign({}, dummyData),
     });
   });
 
