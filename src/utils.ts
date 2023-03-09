@@ -1,20 +1,17 @@
 import {
   hasProperty,
-  JsonRpcErrorStruct,
   isValidJson,
   isObject,
   isJsonRpcError,
   Json,
   JsonRpcError,
-  isNonEmptyArray,
 } from '@metamask/utils';
-import { create, is, partial } from 'superstruct';
 import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError } from './classes';
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
-  'Invalid internal error. See "data.cause" for original value. Please report this bug.';
+  'Unspecified error message. This is a bug, please report it.';
 const FALLBACK_ERROR: JsonRpcError = {
   code: FALLBACK_ERROR_CODE,
   message: getMessageFromCode(FALLBACK_ERROR_CODE),
@@ -79,7 +76,7 @@ export function isValidCode(code: unknown): code is number {
  */
 export function serializeError(
   error: unknown,
-  { fallbackError = FALLBACK_ERROR, shouldIncludeStack = false } = {},
+  { fallbackError = FALLBACK_ERROR, shouldIncludeStack = true } = {},
 ): JsonRpcError {
   if (!isJsonRpcError(fallbackError)) {
     throw new Error(
@@ -100,10 +97,6 @@ export function serializeError(
   return serialized;
 }
 
-const PartialJsonRpcErrorStruct = partial(JsonRpcErrorStruct);
-
-const ERROR_KEYS = Object.keys(JsonRpcErrorStruct.schema);
-
 /**
  * Construct a JSON-serializable object given an error and a `fallbackError`
  *
@@ -113,29 +106,10 @@ const ERROR_KEYS = Object.keys(JsonRpcErrorStruct.schema);
  */
 function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
   if (isJsonRpcError(error)) {
-    return create(error, JsonRpcErrorStruct);
+    return error;
   }
 
-  // If the original error is a partial JSON-RPC error, extract matching keys and merge with fallback error
-  if (isObject(error)) {
-    const subset = ERROR_KEYS.reduce((acc, key) => {
-      if (
-        hasProperty(error, key) &&
-        // @ts-expect-error TODO: Fix type
-        is(error[key], PartialJsonRpcErrorStruct.schema[key])
-      ) {
-        // @ts-expect-error TODO: Fix type
-        acc[key] = error[key];
-      }
-      return acc;
-    }, {});
-    if (isNonEmptyArray(Object.keys(subset))) {
-      const message = getErrorMessage(error, fallbackError.message);
-      return { ...fallbackError, message, ...subset };
-    }
-  }
-
-  // If the error is not a partial, use the fallback error, but try to include the original error as `cause`
+  // If the error does not match the JsonRpcError type, use the fallback error, but try to include the original error as `cause`
   const cause = isObject(error) ? getCause(error) : error;
   const fallbackWithCause = {
     ...fallbackError,
@@ -173,21 +147,4 @@ function getCause<T>(error: T): Json {
 
     return acc;
   }, {});
-}
-
-/**
- * Extract a message from an error or use a fallback.
- *
- * @param error - The error class or object.
- * @param fallbackMessage - The fallback message.
- * @returns The error message.
- */
-function getErrorMessage<T>(error: T, fallbackMessage: string): string {
-  const originalMessage =
-    isObject(error) && typeof error.message === 'string' ? error.message : null;
-  const originalCode =
-    isObject(error) && typeof error.code === 'number' ? error.code : null;
-  const rpcCodeMessage = getMessageFromCode(originalCode, fallbackMessage);
-
-  return originalMessage ?? rpcCodeMessage;
 }
