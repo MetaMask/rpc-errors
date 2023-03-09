@@ -84,10 +84,6 @@ export function serializeError(
     );
   }
 
-  if (error instanceof EthereumRpcError) {
-    return error.serialize();
-  }
-
   const serialized = buildError(error, fallbackError as JsonRpcError);
 
   if (!shouldIncludeStack) {
@@ -105,6 +101,10 @@ export function serializeError(
  * @returns A JSON serializable error object.
  */
 function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
+  if (error instanceof EthereumRpcError) {
+    return error.serialize();
+  }
+
   if (isJsonRpcError(error)) {
     return error;
   }
