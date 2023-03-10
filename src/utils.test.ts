@@ -44,7 +44,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { cause: invalidError6 },
+      data: { cause: null },
     });
   });
 
@@ -269,5 +269,25 @@ describe('serializeError', () => {
     ).toThrow(
       'Must provide fallback error with integer number code and string message.',
     );
+  });
+
+  it('handles arrays passed as error', () => {
+    const error = ['foo', Symbol('bar'), { baz: 'qux', symbol: Symbol('') }];
+    const result = serializeError(error);
+    expect(result).toStrictEqual({
+      code: rpcCodes.internal,
+      message: getMessageFromCode(rpcCodes.internal),
+      data: {
+        cause: ['foo', null, { baz: 'qux' }],
+      },
+    });
+
+    expect(JSON.parse(JSON.stringify(result))).toStrictEqual({
+      code: rpcCodes.internal,
+      message: getMessageFromCode(rpcCodes.internal),
+      data: {
+        cause: ['foo', null, { baz: 'qux' }],
+      },
+    });
   });
 });

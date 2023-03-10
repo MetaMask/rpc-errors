@@ -5,6 +5,7 @@ import {
   isJsonRpcError,
   Json,
   JsonRpcError,
+  RuntimeObject,
 } from '@metamask/utils';
 import { errorCodes, errorValues } from './error-constants';
 import { EthereumRpcError } from './classes';
@@ -84,7 +85,7 @@ export function serializeError(
     );
   }
 
-  const serialized = buildError(error, fallbackError as JsonRpcError);
+  const serialized = buildError(error, fallbackError);
 
   if (!shouldIncludeStack) {
     delete serialized.stack;
@@ -110,13 +111,13 @@ function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
   }
 
   // If the error does not match the JsonRpcError type, use the fallback error, but try to include the original error as `cause`
-  const cause = isObject(error) ? getCause(error) : error;
+  const cause = serializeCause(error);
   const fallbackWithCause = {
     ...fallbackError,
     data: { cause },
   };
 
-  return fallbackWithCause as JsonRpcError;
+  return fallbackWithCause;
 }
 
 /**
@@ -130,14 +131,41 @@ function isJsonRpcServerError(code: number): boolean {
 }
 
 /**
- * Get cause from an object or a class, extracting all properties.
+ * Serializes an unknown error to be used as the `cause` in a fallback error.
  *
- * @param error - The error class or object.
- * @returns An object containing all the error properties.
+ * @param error - The unknown error.
+ * @returns A JSON-serializable object containing as much information about the original error as possible.
  */
-function getCause<T>(error: T): Json {
-  return Object.getOwnPropertyNames(error).reduce((acc, key) => {
-    const value = error[key as keyof T];
+function serializeCause(error: unknown): Json {
+  if (Array.isArray(error)) {
+    return error.map((entry) => {
+      if (isValidJson(entry)) {
+        return entry;
+      } else if (isObject(entry)) {
+        return serializeObject(entry);
+      }
+      return null;
+    });
+  } else if (isObject(error)) {
+    return serializeObject(error);
+  }
+
+  if (isValidJson(error)) {
+    return error;
+  }
+
+  return null;
+}
+
+/**
+ * Extracts all JSON-serializable properties from an object.
+ *
+ * @param object - The object in question.
+ * @returns An object containing all the JSON-serializable properties.
+ */
+function serializeObject(object: RuntimeObject): Json {
+  return Object.getOwnPropertyNames(object).reduce((acc, key) => {
+    const value = object[key];
     if (isValidJson(value)) {
       return {
         ...acc,
