@@ -164,15 +164,15 @@ function serializeCause(error: unknown): Json {
  * @returns An object containing all the JSON-serializable properties.
  */
 function serializeObject(object: RuntimeObject): Json {
-  return Object.getOwnPropertyNames(object).reduce((acc, key) => {
-    const value = object[key];
-    if (isValidJson(value)) {
-      return {
-        ...acc,
-        [key]: value,
-      };
-    }
+  return Object.getOwnPropertyNames(object).reduce<Record<string, Json>>(
+    (acc, key) => {
+      const value = object[key];
+      if (isValidJson(value)) {
+        acc[key] = value;
+      }
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {},
+  );
 }
