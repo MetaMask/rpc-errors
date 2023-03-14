@@ -17,19 +17,19 @@ or
 ## Usage
 
 ```js
-import { ethErrors } from '@metamask/rpc-errors';
+import { rpcErrors, providerErrors } from '@metamask/rpc-errors';
 
-throw ethErrors.provider.unauthorized();
+throw rpcErrors.invalidRequest();
 // or
-throw ethErrors.provider.unauthorized('my custom message');
+throw providerErrors.unauthorized('my custom message');
 ```
 
 ## Supported Errors
 
+- Generic JSON RPC 2.0 errors
+  - Per [JSON RPC 2.0 spec](https://www.jsonrpc.org/specification#error_object)
 - Ethereum JSON RPC
   - Per [EIP-1474](https://eips.ethereum.org/EIPS/eip-1474#error-codes)
-    - This includes all
-      [JSON RPC 2.0 errors](https://www.jsonrpc.org/specification#error_object)
 - Ethereum Provider errors
   - Per [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193#provider-errors)
     - Does **not** yet support [`CloseEvent` errors or status codes](https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Status_codes).
@@ -37,16 +37,16 @@ throw ethErrors.provider.unauthorized('my custom message');
 ## API
 
 ```js
-import { ethErrors } from '@metamask/rpc-errors';
+import { rpcErrors, providerErrors } from '@metamask/rpc-errors';
 
-// Ethereum RPC errors are namespaced under "ethErrors.rpc"
-response.error = ethErrors.rpc.methodNotFound({
+// JSON-RPC errors are namespaced under "rpcErrors"
+response.error = rpcErrors.methodNotFound({
   message: optionalCustomMessage,
   data: optionalData,
 });
 
-// Provider errors namespaced under ethErrors.provider
-response.error = ethErrors.provider.unauthorized({
+// Provider errors namespaced under providerErrors
+response.error = providerErrors.unauthorized({
   message: optionalCustomMessage,
   data: optionalData,
 });
@@ -54,11 +54,11 @@ response.error = ethErrors.provider.unauthorized({
 // each error getter takes a single "opts" argument
 // for most errors, this can be replaced with a single string, which becomes
 // the error message
-response.error = ethErrors.provider.unauthorized(customMessage);
+response.error = providerErrors.unauthorized(customMessage);
 
 // if an error getter accepts a single string, all arguments can be omitted
-response.error = ethErrors.provider.unauthorized();
-response.error = ethErrors.provider.unauthorized({});
+response.error = providerErrors.unauthorized();
+response.error = providerErrors.unauthorized({});
 
 // omitting the message will produce an error with a default message per
 // the relevant spec
@@ -67,13 +67,13 @@ response.error = ethErrors.provider.unauthorized({});
 // "data" property
 
 // the JSON RPC 2.0 server error requires a valid code
-response.error = ethErrors.rpc.server({
+response.error = rpcErrors.server({
   code: -32031,
 });
 
 // custom Ethereum Provider errors require a valid code and message
 // valid codes are integers i such that: 1000 <= i <= 4999
-response.error = ethErrors.provider.custom({
+response.error = providerErrors.custom({
   code: 1001,
   message: 'foo',
 });
@@ -109,7 +109,7 @@ response.error = serializeError(maybeAnError, fallbackError)
 /**
  * Classes
  */
-import { EthereumRpcError, EthereumProviderError } from '@metamask/rpc-errors';
+import { JsonRpcError, EthereumProviderError } from '@metamask/rpc-errors';
 
 /**
  * getMessageFromCode and errorCodes
@@ -126,11 +126,11 @@ const message2 = getMessageFromCode(someCode, myFallback);
 const message3 = getMessageFromCode(someCode, null);
 
 // {
-//   rpc: { [errorName]: code, ... },
-//   provider: { [errorName]: code, ... },
+//   rpcErrors: { [errorName]: code, ... },
+//   providerErrors: { [errorName]: code, ... },
 // }
-const code1 = errorCodes.rpc.parse;
-const code2 = errorCodes.provider.userRejectedRequest;
+const code1 = rpcErrors.parse;
+const code2 = providerErrors.userRejectedRequest;
 
 // all codes in errorCodes have default messages
 const message4 = getMessageFromCode(code1);

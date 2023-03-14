@@ -16,7 +16,7 @@ import {
   dummyData,
 } from './__fixtures__';
 import { getMessageFromCode, serializeError } from './utils';
-import { errorCodes, ethErrors } from '.';
+import { errorCodes, rpcErrors } from '.';
 
 const rpcCodes = errorCodes.rpc;
 
@@ -230,8 +230,8 @@ describe('serializeError', () => {
     });
   });
 
-  it('handles EthereumRpcError', () => {
-    const error = ethErrors.rpc.invalidParams();
+  it('handles JsonRpcError', () => {
+    const error = rpcErrors.invalidParams();
     const result = serializeError(error);
     expect(result).toStrictEqual({
       code: error.code,
