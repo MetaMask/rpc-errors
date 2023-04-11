@@ -8,7 +8,6 @@ import {
   RuntimeObject,
 } from '@metamask/utils';
 import { errorCodes, errorValues } from './error-constants';
-import { EthereumRpcError } from './classes';
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
@@ -63,7 +62,6 @@ export function isValidCode(code: unknown): code is number {
 
 /**
  * Serializes the given error to an Ethereum JSON RPC-compatible error object.
- * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
  * returned object's data.cause property.
  *
@@ -102,7 +100,13 @@ export function serializeError(
  * @returns A JSON serializable error object.
  */
 function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
-  if (error instanceof EthereumRpcError) {
+  // If an error specifies a `serialize` function, we call it and return the result.
+  if (
+    error &&
+    typeof error === 'object' &&
+    'serialize' in error &&
+    typeof error.serialize === 'function'
+  ) {
     return error.serialize();
   }
 
@@ -110,7 +114,7 @@ function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
     return error;
   }
 
-  // If the error does not match the JsonRpcError type, use the fallback error, but try to include the original error as `cause`
+  // If the error does not match the JsonRpcError type, use the fallback error, but try to include the original error as `cause`.
   const cause = serializeCause(error);
   const fallbackWithCause = {
     ...fallbackError,
