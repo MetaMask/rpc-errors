@@ -1,11 +1,18 @@
-import { hasProperty, isPlainObject, Json } from '@metamask/utils';
+import {
+  hasProperty,
+  isValidJson,
+  isObject,
+  isJsonRpcError,
+  Json,
+  JsonRpcError,
+  RuntimeObject,
+} from '@metamask/utils';
 import { errorCodes, errorValues } from './error-constants';
-import { EthereumRpcError, SerializedEthereumRpcError } from './classes';
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
   'Unspecified error message. This is a bug, please report it.';
-const FALLBACK_ERROR: SerializedEthereumRpcError = {
+const FALLBACK_ERROR: JsonRpcError = {
   code: FALLBACK_ERROR_CODE,
   message: getMessageFromCode(FALLBACK_ERROR_CODE),
 };
@@ -25,10 +32,10 @@ type ErrorValueKey = keyof typeof errorValues;
  * has no corresponding message.
  */
 export function getMessageFromCode(
-  code: number,
+  code: unknown,
   fallbackMessage: string = FALLBACK_MESSAGE,
 ): string {
-  if (Number.isInteger(code)) {
+  if (isValidCode(code)) {
     const codeString = code.toString();
 
     if (hasProperty(errorValues, codeString)) {
@@ -44,103 +51,77 @@ export function getMessageFromCode(
 
 /**
  * Returns whether the given code is valid.
- * A code is only valid if it has a message.
+ * A code is valid if it is an integer.
  *
  * @param code - The error code.
  * @returns Whether the given code is valid.
  */
-export function isValidCode(code: number): boolean {
-  if (!Number.isInteger(code)) {
-    return false;
-  }
-
-  const codeString = code.toString();
-  if (errorValues[codeString as ErrorValueKey]) {
-    return true;
-  }
-
-  if (isJsonRpcServerError(code)) {
-    return true;
-  }
-
-  return false;
+export function isValidCode(code: unknown): code is number {
+  return Number.isInteger(code);
 }
 
 /**
  * Serializes the given error to an Ethereum JSON RPC-compatible error object.
- * Merely copies the given error's values if it is already compatible.
  * If the given error is not fully compatible, it will be preserved on the
- * returned object's data.originalError property.
+ * returned object's data.cause property.
  *
  * @param error - The error to serialize.
  * @param options - Options bag.
  * @param options.fallbackError - The error to return if the given error is
- * not compatible.
+ * not compatible. Should be a JSON serializable value.
  * @param options.shouldIncludeStack - Whether to include the error's stack
  * on the returned object.
  * @returns The serialized error.
  */
 export function serializeError(
   error: unknown,
-  { fallbackError = FALLBACK_ERROR, shouldIncludeStack = false } = {},
-): SerializedEthereumRpcError {
-  if (
-    !fallbackError ||
-    !Number.isInteger(fallbackError.code) ||
-    typeof fallbackError.message !== 'string'
-  ) {
+  { fallbackError = FALLBACK_ERROR, shouldIncludeStack = true } = {},
+): JsonRpcError {
+  if (!isJsonRpcError(fallbackError)) {
     throw new Error(
       'Must provide fallback error with integer number code and string message.',
     );
   }
 
-  if (error instanceof EthereumRpcError) {
+  const serialized = buildError(error, fallbackError);
+
+  if (!shouldIncludeStack) {
+    delete serialized.stack;
+  }
+
+  return serialized;
+}
+
+/**
+ * Construct a JSON-serializable object given an error and a JSON serializable `fallbackError`
+ *
+ * @param error - The error in question.
+ * @param fallbackError - A JSON serializable fallback error.
+ * @returns A JSON serializable error object.
+ */
+function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
+  // If an error specifies a `serialize` function, we call it and return the result.
+  if (
+    error &&
+    typeof error === 'object' &&
+    'serialize' in error &&
+    typeof error.serialize === 'function'
+  ) {
     return error.serialize();
   }
 
-  const serialized: Partial<SerializedEthereumRpcError> = {};
-
-  if (
-    error &&
-    isPlainObject(error) &&
-    hasProperty(error, 'code') &&
-    isValidCode((error as SerializedEthereumRpcError).code)
-  ) {
-    const _error = error as Partial<SerializedEthereumRpcError>;
-    serialized.code = _error.code as number;
-
-    if (_error.message && typeof _error.message === 'string') {
-      serialized.message = _error.message;
-
-      if (hasProperty(_error, 'data')) {
-        serialized.data = _error.data ?? null;
-      }
-    } else {
-      serialized.message = getMessageFromCode(
-        (serialized as SerializedEthereumRpcError).code,
-      );
-
-      // TODO: Verify that the original error is serializable.
-      serialized.data = { originalError: assignOriginalError(error) } as Json;
-    }
-  } else {
-    serialized.code = fallbackError.code;
-
-    const message = (error as any)?.message;
-
-    serialized.message =
-      message && typeof message === 'string' ? message : fallbackError.message;
-
-    // TODO: Verify that the original error is serializable.
-    serialized.data = { originalError: assignOriginalError(error) } as Json;
+  if (isJsonRpcError(error)) {
+    return error;
   }
 
-  const stack = (error as any)?.stack;
+  // If the error does not match the JsonRpcError type, use the fallback error, but try to include the original error as `cause`.
+  const cause = serializeCause(error);
+  const fallbackWithCause = {
+    ...fallbackError,
+    data: { cause },
+  };
 
-  if (shouldIncludeStack && error && stack && typeof stack === 'string') {
-    serialized.stack = stack;
-  }
-  return serialized as SerializedEthereumRpcError;
+  return fallbackWithCause;
 }
 
 /**
@@ -154,15 +135,48 @@ function isJsonRpcServerError(code: number): boolean {
 }
 
 /**
- * Create a copy of the given value if it's an object, and not an array.
+ * Serializes an unknown error to be used as the `cause` in a fallback error.
  *
- * @param error - The value to copy.
- * @returns The copied value, or the original value if it's not an object.
+ * @param error - The unknown error.
+ * @returns A JSON-serializable object containing as much information about the original error as possible.
  */
-function assignOriginalError(error: unknown): unknown {
-  if (error && typeof error === 'object' && !Array.isArray(error)) {
-    return Object.assign({}, error);
+function serializeCause(error: unknown): Json {
+  if (Array.isArray(error)) {
+    return error.map((entry) => {
+      if (isValidJson(entry)) {
+        return entry;
+      } else if (isObject(entry)) {
+        return serializeObject(entry);
+      }
+      return null;
+    });
+  } else if (isObject(error)) {
+    return serializeObject(error);
   }
 
-  return error;
+  if (isValidJson(error)) {
+    return error;
+  }
+
+  return null;
+}
+
+/**
+ * Extracts all JSON-serializable properties from an object.
+ *
+ * @param object - The object in question.
+ * @returns An object containing all the JSON-serializable properties.
+ */
+function serializeObject(object: RuntimeObject): Json {
+  return Object.getOwnPropertyNames(object).reduce<Record<string, Json>>(
+    (acc, key) => {
+      const value = object[key];
+      if (isValidJson(value)) {
+        acc[key] = value;
+      }
+
+      return acc;
+    },
+    {},
+  );
 }

@@ -13,9 +13,10 @@ import {
   validError3,
   validError4,
   dummyMessage,
+  dummyData,
 } from './__fixtures__';
 import { getMessageFromCode, serializeError } from './utils';
-import { errorCodes } from '.';
+import { errorCodes, ethErrors } from '.';
 
 const rpcCodes = errorCodes.rpc;
 
@@ -25,7 +26,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError0 },
+      data: { cause: invalidError0 },
     });
   });
 
@@ -34,7 +35,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError5 },
+      data: { cause: invalidError5 },
     });
   });
 
@@ -43,7 +44,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError6 },
+      data: { cause: null },
     });
   });
 
@@ -52,7 +53,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError1 },
+      data: { cause: invalidError1 },
     });
   });
 
@@ -61,25 +62,35 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
       message: getMessageFromCode(rpcCodes.internal),
-      data: { originalError: invalidError2 },
+      data: { cause: invalidError2 },
     });
   });
 
   it('handles invalid error: valid code, undefined message', () => {
     const result = serializeError(invalidError3);
     expect(result).toStrictEqual({
-      code: 4001,
-      message: getMessageFromCode(4001),
-      data: { originalError: Object.assign({}, invalidError3) },
+      code: errorCodes.rpc.internal,
+      message: getMessageFromCode(errorCodes.rpc.internal),
+      data: {
+        cause: {
+          code: 4001,
+        },
+      },
     });
   });
 
   it('handles invalid error: non-string message with data', () => {
     const result = serializeError(invalidError4);
     expect(result).toStrictEqual({
-      code: 4001,
-      message: getMessageFromCode(4001),
-      data: { originalError: Object.assign({}, invalidError4) },
+      code: rpcCodes.internal,
+      message: getMessageFromCode(rpcCodes.internal),
+      data: {
+        cause: {
+          code: invalidError4.code,
+          message: invalidError4.message,
+          data: Object.assign({}, dummyData),
+        },
+      },
     });
   });
 
@@ -87,8 +98,14 @@ describe('serializeError', () => {
     const result = serializeError(invalidError7);
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
-      message: dummyMessage,
-      data: { originalError: Object.assign({}, invalidError7) },
+      message: getMessageFromCode(rpcCodes.internal),
+      data: {
+        cause: {
+          code: invalidError7.code,
+          message: invalidError7.message,
+          data: Object.assign({}, dummyData),
+        },
+      },
     });
   });
 
@@ -99,7 +116,7 @@ describe('serializeError', () => {
     expect(result).toStrictEqual({
       code: rpcCodes.methodNotFound,
       message: 'foo',
-      data: { originalError: Object.assign({}, invalidError2) },
+      data: { cause: Object.assign({}, invalidError2) },
     });
   });
 
@@ -145,10 +162,8 @@ describe('serializeError', () => {
     });
   });
 
-  it('handles valid error: message, data, and stack', () => {
-    const result = serializeError(
-      Object.assign({}, validError1, { stack: 'foo' }),
-    );
+  it('handles valid error: message and data', () => {
+    const result = serializeError(Object.assign({}, validError1));
     expect(result).toStrictEqual({
       code: 4001,
       message: validError1.message,
@@ -157,7 +172,7 @@ describe('serializeError', () => {
   });
 
   it('handles including stack: no stack present', () => {
-    const result = serializeError(validError1, { shouldIncludeStack: true });
+    const result = serializeError(validError1);
     expect(result).toStrictEqual({
       code: 4001,
       message: validError1.message,
@@ -168,7 +183,6 @@ describe('serializeError', () => {
   it('handles including stack: string stack present', () => {
     const result = serializeError(
       Object.assign({}, validError1, { stack: 'foo' }),
-      { shouldIncludeStack: true },
     );
     expect(result).toStrictEqual({
       code: 4001,
@@ -178,17 +192,121 @@ describe('serializeError', () => {
     });
   });
 
-  it('handles including stack: non-string stack present', () => {
+  it('handles removing stack', () => {
     const result = serializeError(
-      Object.assign({}, validError1, { stack: 2 }),
-      {
-        shouldIncludeStack: true,
-      },
+      Object.assign({}, validError1, { stack: 'foo' }),
+      { shouldIncludeStack: false },
     );
     expect(result).toStrictEqual({
       code: 4001,
       message: validError1.message,
       data: Object.assign({}, validError1.data),
+    });
+  });
+
+  it('handles regular Error()', () => {
+    const error = new Error('foo');
+    const result = serializeError(error);
+    expect(result).toStrictEqual({
+      code: errorCodes.rpc.internal,
+      message: getMessageFromCode(errorCodes.rpc.internal),
+      data: {
+        cause: {
+          message: error.message,
+          stack: error.stack,
+        },
+      },
+    });
+
+    expect(JSON.parse(JSON.stringify(result))).toStrictEqual({
+      code: errorCodes.rpc.internal,
+      message: getMessageFromCode(errorCodes.rpc.internal),
+      data: {
+        cause: {
+          message: error.message,
+          stack: error.stack,
+        },
+      },
+    });
+  });
+
+  it('handles EthereumRpcError', () => {
+    const error = ethErrors.rpc.invalidParams();
+    const result = serializeError(error);
+    expect(result).toStrictEqual({
+      code: error.code,
+      message: error.message,
+      stack: error.stack,
+    });
+
+    expect(JSON.parse(JSON.stringify(result))).toStrictEqual({
+      code: error.code,
+      message: error.message,
+      stack: error.stack,
+    });
+  });
+
+  it('handles class that has serialize function', () => {
+    class MockClass {
+      serialize() {
+        return { code: 1, message: 'foo' };
+      }
+    }
+    const error = new MockClass();
+    const result = serializeError(error);
+    expect(result).toStrictEqual({
+      code: 1,
+      message: 'foo',
+    });
+
+    expect(JSON.parse(JSON.stringify(result))).toStrictEqual({
+      code: 1,
+      message: 'foo',
+    });
+  });
+
+  it('removes non JSON-serializable props on cause', () => {
+    const error = new Error('foo');
+    // @ts-expect-error Intentionally using wrong type
+    error.message = () => undefined;
+    const result = serializeError(error);
+    expect(result).toStrictEqual({
+      code: errorCodes.rpc.internal,
+      message: getMessageFromCode(errorCodes.rpc.internal),
+      data: {
+        cause: {
+          stack: error.stack,
+        },
+      },
+    });
+  });
+
+  it('throws if fallback is invalid', () => {
+    expect(() =>
+      // @ts-expect-error Intentionally using wrong type
+      serializeError(new Error(), { fallbackError: new Error() }),
+    ).toThrow(
+      'Must provide fallback error with integer number code and string message.',
+    );
+  });
+
+  it('handles arrays passed as error', () => {
+    const error = ['foo', Symbol('bar'), { baz: 'qux', symbol: Symbol('') }];
+    const result = serializeError(error);
+    expect(result).toStrictEqual({
+      code: rpcCodes.internal,
+      message: getMessageFromCode(rpcCodes.internal),
+      data: {
+        cause: ['foo', null, { baz: 'qux' }],
+      },
+    });
+
+    expect(JSON.parse(JSON.stringify(result))).toStrictEqual({
+      code: rpcCodes.internal,
+      message: getMessageFromCode(rpcCodes.internal),
+      data: {
+        cause: ['foo', null, { baz: 'qux' }],
+      },
     });
   });
 });

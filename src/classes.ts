@@ -1,12 +1,7 @@
 import safeStringify from 'fast-safe-stringify';
-import { Json } from '@metamask/utils';
+import { Json, JsonRpcError } from '@metamask/utils';
 
-export type SerializedEthereumRpcError = {
-  code: number;
-  message: string;
-  data?: Json;
-  stack?: string;
-};
+export { JsonRpcError };
 
 /**
  * Error subclass implementing JSON RPC 2.0 errors and Ethereum RPC errors
@@ -40,8 +35,8 @@ export class EthereumRpcError<T extends Json> extends Error {
    *
    * @returns A plain object with all public class properties.
    */
-  serialize(): SerializedEthereumRpcError {
-    const serialized: SerializedEthereumRpcError = {
+  serialize(): JsonRpcError {
+    const serialized: JsonRpcError = {
       code: this.code,
       message: this.message,
     };
