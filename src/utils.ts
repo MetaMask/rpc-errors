@@ -70,7 +70,7 @@ export function isValidCode(code: unknown): code is number {
  * @param error - The error to serialize.
  * @param options - Options bag.
  * @param options.fallbackError - The error to return if the given error is
- * not compatible.
+ * not compatible. Should be a JSON serializable value.
  * @param options.shouldIncludeStack - Whether to include the error's stack
  * on the returned object.
  * @returns The serialized error.
@@ -95,10 +95,10 @@ export function serializeError(
 }
 
 /**
- * Construct a JSON-serializable object given an error and a `fallbackError`
+ * Construct a JSON-serializable object given an error and a JSON serializable `fallbackError`
  *
  * @param error - The error in question.
- * @param fallbackError - The fallback error.
+ * @param fallbackError - A JSON serializable fallback error.
  * @returns A JSON serializable error object.
  */
 function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
