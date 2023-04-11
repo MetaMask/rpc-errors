@@ -246,6 +246,25 @@ describe('serializeError', () => {
     });
   });
 
+  it('handles class that has serialize function', () => {
+    class MockClass {
+      serialize() {
+        return { code: 1, message: 'foo' };
+      }
+    }
+    const error = new MockClass();
+    const result = serializeError(error);
+    expect(result).toStrictEqual({
+      code: 1,
+      message: 'foo',
+    });
+
+    expect(JSON.parse(JSON.stringify(result))).toStrictEqual({
+      code: 1,
+      message: 'foo',
+    });
+  });
+
   it('removes non JSON-serializable props on cause', () => {
     const error = new Error('foo');
     // @ts-expect-error Intentionally using wrong type
