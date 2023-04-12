@@ -8,13 +8,13 @@
     "errors",
     "utility"
   ],
-  "homepage": "https://github.com/MetaMask/eth-rpc-errors#readme",
+  "homepage": "https://github.com/MetaMask/rpc-errors#readme",
   "bugs": {
-    "url": "https://github.com/MetaMask/eth-rpc-errors/issues"
+    "url": "https://github.com/MetaMask/rpc-errors/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/eth-rpc-errors.git"
+    "url": "https://github.com/MetaMask/rpc-errors.git"
   },
   "license": "MIT",
   "author": "Erik Marks <rekmarks@protonmail.com>",

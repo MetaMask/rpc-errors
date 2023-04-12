@@ -4,7 +4,7 @@ import {
   isObject,
   isJsonRpcError,
   Json,
-  JsonRpcError,
+  JsonRpcError as SerializedJsonRpcError,
   RuntimeObject,
 } from '@metamask/utils';
 import { errorCodes, errorValues } from './error-constants';
@@ -12,7 +12,7 @@ import { errorCodes, errorValues } from './error-constants';
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
   'Unspecified error message. This is a bug, please report it.';
-const FALLBACK_ERROR: JsonRpcError = {
+const FALLBACK_ERROR: SerializedJsonRpcError = {
   code: FALLBACK_ERROR_CODE,
   message: getMessageFromCode(FALLBACK_ERROR_CODE),
 };
@@ -76,7 +76,7 @@ export function isValidCode(code: unknown): code is number {
 export function serializeError(
   error: unknown,
   { fallbackError = FALLBACK_ERROR, shouldIncludeStack = true } = {},
-): JsonRpcError {
+): SerializedJsonRpcError {
   if (!isJsonRpcError(fallbackError)) {
     throw new Error(
       'Must provide fallback error with integer number code and string message.',
@@ -99,7 +99,10 @@ export function serializeError(
  * @param fallbackError - A JSON serializable fallback error.
  * @returns A JSON serializable error object.
  */
-function buildError(error: unknown, fallbackError: JsonRpcError): JsonRpcError {
+function buildError(
+  error: unknown,
+  fallbackError: SerializedJsonRpcError,
+): SerializedJsonRpcError {
   // If an error specifies a `serialize` function, we call it and return the result.
   if (
     error &&

@@ -1,4 +1,4 @@
-import { ethErrors } from '..';
+import { rpcErrors } from '..';
 
 export const dummyData = { foo: 'bar' };
 export const dummyMessage = 'baz';
@@ -26,11 +26,11 @@ export const validError1 = {
   message: dummyMessage,
   data: Object.assign({}, dummyData),
 };
-export const validError2 = ethErrors.rpc.parse();
+export const validError2 = rpcErrors.parse();
 delete validError2.stack;
-export const validError3 = ethErrors.rpc.parse(dummyMessage);
+export const validError3 = rpcErrors.parse(dummyMessage);
 delete validError3.stack;
-export const validError4 = ethErrors.rpc.parse({
+export const validError4 = rpcErrors.parse({
   message: dummyMessage,
   data: Object.assign({}, dummyData),
 });

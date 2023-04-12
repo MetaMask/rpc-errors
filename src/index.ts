@@ -1,12 +1,13 @@
-import { EthereumRpcError, EthereumProviderError } from './classes';
+import { JsonRpcError, EthereumProviderError } from './classes';
 import { serializeError, getMessageFromCode } from './utils';
-import { ethErrors } from './errors';
+import { rpcErrors, providerErrors } from './errors';
 import { errorCodes } from './error-constants';
 
 export {
   errorCodes,
-  ethErrors,
-  EthereumRpcError,
+  rpcErrors,
+  providerErrors,
+  JsonRpcError,
   EthereumProviderError,
   serializeError,
   getMessageFromCode,
