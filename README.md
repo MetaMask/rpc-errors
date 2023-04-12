@@ -39,13 +39,13 @@ throw providerErrors.unauthorized('my custom message');
 ```js
 import { rpcErrors, providerErrors } from '@metamask/rpc-errors';
 
-// JSON-RPC errors are namespaced under "rpcErrors"
+// JSON-RPC errors and Ethereum EIP-1474 errors are namespaced under "rpcErrors"
 response.error = rpcErrors.methodNotFound({
   message: optionalCustomMessage,
   data: optionalData,
 });
 
-// Provider errors namespaced under providerErrors
+// Ethereum EIP-1193 Provider errors namespaced under "providerErrors"
 response.error = providerErrors.unauthorized({
   message: optionalCustomMessage,
   data: optionalData,
