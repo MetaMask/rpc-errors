@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - If errors don't conform to the type, the error will be wrapped in an internal error and the original error will be available as `data.cause`
 - **BREAKING:** Rename exports to be more generic ([#75](https://github.com/MetaMask/rpc-errors/pull/75))
   - JSON-RPC errors and Ethereum EIP-1474 errors are namespaced under "rpcErrors"
-  - Ethereum EIP-1193 Provider errors namespaced under "providerErrors"
+  - Ethereum EIP-1193 Provider errors are namespaced under "providerErrors"
 - **BREAKING:** Target `ES2020` ([#77](https://github.com/MetaMask/rpc-errors/pull/77))
 - Rename package to `@metamask/rpc-errors` ([#67](https://github.com/MetaMask/rpc-errors/pull/67))
 
