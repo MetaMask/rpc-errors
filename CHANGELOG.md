@@ -7,29 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [5.0.0]
-### Uncategorized
-- Rename exports to be more generic ([#75](https://github.com/MetaMask/rpc-errors/pull/75))
-- Target `ES2020` ([#77](https://github.com/MetaMask/rpc-errors/pull/77))
-- Rewrite error serialization ([#61](https://github.com/MetaMask/rpc-errors/pull/61))
-- Bump http-cache-semantics from 4.1.0 to 4.1.1 ([#72](https://github.com/MetaMask/rpc-errors/pull/72))
-- Bump json5 from 1.0.1 to 1.0.2 ([#71](https://github.com/MetaMask/rpc-errors/pull/71))
-- Standardise repo as per the module template ([#69](https://github.com/MetaMask/rpc-errors/pull/69))
-- Migrate to Jest ([#66](https://github.com/MetaMask/rpc-errors/pull/66))
-- BREAKING: Bump to Node 16 ([#68](https://github.com/MetaMask/rpc-errors/pull/68))
-- Rename to @metamask/rpc-errors ([#67](https://github.com/MetaMask/rpc-errors/pull/67))
-- Scope under MetaMask org ([#64](https://github.com/MetaMask/rpc-errors/pull/64))
-- Upgrade to Yarn 3 ([#65](https://github.com/MetaMask/rpc-errors/pull/65))
-- Bump ansi-regex from 4.1.0 to 4.1.1 ([#62](https://github.com/MetaMask/rpc-errors/pull/62))
-- Bump minimist from 1.2.5 to 1.2.7 ([#63](https://github.com/MetaMask/rpc-errors/pull/63))
-- BREAKING: Bump to Node 14 ([#59](https://github.com/MetaMask/rpc-errors/pull/59))
-- Use GitHub Actions instead of Circle CI ([#60](https://github.com/MetaMask/rpc-errors/pull/60))
-- Bump path-parse from 1.0.6 to 1.0.7 ([#45](https://github.com/MetaMask/rpc-errors/pull/45))
-- Bump glob-parent from 5.1.1 to 5.1.2 ([#44](https://github.com/MetaMask/rpc-errors/pull/44))
-- Bump hosted-git-info from 2.8.8 to 2.8.9 ([#43](https://github.com/MetaMask/rpc-errors/pull/43))
-- Bump lodash from 4.17.19 to 4.17.21 ([#42](https://github.com/MetaMask/rpc-errors/pull/42))
-- Repo standardization ([#41](https://github.com/MetaMask/rpc-errors/pull/41))
-- Bump y18n from 4.0.0 to 4.0.1 ([#40](https://github.com/MetaMask/rpc-errors/pull/40))
-- Fix version URLs in changelog ([#39](https://github.com/MetaMask/rpc-errors/pull/39))
+### Changed
+- **BREAKING:** Bump minimum version to Node 16 ([#68](https://github.com/MetaMask/rpc-errors/pull/68))
+- **BREAKING:** Rewrite error serialization ([#61](https://github.com/MetaMask/rpc-errors/pull/61))
+  - Allows errors that conform to the `JsonRpcError` type
+  - If errors don't conform to the type, the error will be wrapped in an internal error and the original error will be available as `data.cause`
+- **BREAKING:** Rename exports to be more generic ([#75](https://github.com/MetaMask/rpc-errors/pull/75))
+  - JSON-RPC errors and Ethereum EIP-1474 errors are namespaced under "rpcErrors"
+  - Ethereum EIP-1193 Provider errors namespaced under "providerErrors"
+- **BREAKING:** Target `ES2020` ([#77](https://github.com/MetaMask/rpc-errors/pull/77))
+- Rename package to `@metamask/rpc-errors` ([#67](https://github.com/MetaMask/rpc-errors/pull/67))
 
 ## [4.0.3] - 2021-03-10
 ### Fixed
