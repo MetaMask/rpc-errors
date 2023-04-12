@@ -5,8 +5,7 @@ import {
   SERVER_ERROR_CODE,
   CUSTOM_ERROR_CODE,
 } from './__fixtures__';
-import { providerErrors } from './errors';
-import { rpcErrors, errorCodes } from '.';
+import { rpcErrors, providerErrors, errorCodes } from '.';
 
 describe('rpcErrors.invalidInput', () => {
   it('accepts a single string argument where appropriate', () => {
