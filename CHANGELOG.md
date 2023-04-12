@@ -6,18 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [5.0.0]
-### Changed
-- **BREAKING:** Bump minimum version to Node 16 ([#68](https://github.com/MetaMask/rpc-errors/pull/68))
-- **BREAKING:** Rewrite error serialization ([#61](https://github.com/MetaMask/rpc-errors/pull/61))
-  - Allows errors that conform to the `JsonRpcError` type
-  - If errors don't conform to the type, the error will be wrapped in an internal error and the original error will be available as `data.cause`
-- **BREAKING:** Rename exports to be more generic ([#75](https://github.com/MetaMask/rpc-errors/pull/75))
-  - JSON-RPC errors and Ethereum EIP-1474 errors are namespaced under "rpcErrors"
-  - Ethereum EIP-1193 Provider errors are namespaced under "providerErrors"
-- **BREAKING:** Target `ES2020` ([#77](https://github.com/MetaMask/rpc-errors/pull/77))
-- Rename package to `@metamask/rpc-errors` ([#67](https://github.com/MetaMask/rpc-errors/pull/67))
-
 ## [4.0.3] - 2021-03-10
 ### Fixed
 - Correctly type `ethErrors` getter function argument objects as optional ([#36](https://github.com/MetaMask/eth-rpc-errors/pull/36))
@@ -103,8 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `serializeError`
   - If the object passed to the function has a `.message` property, it will preferred over the `.message` property of the fallback error when creating the returned serialized error object
 
-[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v5.0.0...HEAD
-[5.0.0]: https://github.com/MetaMask/rpc-errors/compare/v4.0.3...v5.0.0
+[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v4.0.3...HEAD
 [4.0.3]: https://github.com/MetaMask/rpc-errors/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/MetaMask/rpc-errors/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/MetaMask/rpc-errors/compare/v4.0.0...v4.0.1
