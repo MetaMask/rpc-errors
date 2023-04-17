@@ -1,3 +1,4 @@
+import { assert, isPlainObject } from '@metamask/utils';
 import { getMessageFromCode, JSON_RPC_SERVER_ERROR_MESSAGE } from './utils';
 import {
   dummyData,
@@ -45,7 +46,7 @@ describe('custom provider error options', () => {
   });
 });
 
-describe('ethError.rpc.server', () => {
+describe('rpcErrors.server', () => {
   it('throws on invalid input', () => {
     expect(() => {
       // @ts-expect-error Invalid input
@@ -62,6 +63,16 @@ describe('ethError.rpc.server', () => {
     expect(() => {
       rpcErrors.server({ code: 1 });
     }).toThrow('"code" must be an integer such that: -32099 <= code <= -32005');
+  });
+
+  it('returns appropriate value', () => {
+    const error = rpcErrors.server({
+      code: SERVER_ERROR_CODE,
+      data: Object.assign({}, dummyData),
+    });
+
+    expect(error.code <= -32000 && error.code >= -32099).toBe(true);
+    expect(error.message).toBe(JSON_RPC_SERVER_ERROR_MESSAGE);
   });
 });
 
@@ -85,14 +96,26 @@ describe('rpcErrors', () => {
     },
   );
 
-  it('server returns appropriate value', () => {
-    const error = rpcErrors.server({
-      code: SERVER_ERROR_CODE,
-      data: Object.assign({}, dummyData),
+  it('serializes a cause', () => {
+    const error = rpcErrors.invalidInput({
+      data: {
+        foo: 'bar',
+        cause: new Error('foo'),
+      },
     });
 
-    expect(error.code <= -32000 && error.code >= -32099).toBe(true);
-    expect(error.message).toBe(JSON_RPC_SERVER_ERROR_MESSAGE);
+    const serializedError = error.serialize();
+    assert(serializedError.data);
+    assert(isPlainObject(serializedError.data));
+
+    expect(serializedError.data.cause).not.toBeInstanceOf(Error);
+    expect(serializedError.data).toStrictEqual({
+      foo: 'bar',
+      cause: {
+        message: 'foo',
+        stack: expect.stringContaining('Error: foo'),
+      },
+    });
   });
 });
 
@@ -122,5 +145,27 @@ describe('providerErrors', () => {
     expect(error.code >= 1000 && error.code < 5000).toBe(true);
     expect(error.code).toBe(CUSTOM_ERROR_CODE);
     expect(error.message).toBe(CUSTOM_ERROR_MESSAGE);
+  });
+
+  it('serializes a cause', () => {
+    const error = providerErrors.unauthorized({
+      data: {
+        foo: 'bar',
+        cause: new Error('foo'),
+      },
+    });
+
+    const serializedError = error.serialize();
+    assert(serializedError.data);
+    assert(isPlainObject(serializedError.data));
+
+    expect(serializedError.data.cause).not.toBeInstanceOf(Error);
+    expect(serializedError.data).toStrictEqual({
+      foo: 'bar',
+      cause: {
+        message: 'foo',
+        stack: expect.stringContaining('Error: foo'),
+      },
+    });
   });
 });

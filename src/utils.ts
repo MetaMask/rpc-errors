@@ -9,6 +9,20 @@ import {
 } from '@metamask/utils';
 import { errorCodes, errorValues } from './error-constants';
 
+/**
+ * A data object, that must be either:
+ *
+ * - A JSON-serializable object.
+ * - An object with a `cause` property that is an `Error` instance, and any
+ * other properties that are JSON-serializable.
+ */
+export type DataWithOptionalCause =
+  | Json
+  | {
+      [key: string]: Json | Error;
+      cause: Error;
+    };
+
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
   'Unspecified error message. This is a bug, please report it.';
@@ -143,7 +157,7 @@ function isJsonRpcServerError(code: number): boolean {
  * @param error - The unknown error.
  * @returns A JSON-serializable object containing as much information about the original error as possible.
  */
-function serializeCause(error: unknown): Json {
+export function serializeCause(error: unknown): Json {
   if (Array.isArray(error)) {
     return error.map((entry) => {
       if (isValidJson(entry)) {
