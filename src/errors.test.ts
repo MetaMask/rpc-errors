@@ -1,3 +1,4 @@
+import { assert, isPlainObject } from '@metamask/utils';
 import { getMessageFromCode, JSON_RPC_SERVER_ERROR_MESSAGE } from './utils';
 import {
   dummyData,
@@ -103,8 +104,12 @@ describe('rpcErrors', () => {
       },
     });
 
-    expect(error.serialize().data.cause).not.toBeInstanceOf(Error);
-    expect(error.serialize().data).toStrictEqual({
+    const serializedError = error.serialize();
+    assert(serializedError.data);
+    assert(isPlainObject(serializedError.data));
+
+    expect(serializedError.data.cause).not.toBeInstanceOf(Error);
+    expect(serializedError.data).toStrictEqual({
       foo: 'bar',
       cause: {
         message: 'foo',
@@ -150,8 +155,12 @@ describe('providerErrors', () => {
       },
     });
 
-    expect(error.serialize().data.cause).not.toBeInstanceOf(Error);
-    expect(error.serialize().data).toStrictEqual({
+    const serializedError = error.serialize();
+    assert(serializedError.data);
+    assert(isPlainObject(serializedError.data));
+
+    expect(serializedError.data.cause).not.toBeInstanceOf(Error);
+    expect(serializedError.data).toStrictEqual({
       foo: 'bar',
       cause: {
         message: 'foo',
