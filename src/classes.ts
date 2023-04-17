@@ -1,5 +1,10 @@
 import safeStringify from 'fast-safe-stringify';
-import { Json, JsonRpcError as SerializedJsonRpcError } from '@metamask/utils';
+import {
+  isPlainObject,
+  Json,
+  JsonRpcError as SerializedJsonRpcError,
+} from '@metamask/utils';
+import { DataWithOptionalCause, serializeCause } from './utils';
 
 export { SerializedJsonRpcError };
 
@@ -9,7 +14,7 @@ export { SerializedJsonRpcError };
  *
  * Permits any integer error code.
  */
-export class JsonRpcError<T extends Json> extends Error {
+export class JsonRpcError<T extends DataWithOptionalCause> extends Error {
   public code: number;
 
   public data?: T;
@@ -40,13 +45,22 @@ export class JsonRpcError<T extends Json> extends Error {
       code: this.code,
       message: this.message,
     };
+
     if (this.data !== undefined) {
-      serialized.data = this.data;
+      // `this.data` is not guaranteed to be a plain object, but this simplifies
+      // the type guard below. We can safely cast it because we know it's a
+      // JSON-serializable value.
+      serialized.data = this.data as { [key: string]: Json };
+
+      if (isPlainObject(this.data)) {
+        serialized.data.cause = serializeCause(this.data.cause);
+      }
     }
 
     if (this.stack) {
       serialized.stack = this.stack;
     }
+
     return serialized;
   }
 
@@ -65,7 +79,9 @@ export class JsonRpcError<T extends Json> extends Error {
  * Error subclass implementing Ethereum Provider errors per EIP-1193.
  * Permits integer error codes in the [ 1000 <= 4999 ] range.
  */
-export class EthereumProviderError<T extends Json> extends JsonRpcError<T> {
+export class EthereumProviderError<
+  T extends DataWithOptionalCause,
+> extends JsonRpcError<T> {
   /**
    * Create an Ethereum Provider JSON-RPC error.
    *
