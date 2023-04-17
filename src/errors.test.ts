@@ -103,7 +103,7 @@ describe('rpcErrors', () => {
       },
     });
 
-    expect(error.serialize().data).not.toBeInstanceOf(Error);
+    expect(error.serialize().data.cause).not.toBeInstanceOf(Error);
     expect(error.serialize().data).toStrictEqual({
       foo: 'bar',
       cause: {
@@ -150,7 +150,7 @@ describe('providerErrors', () => {
       },
     });
 
-    expect(error.serialize().data).not.toBeInstanceOf(Error);
+    expect(error.serialize().data.cause).not.toBeInstanceOf(Error);
     expect(error.serialize().data).toStrictEqual({
       foo: 'bar',
       cause: {
