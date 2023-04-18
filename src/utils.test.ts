@@ -1,3 +1,4 @@
+import { errorCodes, rpcErrors } from '.';
 import {
   invalidError0,
   invalidError1,
@@ -16,7 +17,6 @@ import {
   dummyData,
 } from './__fixtures__';
 import { getMessageFromCode, serializeError } from './utils';
-import { errorCodes, rpcErrors } from '.';
 
 const rpcCodes = errorCodes.rpc;
 
