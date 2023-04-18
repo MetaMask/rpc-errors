@@ -7,6 +7,7 @@ import {
   JsonRpcError as SerializedJsonRpcError,
   RuntimeObject,
 } from '@metamask/utils';
+
 import { errorCodes, errorValues } from './error-constants';
 
 /**

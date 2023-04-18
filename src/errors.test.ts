@@ -1,26 +1,27 @@
 import { assert, isPlainObject } from '@metamask/utils';
-import { getMessageFromCode, JSON_RPC_SERVER_ERROR_MESSAGE } from './utils';
+
+import { rpcErrors, providerErrors, errorCodes } from '.';
 import {
   dummyData,
   CUSTOM_ERROR_MESSAGE,
   SERVER_ERROR_CODE,
   CUSTOM_ERROR_CODE,
 } from './__fixtures__';
-import { rpcErrors, providerErrors, errorCodes } from '.';
+import { getMessageFromCode, JSON_RPC_SERVER_ERROR_MESSAGE } from './utils';
 
 describe('rpcErrors.invalidInput', () => {
   it('accepts a single string argument where appropriate', () => {
-    const err = rpcErrors.invalidInput(CUSTOM_ERROR_MESSAGE);
-    expect(err.code).toBe(errorCodes.rpc.invalidInput);
-    expect(err.message).toBe(CUSTOM_ERROR_MESSAGE);
+    const error = rpcErrors.invalidInput(CUSTOM_ERROR_MESSAGE);
+    expect(error.code).toBe(errorCodes.rpc.invalidInput);
+    expect(error.message).toBe(CUSTOM_ERROR_MESSAGE);
   });
 });
 
 describe('providerErrors.unauthorized', () => {
   it('accepts a single string argument where appropriate', () => {
-    const err = providerErrors.unauthorized(CUSTOM_ERROR_MESSAGE);
-    expect(err.code).toBe(errorCodes.provider.unauthorized);
-    expect(err.message).toBe(CUSTOM_ERROR_MESSAGE);
+    const error = providerErrors.unauthorized(CUSTOM_ERROR_MESSAGE);
+    expect(error.code).toBe(errorCodes.provider.unauthorized);
+    expect(error.message).toBe(CUSTOM_ERROR_MESSAGE);
   });
 });
 

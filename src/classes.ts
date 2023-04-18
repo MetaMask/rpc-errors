@@ -1,12 +1,13 @@
-import safeStringify from 'fast-safe-stringify';
 import {
   isPlainObject,
   Json,
   JsonRpcError as SerializedJsonRpcError,
 } from '@metamask/utils';
+import safeStringify from 'fast-safe-stringify';
+
 import { DataWithOptionalCause, serializeCause } from './utils';
 
-export { SerializedJsonRpcError };
+export type { SerializedJsonRpcError };
 
 /**
  * Error subclass implementing JSON RPC 2.0 errors and Ethereum RPC errors
