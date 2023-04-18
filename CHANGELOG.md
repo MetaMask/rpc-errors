@@ -7,12 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [5.1.0]
-### Uncategorized
-- Bump @metamask/utils from 5.0.0 to 5.0.1 ([#85](https://github.com/MetaMask/rpc-errors/pull/85))
-- Bump ESLint configs and dependencies to latest version ([#89](https://github.com/MetaMask/rpc-errors/pull/89))
-- Bump @metamask/eslint-config-jest from 10.0.0 to 11.1.0 ([#88](https://github.com/MetaMask/rpc-errors/pull/88))
-- Standardise workflows per the module template as of April 2023 ([#82](https://github.com/MetaMask/rpc-errors/pull/82))
+### Added
 - Allow passing a cause to predefined error functions ([#83](https://github.com/MetaMask/rpc-errors/pull/83))
+  - This allows passing an `Error` instance as cause, by using `{ data: { cause: /* some error */ } }`
+  - The error will be properly serialised when calling `serialize`
 
 ## [5.0.0]
 ### Changed
