@@ -1,6 +1,6 @@
 import { JsonRpcError, EthereumProviderError } from './classes';
-import { DataWithOptionalCause, getMessageFromCode } from './utils';
 import { errorCodes } from './error-constants';
+import { DataWithOptionalCause, getMessageFromCode } from './utils';
 
 type EthereumErrorOptions<T extends DataWithOptionalCause> = {
   message?: string;
@@ -242,7 +242,7 @@ function getJsonRpcError<T extends DataWithOptionalCause>(
   arg?: JsonRpcErrorsArg<T>,
 ): JsonRpcError<T> {
   const [message, data] = parseOpts(arg);
-  return new JsonRpcError(code, message || getMessageFromCode(code), data);
+  return new JsonRpcError(code, message ?? getMessageFromCode(code), data);
 }
 
 /**
@@ -259,7 +259,7 @@ function getEthProviderError<T extends DataWithOptionalCause>(
   const [message, data] = parseOpts(arg);
   return new EthereumProviderError(
     code,
-    message || getMessageFromCode(code),
+    message ?? getMessageFromCode(code),
     data,
   );
 }
@@ -282,7 +282,7 @@ function parseOpts<T extends DataWithOptionalCause>(
       if (message && typeof message !== 'string') {
         throw new Error('Must specify string message.');
       }
-      return [message || undefined, data];
+      return [message ?? undefined, data];
     }
   }
 

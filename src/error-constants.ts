@@ -21,6 +21,7 @@ export const errorCodes = {
   },
 };
 
+/* eslint-disable @typescript-eslint/naming-convention */
 export const errorValues = {
   '-32700': {
     standard: 'JSON RPC 2.0',
@@ -89,3 +90,4 @@ export const errorValues = {
     message: 'The provider is disconnected from the specified chain.',
   },
 };
+/* eslint-enable @typescript-eslint/naming-convention */

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.1.0]
+### Added
+- Allow passing a cause to predefined error functions ([#83](https://github.com/MetaMask/rpc-errors/pull/83))
+  - This allows passing an `Error` instance as cause, by using `{ data: { cause: /* some error */ } }`
+  - The error will be properly serialised when calling `serialize`
+
 ## [5.0.0]
 ### Changed
 - **BREAKING:** Bump minimum version to Node 16 ([#68](https://github.com/MetaMask/rpc-errors/pull/68))
@@ -103,7 +109,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `serializeError`
   - If the object passed to the function has a `.message` property, it will preferred over the `.message` property of the fallback error when creating the returned serialized error object
 
-[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v5.0.0...HEAD
+[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v5.1.0...HEAD
+[5.1.0]: https://github.com/MetaMask/rpc-errors/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/MetaMask/rpc-errors/compare/v4.0.3...v5.0.0
 [4.0.3]: https://github.com/MetaMask/rpc-errors/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/MetaMask/rpc-errors/compare/v4.0.1...v4.0.2
