@@ -13,14 +13,17 @@ import { errorCodes, errorValues } from './error-constants';
  * A data object, that must be either:
  *
  * - A JSON-serializable object.
- * - An object with a `cause` property that is an `Error` instance, and any
+ * - An object with a `cause` property that is an error-like value, and any
  * other properties that are JSON-serializable.
  */
 export type DataWithOptionalCause =
   | Json
   | {
-      [key: string]: Json | Error;
-      cause: Error;
+      // Unfortunately we can't use just `Json` here, because all properties of
+      // an object with an index signature must be assignable to the index
+      // signature's type. So we have to use `Json | unknown` instead.
+      [key: string]: Json | unknown;
+      cause: unknown;
     };
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;

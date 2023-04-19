@@ -117,6 +117,25 @@ describe('rpcErrors', () => {
       },
     });
   });
+
+  it('serializes a non-Error-instance cause', () => {
+    const error = rpcErrors.invalidInput({
+      data: {
+        foo: 'bar',
+        cause: 'foo',
+      },
+    });
+
+    const serializedError = error.serialize();
+    assert(serializedError.data);
+    assert(isPlainObject(serializedError.data));
+
+    expect(serializedError.data.cause).not.toBeInstanceOf(Error);
+    expect(serializedError.data).toStrictEqual({
+      foo: 'bar',
+      cause: 'foo',
+    });
+  });
 });
 
 describe('providerErrors', () => {
@@ -166,6 +185,25 @@ describe('providerErrors', () => {
         message: 'foo',
         stack: expect.stringContaining('Error: foo'),
       },
+    });
+  });
+
+  it('serializes a non-Error-instance cause', () => {
+    const error = providerErrors.unauthorized({
+      data: {
+        foo: 'bar',
+        cause: 'foo',
+      },
+    });
+
+    const serializedError = error.serialize();
+    assert(serializedError.data);
+    assert(isPlainObject(serializedError.data));
+
+    expect(serializedError.data.cause).not.toBeInstanceOf(Error);
+    expect(serializedError.data).toStrictEqual({
+      foo: 'bar',
+      cause: 'foo',
     });
   });
 });
