@@ -5,7 +5,11 @@ import {
 } from '@metamask/utils';
 import safeStringify from 'fast-safe-stringify';
 
-import { DataWithOptionalCause, serializeCause } from './utils';
+import type {
+  DataWithOptionalCause,
+  OptionalDataWithOptionalCause,
+} from './utils';
+import { serializeCause } from './utils';
 
 export type { SerializedJsonRpcError };
 
@@ -15,7 +19,9 @@ export type { SerializedJsonRpcError };
  *
  * Permits any integer error code.
  */
-export class JsonRpcError<T extends DataWithOptionalCause> extends Error {
+export class JsonRpcError<
+  T extends OptionalDataWithOptionalCause,
+> extends Error {
   public code: number;
 
   public data?: T;

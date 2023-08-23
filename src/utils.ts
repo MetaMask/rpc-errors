@@ -27,6 +27,14 @@ export type DataWithOptionalCause =
       cause: unknown;
     };
 
+/**
+ * A data object, that must be either:
+ *
+ * - A valid DataWithOptionalCause value.
+ * - undefined.
+ */
+export type OptionalDataWithOptionalCause = undefined | DataWithOptionalCause;
+
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
   'Unspecified error message. This is a bug, please report it.';
