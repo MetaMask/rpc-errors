@@ -19,18 +19,9 @@ module.exports = {
 
     {
       files: ['*.test.ts', '*.test.js'],
-      extends: [
-        '@metamask/eslint-config-jest',
-        '@metamask/eslint-config-nodejs',
-      ],
+      extends: ['@metamask/eslint-config-jest'],
     },
   ],
 
-  ignorePatterns: [
-    '!.eslintrc.js',
-    '!.prettierrc.js',
-    'dist/',
-    'docs/',
-    '.yarn/',
-  ],
+  ignorePatterns: ['!.eslintrc.js', '!.prettierrc.js', 'dist/', 'docs/'],
 };

@@ -1,13 +1,11 @@
-import type {
-  Json,
-  JsonRpcError as SerializedJsonRpcError,
-  RuntimeObject,
-} from '@metamask/utils';
 import {
   hasProperty,
   isValidJson,
   isObject,
   isJsonRpcError,
+  Json,
+  JsonRpcError as SerializedJsonRpcError,
+  RuntimeObject,
 } from '@metamask/utils';
 
 import { errorCodes, errorValues } from './error-constants';
