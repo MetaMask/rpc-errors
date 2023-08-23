@@ -5,10 +5,7 @@ import {
 } from '@metamask/utils';
 import safeStringify from 'fast-safe-stringify';
 
-import type {
-  DataWithOptionalCause,
-  OptionalDataWithOptionalCause,
-} from './utils';
+import type { OptionalDataWithOptionalCause } from './utils';
 import { serializeCause } from './utils';
 
 export type { SerializedJsonRpcError };
@@ -87,7 +84,7 @@ export class JsonRpcError<
  * Permits integer error codes in the [ 1000 <= 4999 ] range.
  */
 export class EthereumProviderError<
-  T extends DataWithOptionalCause,
+  T extends OptionalDataWithOptionalCause,
 > extends JsonRpcError<T> {
   /**
    * Create an Ethereum Provider JSON-RPC error.
