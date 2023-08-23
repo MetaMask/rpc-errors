@@ -24,8 +24,8 @@ module.exports = {
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
     './src/**/*.ts',
+    '!./src/__fixtures__/**/*',
     '!./src/index.ts',
-    '!./src/__fixtures__/**',
   ],
 
   // The directory where Jest should output its coverage files
@@ -37,7 +37,7 @@ module.exports = {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: 'babel',
+  coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: ['html', 'json-summary', 'text'],
@@ -45,10 +45,10 @@ module.exports = {
   // An object that configures minimum threshold enforcement for coverage results
   coverageThreshold: {
     global: {
-      branches: 92.64,
-      functions: 94.44,
-      lines: 92.85,
-      statements: 92.85,
+      branches: 94.31,
+      functions: 94.11,
+      lines: 97.05,
+      statements: 97.05,
     },
   },
 
