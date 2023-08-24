@@ -24,7 +24,7 @@ export type DataWithOptionalCause =
       // an object with an index signature must be assignable to the index
       // signature's type. So we have to use `Json | unknown` instead.
       [key: string]: Json | unknown;
-      cause: unknown;
+      cause?: unknown;
     };
 
 /**
