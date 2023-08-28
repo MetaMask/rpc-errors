@@ -24,8 +24,16 @@ export type DataWithOptionalCause =
       // an object with an index signature must be assignable to the index
       // signature's type. So we have to use `Json | unknown` instead.
       [key: string]: Json | unknown;
-      cause: unknown;
+      cause?: unknown;
     };
+
+/**
+ * A data object, that must be either:
+ *
+ * - A valid DataWithOptionalCause value.
+ * - undefined.
+ */
+export type OptionalDataWithOptionalCause = undefined | DataWithOptionalCause;
 
 const FALLBACK_ERROR_CODE = errorCodes.rpc.internal;
 const FALLBACK_MESSAGE =
