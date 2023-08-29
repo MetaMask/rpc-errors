@@ -35,6 +35,9 @@
     "test": "jest && jest-it-up",
     "test:watch": "jest --watch"
   },
+  "resolutions": {
+    "@metamask/utils@^8.0.0": "patch:@metamask/utils@npm%3A8.0.0#./.yarn/patches/@metamask-utils-npm-8.0.0-7a3c3a899a.patch"
+  },
   "dependencies": {
     "@metamask/utils": "^8.0.0",
     "fast-safe-stringify": "^2.0.6"
@@ -72,8 +75,5 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "resolutions": {
-    "@metamask/utils@^8.0.0": "patch:@metamask/utils@npm%3A8.0.0#./.yarn/patches/@metamask-utils-npm-8.0.0-7a3c3a899a.patch"
   }
 }
