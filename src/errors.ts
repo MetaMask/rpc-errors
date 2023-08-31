@@ -2,20 +2,20 @@ import { JsonRpcError, EthereumProviderError } from './classes';
 import { errorCodes } from './error-constants';
 import { OptionalDataWithOptionalCause, getMessageFromCode } from './utils';
 
-type EthereumErrorOptions<T extends OptionalDataWithOptionalCause> = {
+type EthereumErrorOptions<Data extends OptionalDataWithOptionalCause> = {
   message?: string;
-  data?: T;
+  data?: Data;
 };
 
-type ServerErrorOptions<T extends OptionalDataWithOptionalCause> = {
+type ServerErrorOptions<Data extends OptionalDataWithOptionalCause> = {
   code: number;
-} & EthereumErrorOptions<T>;
+} & EthereumErrorOptions<Data>;
 
-type CustomErrorArg<T extends OptionalDataWithOptionalCause> =
-  ServerErrorOptions<T>;
+type CustomErrorArg<Data extends OptionalDataWithOptionalCause> =
+  ServerErrorOptions<Data>;
 
-type JsonRpcErrorsArg<T extends OptionalDataWithOptionalCause> =
-  | EthereumErrorOptions<T>
+type JsonRpcErrorsArg<Data extends OptionalDataWithOptionalCause> =
+  | EthereumErrorOptions<Data>
   | string;
 
 export const rpcErrors = {
@@ -25,7 +25,7 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  parse: <T extends OptionalDataWithOptionalCause>(arg?: JsonRpcErrorsArg<T>) =>
+  parse: <Data extends OptionalDataWithOptionalCause>(arg?: JsonRpcErrorsArg<Data>) =>
     getJsonRpcError(errorCodes.rpc.parse, arg),
 
   /**
@@ -34,8 +34,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  invalidRequest: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  invalidRequest: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.invalidRequest, arg),
 
   /**
@@ -44,8 +44,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  invalidParams: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  invalidParams: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.invalidParams, arg),
 
   /**
@@ -54,8 +54,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  methodNotFound: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  methodNotFound: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.methodNotFound, arg),
 
   /**
@@ -64,8 +64,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  internal: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  internal: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.internal, arg),
 
   /**
@@ -76,8 +76,8 @@ export const rpcErrors = {
    * @param opts - The error options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  server: <T extends OptionalDataWithOptionalCause>(
-    opts: ServerErrorOptions<T>,
+  server: <Data extends OptionalDataWithOptionalCause>(
+    opts: ServerErrorOptions<Data>,
   ) => {
     if (!opts || typeof opts !== 'object' || Array.isArray(opts)) {
       throw new Error(
@@ -99,8 +99,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  invalidInput: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  invalidInput: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.invalidInput, arg),
 
   /**
@@ -109,8 +109,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  resourceNotFound: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  resourceNotFound: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.resourceNotFound, arg),
 
   /**
@@ -119,8 +119,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  resourceUnavailable: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  resourceUnavailable: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.resourceUnavailable, arg),
 
   /**
@@ -129,8 +129,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  transactionRejected: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  transactionRejected: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.transactionRejected, arg),
 
   /**
@@ -139,8 +139,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  methodNotSupported: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  methodNotSupported: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.methodNotSupported, arg),
 
   /**
@@ -149,8 +149,8 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  limitExceeded: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  limitExceeded: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => getJsonRpcError(errorCodes.rpc.limitExceeded, arg),
 };
 
@@ -161,8 +161,8 @@ export const providerErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link EthereumProviderError} class.
    */
-  userRejectedRequest: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  userRejectedRequest: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => {
     return getEthProviderError(errorCodes.provider.userRejectedRequest, arg);
   },
@@ -173,8 +173,8 @@ export const providerErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link EthereumProviderError} class.
    */
-  unauthorized: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  unauthorized: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => {
     return getEthProviderError(errorCodes.provider.unauthorized, arg);
   },
@@ -185,8 +185,8 @@ export const providerErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link EthereumProviderError} class.
    */
-  unsupportedMethod: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  unsupportedMethod: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => {
     return getEthProviderError(errorCodes.provider.unsupportedMethod, arg);
   },
@@ -197,8 +197,8 @@ export const providerErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link EthereumProviderError} class.
    */
-  disconnected: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  disconnected: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => {
     return getEthProviderError(errorCodes.provider.disconnected, arg);
   },
@@ -209,8 +209,8 @@ export const providerErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link EthereumProviderError} class.
    */
-  chainDisconnected: <T extends OptionalDataWithOptionalCause>(
-    arg?: JsonRpcErrorsArg<T>,
+  chainDisconnected: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
   ) => {
     return getEthProviderError(errorCodes.provider.chainDisconnected, arg);
   },
@@ -221,8 +221,8 @@ export const providerErrors = {
    * @param opts - The error options bag.
    * @returns An instance of the {@link EthereumProviderError} class.
    */
-  custom: <T extends OptionalDataWithOptionalCause>(
-    opts: CustomErrorArg<T>,
+  custom: <Data extends OptionalDataWithOptionalCause>(
+    opts: CustomErrorArg<Data>,
   ) => {
     if (!opts || typeof opts !== 'object' || Array.isArray(opts)) {
       throw new Error(
@@ -246,10 +246,10 @@ export const providerErrors = {
  * @param arg - The error message or options bag.
  * @returns An instance of the {@link JsonRpcError} class.
  */
-function getJsonRpcError<T extends OptionalDataWithOptionalCause>(
+function getJsonRpcError<Data extends OptionalDataWithOptionalCause>(
   code: number,
-  arg?: JsonRpcErrorsArg<T>,
-): JsonRpcError<T> {
+  arg?: JsonRpcErrorsArg<Data>,
+): JsonRpcError<Data> {
   const [message, data] = parseOpts(arg);
   return new JsonRpcError(code, message ?? getMessageFromCode(code), data);
 }
@@ -261,10 +261,10 @@ function getJsonRpcError<T extends OptionalDataWithOptionalCause>(
  * @param arg - The error message or options bag.
  * @returns An instance of the {@link EthereumProviderError} class.
  */
-function getEthProviderError<T extends OptionalDataWithOptionalCause>(
+function getEthProviderError<Data extends OptionalDataWithOptionalCause>(
   code: number,
-  arg?: JsonRpcErrorsArg<T>,
-): EthereumProviderError<T> {
+  arg?: JsonRpcErrorsArg<Data>,
+): EthereumProviderError<Data> {
   const [message, data] = parseOpts(arg);
   return new EthereumProviderError(
     code,
@@ -279,9 +279,9 @@ function getEthProviderError<T extends OptionalDataWithOptionalCause>(
  * @param arg - The error message or options bag.
  * @returns A tuple containing the error message and optional data.
  */
-function parseOpts<T extends OptionalDataWithOptionalCause>(
-  arg?: JsonRpcErrorsArg<T>,
-): [message?: string | undefined, data?: T | undefined] {
+function parseOpts<Data extends OptionalDataWithOptionalCause>(
+  arg?: JsonRpcErrorsArg<Data>,
+): [message?: string | undefined, data?: Data | undefined] {
   if (arg) {
     if (typeof arg === 'string') {
       return [arg];
