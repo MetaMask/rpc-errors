@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0]
+### Changed
+- Make Data type-parameter optional in JsonRpcError ([#102](https://github.com/MetaMask/rpc-errors/pull/102))
+
+### Fixed
+- **BREAKING**: `undefined` is now not recognized as valid JSON value
+  - Update dependency `@metamask/utils` from `^5.0.0` to `^8.0.0` ([#101](https://github.com/MetaMask/rpc-errors/pull/101))
+
 ## [5.1.1]
 ### Fixed
 - Allow passing unknown values as cause ([#91](https://github.com/MetaMask/rpc-errors/pull/91))
@@ -114,7 +122,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `serializeError`
   - If the object passed to the function has a `.message` property, it will preferred over the `.message` property of the fallback error when creating the returned serialized error object
 
-[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v5.1.1...HEAD
+[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v6.0.0...HEAD
+[6.0.0]: https://github.com/MetaMask/rpc-errors/compare/v5.1.1...v6.0.0
 [5.1.1]: https://github.com/MetaMask/rpc-errors/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/MetaMask/rpc-errors/compare/v5.0.0...v5.1.0
 [5.0.0]: https://github.com/MetaMask/rpc-errors/compare/v4.0.3...v5.0.0
