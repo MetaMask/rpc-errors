@@ -1,6 +1,7 @@
 import { JsonRpcError, EthereumProviderError } from './classes';
 import { errorCodes } from './error-constants';
-import { OptionalDataWithOptionalCause, getMessageFromCode } from './utils';
+import type { OptionalDataWithOptionalCause } from './utils';
+import { getMessageFromCode } from './utils';
 
 type EthereumErrorOptions<Data extends OptionalDataWithOptionalCause> = {
   message?: string;
@@ -25,8 +26,9 @@ export const rpcErrors = {
    * @param arg - The error message or options bag.
    * @returns An instance of the {@link JsonRpcError} class.
    */
-  parse: <Data extends OptionalDataWithOptionalCause>(arg?: JsonRpcErrorsArg<Data>) =>
-    getJsonRpcError(errorCodes.rpc.parse, arg),
+  parse: <Data extends OptionalDataWithOptionalCause>(
+    arg?: JsonRpcErrorsArg<Data>,
+  ) => getJsonRpcError(errorCodes.rpc.parse, arg),
 
   /**
    * Get a JSON RPC 2.0 Invalid Request (-32600) error.

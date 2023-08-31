@@ -1,8 +1,8 @@
-import {
-  isPlainObject,
+import type {
   Json,
   JsonRpcError as SerializedJsonRpcError,
 } from '@metamask/utils';
+import { isPlainObject } from '@metamask/utils';
 import safeStringify from 'fast-safe-stringify';
 
 import type { OptionalDataWithOptionalCause } from './utils';
