@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make Data type-parameter optional in JsonRpcError ([#102](https://github.com/MetaMask/rpc-errors/pull/102))
 
 ### Fixed
-- `undefined` is now not recognized as valid JSON value
+- **BREAKING**: `undefined` is now not recognized as valid JSON value
   - Update dependency `@metamask/utils` from `^5.0.0` to `^8.0.0` ([#101](https://github.com/MetaMask/rpc-errors/pull/101))
 
 ## [5.1.1]
