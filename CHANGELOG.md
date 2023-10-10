@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [6.1.0]
-### Uncategorized
-- chore: exclude dist/__fixtures__ from publish ([#114](https://github.com/MetaMask/rpc-errors/pull/114))
+### Changed
+- Update dependency `@metamask/utils` from `^8.0.0` to `^8.1.0` ([#108](https://github.com/MetaMask/rpc-errors/pull/108))
+
+### Fixed
+- Exclude `dist/__fixtures__` files from published package ([#114](https://github.com/MetaMask/rpc-errors/pull/114))
 
 ## [6.0.0]
 ### Changed
