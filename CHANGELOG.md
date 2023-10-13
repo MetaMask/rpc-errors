@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.0]
+### Changed
+- Update dependency `@metamask/utils` from `^8.0.0` to `^8.1.0` ([#108](https://github.com/MetaMask/rpc-errors/pull/108))
+
+### Fixed
+- Exclude `dist/__fixtures__` files from published package ([#114](https://github.com/MetaMask/rpc-errors/pull/114))
+
 ## [6.0.0]
 ### Changed
 - Make Data type-parameter optional in JsonRpcError ([#102](https://github.com/MetaMask/rpc-errors/pull/102))
@@ -122,7 +129,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `serializeError`
   - If the object passed to the function has a `.message` property, it will preferred over the `.message` property of the fallback error when creating the returned serialized error object
 
-[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v6.0.0...HEAD
+[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v6.1.0...HEAD
+[6.1.0]: https://github.com/MetaMask/rpc-errors/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/MetaMask/rpc-errors/compare/v5.1.1...v6.0.0
 [5.1.1]: https://github.com/MetaMask/rpc-errors/compare/v5.1.0...v5.1.1
 [5.1.0]: https://github.com/MetaMask/rpc-errors/compare/v5.0.0...v5.1.0
