@@ -1,8 +1,8 @@
-import {
-  isPlainObject,
+import type {
   Json,
   JsonRpcError as SerializedJsonRpcError,
 } from '@metamask/utils';
+import { isPlainObject } from '@metamask/utils';
 import safeStringify from 'fast-safe-stringify';
 
 import type { OptionalDataWithOptionalCause } from './utils';
@@ -17,13 +17,13 @@ export type { SerializedJsonRpcError };
  * Permits any integer error code.
  */
 export class JsonRpcError<
-  T extends OptionalDataWithOptionalCause,
+  Data extends OptionalDataWithOptionalCause,
 > extends Error {
   public code: number;
 
-  public data?: T;
+  public data?: Data;
 
-  constructor(code: number, message: string, data?: T) {
+  constructor(code: number, message: string, data?: Data) {
     if (!Number.isInteger(code)) {
       throw new Error('"code" must be an integer.');
     }
@@ -84,8 +84,8 @@ export class JsonRpcError<
  * Permits integer error codes in the [ 1000 <= 4999 ] range.
  */
 export class EthereumProviderError<
-  T extends OptionalDataWithOptionalCause,
-> extends JsonRpcError<T> {
+  Data extends OptionalDataWithOptionalCause,
+> extends JsonRpcError<Data> {
   /**
    * Create an Ethereum Provider JSON-RPC error.
    *
@@ -94,7 +94,7 @@ export class EthereumProviderError<
    * @param message - The JSON-RPC error message.
    * @param data - Optional data to include in the error.
    */
-  constructor(code: number, message: string, data?: T) {
+  constructor(code: number, message: string, data?: Data) {
     if (!isValidEthProviderCode(code)) {
       throw new Error(
         '"code" must be an integer such that: 1000 <= code <= 4999',
