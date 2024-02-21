@@ -37,7 +37,7 @@ module.exports = {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: 'v8',
+  coverageProvider: 'babel',
 
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: ['html', 'json-summary', 'text'],
@@ -45,10 +45,10 @@ module.exports = {
   // An object that configures minimum threshold enforcement for coverage results
   coverageThreshold: {
     global: {
-      branches: 94.31,
-      functions: 94.11,
-      lines: 97.15,
-      statements: 97.15,
+      branches: 92.64,
+      functions: 94.44,
+      lines: 92.85,
+      statements: 92.85,
     },
   },
 
