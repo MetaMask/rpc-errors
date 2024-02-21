@@ -9,12 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.2.0]
 
-### Uncategorized
+### Added
 
-- Update repository to match module template (February 2024) ([#133](https://github.com/MetaMask/rpc-errors/pull/133))
-- Bump ip from 2.0.0 to 2.0.1 ([#132](https://github.com/MetaMask/rpc-errors/pull/132))
-- devDeps: depcheck@^1.4.5->^1.4.7 ([#117](https://github.com/MetaMask/rpc-errors/pull/117))
-- devDeps: @metamask/eslint-config\* from v11 to v12 ([#110](https://github.com/MetaMask/rpc-errors/pull/110))
+- Add ESM build ([#133](https://github.com/MetaMask/rpc-errors/pull/133))
+
+### Changed
+
+- Update `@metamask/utils` from `^8.1.0` to `^8.3.0` ([#133](https://github.com/MetaMask/rpc-errors/pull/133))
 
 ## [6.1.0]
 
