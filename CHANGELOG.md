@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.2.1]
 
-### Uncategorized
+### Fixed
 
 - Export `OptionalDataWithOptionalCause` type ([#135](https://github.com/MetaMask/rpc-errors/pull/135))
 
