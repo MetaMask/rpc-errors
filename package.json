@@ -1,6 +1,6 @@
 {
   "name": "@metamask/rpc-errors",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "Ethereum RPC and Provider errors",
   "keywords": [
     "rpc",
