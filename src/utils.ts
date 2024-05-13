@@ -218,8 +218,9 @@ function serializeObject(object: RuntimeObject): Json {
  * @param data - Optional data to validate.
  * @returns Whether cause property is present and an object.
  */
-export function dataHasCause(
-  data: OptionalDataWithOptionalCause,
-): data is { cause: object } {
+export function dataHasCause(data: unknown): data is {
+  [key: string]: Json | unknown;
+  cause: object;
+} {
   return isObject(data) && hasProperty(data, 'cause') && isObject(data.cause);
 }
