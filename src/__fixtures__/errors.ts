@@ -1,7 +1,11 @@
 import { rpcErrors } from '..';
 
-export const dummyData = { foo: 'bar' };
 export const dummyMessage = 'baz';
+export const dummyData = { foo: 'bar' };
+export const dummyDataWithCause = {
+  foo: 'bar',
+  cause: { message: dummyMessage },
+};
 
 export const invalidError0 = 0;
 export const invalidError1 = ['foo', 'bar', 3];
