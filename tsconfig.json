@@ -3,6 +3,7 @@
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
+    // Remove custom `cause` field from JsonRpcError when updating
     "lib": ["ES2020"],
     "module": "CommonJS",
     "moduleResolution": "node",
