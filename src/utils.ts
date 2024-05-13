@@ -211,3 +211,15 @@ function serializeObject(object: RuntimeObject): Json {
     {},
   );
 }
+
+/**
+ * Returns true if supplied error data has a usable `cause` property; false otherwise.
+ *
+ * @param data - Optional data to validate.
+ * @returns Whether cause property is present and an object.
+ */
+export function dataHasCause(
+  data: OptionalDataWithOptionalCause,
+): data is { cause: object } {
+  return isObject(data) && hasProperty(data, 'cause') && isObject(data.cause);
+}
