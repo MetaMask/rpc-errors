@@ -9,11 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.3.0]
 
-### Uncategorized
+### Added
 
-- feat: propagate data.cause as cause in JsonRpcError constructor ([#140](https://github.com/MetaMask/rpc-errors/pull/140))
-- Bump tar from 6.1.11 to 6.2.1 ([#138](https://github.com/MetaMask/rpc-errors/pull/138))
-- Enabling MetaMask security code scanner ([#137](https://github.com/MetaMask/rpc-errors/pull/137))
+- Expose error causes as `cause` property ([#140](https://github.com/MetaMask/rpc-errors/pull/140))
+  - `JsonRpcError` objects already had a `.data.cause` property. It is now exposed as `.cause` in order to to be recognized as ES Causes.
 
 ## [6.2.1]
 
