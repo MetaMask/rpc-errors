@@ -2,11 +2,11 @@ import type {
   Json,
   JsonRpcError as SerializedJsonRpcError,
 } from '@metamask/utils';
-import { hasProperty, isObject, isPlainObject } from '@metamask/utils';
+import { isPlainObject } from '@metamask/utils';
 import safeStringify from 'fast-safe-stringify';
 
 import type { OptionalDataWithOptionalCause } from './utils';
-import { serializeCause } from './utils';
+import { dataHasCause, serializeCause } from './utils';
 
 export type { SerializedJsonRpcError };
 
@@ -19,8 +19,8 @@ export type { SerializedJsonRpcError };
 export class JsonRpcError<
   Data extends OptionalDataWithOptionalCause,
 > extends Error {
-  // This can be removed when tsconfig lib and/or target have changed to >=es2022
-  public cause: OptionalDataWithOptionalCause;
+  // The `cause` field can be removed when tsconfig lib and/or target have changed to >=es2022
+  public cause?: unknown;
 
   public code: number;
 
@@ -35,18 +35,23 @@ export class JsonRpcError<
       throw new Error('"message" must be a non-empty string.');
     }
 
-    super(message);
-    this.code = code;
+    if (dataHasCause(data)) {
+      // @ts-expect-error - Error class does accept options argument depending on runtime, but types are mapping to oldest supported
+      super(message, { cause: data.cause });
+
+      // Browser backwards-compatibility fallback
+      if (!Object.prototype.hasOwnProperty.call(this, 'cause')) {
+        Object.assign(this, { cause: data.cause });
+      }
+    } else {
+      super(message);
+    }
+
     if (data !== undefined) {
       this.data = data;
-      if (
-        isObject(data) &&
-        hasProperty(data, 'cause') &&
-        isObject(data.cause)
-      ) {
-        this.cause = data.cause;
-      }
     }
+
+    this.code = code;
   }
 
   /**

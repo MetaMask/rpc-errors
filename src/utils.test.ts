@@ -16,7 +16,7 @@ import {
   dummyMessage,
   dummyData,
 } from './__fixtures__';
-import { getMessageFromCode, serializeError } from './utils';
+import { dataHasCause, getMessageFromCode, serializeError } from './utils';
 
 const rpcCodes = errorCodes.rpc;
 
@@ -308,5 +308,25 @@ describe('serializeError', () => {
         cause: ['foo', null, { baz: 'qux' }],
       },
     });
+  });
+});
+
+describe('dataHasCause', () => {
+  it('returns false for invalid data types', () => {
+    [undefined, null, 'hello', 1234].forEach((data) => {
+      const result = dataHasCause(data);
+      expect(result).toBe(false);
+    });
+  });
+  it('returns false for invalid cause types', () => {
+    [undefined, null, 'hello', 1234].forEach((cause) => {
+      const result = dataHasCause({ cause });
+      expect(result).toBe(false);
+    });
+  });
+  it('returns true when cause is object', () => {
+    const data = { cause: {} };
+    const result = dataHasCause(data);
+    expect(result).toBe(true);
   });
 });
