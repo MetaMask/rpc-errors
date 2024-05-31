@@ -2,7 +2,7 @@ import type {
   Json,
   JsonRpcError as SerializedJsonRpcError,
 } from '@metamask/utils';
-import { isPlainObject } from '@metamask/utils';
+import { hasProperty, isPlainObject } from '@metamask/utils';
 import safeStringify from 'fast-safe-stringify';
 
 import type { OptionalDataWithOptionalCause } from './utils';
@@ -40,7 +40,7 @@ export class JsonRpcError<
       super(message, { cause: data.cause });
 
       // Browser backwards-compatibility fallback
-      if (!Object.prototype.hasOwnProperty.call(this, 'cause')) {
+      if (!hasProperty(this, 'cause')) {
         Object.assign(this, { cause: data.cause });
       }
     } else {
