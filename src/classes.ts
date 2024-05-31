@@ -19,7 +19,7 @@ export type { SerializedJsonRpcError };
 export class JsonRpcError<
   Data extends OptionalDataWithOptionalCause,
 > extends Error {
-  // The `cause` field can be removed when tsconfig lib and/or target have changed to >=es2022
+  // The `cause` definition can be removed when tsconfig lib and/or target have changed to >=es2022
   public cause?: unknown;
 
   public code: number;
