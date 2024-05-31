@@ -3,6 +3,8 @@ import { assert, isPlainObject } from '@metamask/utils';
 import { rpcErrors, providerErrors, errorCodes } from '.';
 import {
   dummyData,
+  dummyDataWithCause,
+  dummyMessage,
   CUSTOM_ERROR_MESSAGE,
   SERVER_ERROR_CODE,
   CUSTOM_ERROR_CODE,
@@ -97,6 +99,21 @@ describe('rpcErrors', () => {
     },
   );
 
+  it.each(Object.entries(rpcErrors).filter(([key]) => key !== 'server'))(
+    '%s propagates data.cause if set',
+    (key, value) => {
+      const createError = value as any;
+      const error = createError({
+        message: null,
+        data: Object.assign({}, dummyDataWithCause),
+      });
+      // @ts-expect-error TypeScript does not like indexing into this with the key
+      const rpcCode = errorCodes.rpc[key];
+      expect(error.message).toBe(getMessageFromCode(rpcCode));
+      expect(error.cause.message).toBe(dummyMessage);
+    },
+  );
+
   it('serializes a cause', () => {
     const error = rpcErrors.invalidInput({
       data: {
@@ -153,6 +170,21 @@ describe('providerErrors', () => {
       expect(error.code >= 1000 && error.code < 5000).toBe(true);
       expect(error.code).toBe(providerCode);
       expect(error.message).toBe(getMessageFromCode(providerCode));
+    },
+  );
+
+  it.each(Object.entries(providerErrors).filter(([key]) => key !== 'custom'))(
+    '%s propagates data.cause if set',
+    (key, value) => {
+      const createError = value as any;
+      const error = createError({
+        message: null,
+        data: Object.assign({}, dummyDataWithCause),
+      });
+      // @ts-expect-error TypeScript does not like indexing into this with the key
+      const providerCode = errorCodes.provider[key];
+      expect(error.message).toBe(getMessageFromCode(providerCode));
+      expect(error.cause.message).toBe(dummyMessage);
     },
   );
 
