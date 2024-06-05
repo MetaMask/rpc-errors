@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.0]
+
+### Added
+
+- Expose error causes as `cause` property ([#140](https://github.com/MetaMask/rpc-errors/pull/140))
+  - `JsonRpcError` objects already had a `.data.cause` property. It is now exposed as `.cause` in order to to be recognized as ES Causes.
+
 ## [6.2.1]
 
 ### Fixed
@@ -182,7 +189,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `serializeError`
   - If the object passed to the function has a `.message` property, it will preferred over the `.message` property of the fallback error when creating the returned serialized error object
 
-[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v6.2.1...HEAD
+[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v6.3.0...HEAD
+[6.3.0]: https://github.com/MetaMask/rpc-errors/compare/v6.2.1...v6.3.0
 [6.2.1]: https://github.com/MetaMask/rpc-errors/compare/v6.2.0...v6.2.1
 [6.2.0]: https://github.com/MetaMask/rpc-errors/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/MetaMask/rpc-errors/compare/v6.0.0...v6.1.0
