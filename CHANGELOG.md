@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.3.1]
 
-### Uncategorized
+### Changed
 
-- chore(deps): Bump `@metamask/utils` from `^8.3.0` to `^9.0.0` ([#147](https://github.com/MetaMask/rpc-errors/pull/147))
+- Bump `@metamask/utils` from `^8.3.0` to `^9.0.0` ([#147](https://github.com/MetaMask/rpc-errors/pull/147))
 
 ## [6.3.0]
 
