@@ -179,7 +179,7 @@ async function expectPullRequestTemplate(workspace, workspaceName) {
 
   const pullRequestTemplate = await getWorkspaceFile(
     workspace,
-    '.github/PULL_REQUEST_TEMPLATE.md',
+    '.github/pull_request_template.md',
   );
 
   if (!pullRequestTemplate) {
