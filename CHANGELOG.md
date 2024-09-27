@@ -9,12 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.4.0]
 
-### Uncategorized
+### Changed
 
-- build: Migrate to ts-bridge ([#152](https://github.com/MetaMask/rpc-errors/pull/152))
-- Bump the npm_and_yarn group with 2 updates ([#151](https://github.com/MetaMask/rpc-errors/pull/151))
-- Bump braces in the npm_and_yarn group across 1 directory ([#146](https://github.com/MetaMask/rpc-errors/pull/146))
-- chore(devdeps): @lavamoat/allow-scripts@^3.0.0->^3.0.4 ([#143](https://github.com/MetaMask/rpc-errors/pull/143))
+- Migrate to `ts-bridge` ([#152](https://github.com/MetaMask/rpc-errors/pull/152))
+  - Migrates to [ts-bridge](https://ts-bridge.dev) from `tsup`, which may resolve issues when importing this package in CommonJS or ESM.
 
 ## [6.3.1]
 
