@@ -66,16 +66,19 @@ gen_enforced_field(WorkspaceCwd, 'repository.url', 'https://github.com/MetaMask/
 gen_enforced_field(WorkspaceCwd, 'license').
 
 % The type definitions entrypoint the package must be `./dist/types/index.d.ts`.
-gen_enforced_field(WorkspaceCwd, 'types', './dist/types/index.d.ts').
-gen_enforced_field(WorkspaceCwd, 'exports["."].types', './dist/types/index.d.ts').
+gen_enforced_field(WorkspaceCwd, 'types', './dist/index.d.cts').
 
 % The entrypoint for the package must be `./dist/index.js`.
-gen_enforced_field(WorkspaceCwd, 'main', './dist/index.js').
-gen_enforced_field(WorkspaceCwd, 'exports["."].require', './dist/index.js').
+gen_enforced_field(WorkspaceCwd, 'main', './dist/index.cjs').
 
 % The module entrypoint for the package must be `./dist/index.mjs`.
 gen_enforced_field(WorkspaceCwd, 'module', './dist/index.mjs').
-gen_enforced_field(WorkspaceCwd, 'exports["."].import', './dist/index.mjs').
+
+% The package must have the expected .mjs and .cjs exports
+gen_enforced_field(WorkspaceCwd, 'exports["."].import.types', './dist/index.d.mts').
+gen_enforced_field(WorkspaceCwd, 'exports["."].import.default', './dist/index.mjs').
+gen_enforced_field(WorkspaceCwd, 'exports["."].require.types', './dist/index.d.cts').
+gen_enforced_field(WorkspaceCwd, 'exports["."].require.default', './dist/index.cjs').
 
 gen_enforced_field(WorkspaceCwd, 'exports["./package.json"]', './package.json').
 
