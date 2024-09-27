@@ -1018,7 +1018,7 @@ __metadata:
     "@metamask/utils": ^9.0.0
     "@ts-bridge/cli": ^0.5.1
     "@types/jest": ^28.1.6
-    "@types/node": ^16
+    "@types/node": ^18
     "@typescript-eslint/eslint-plugin": ^5.43.0
     "@typescript-eslint/parser": ^5.43.0
     depcheck: ^1.4.7
@@ -1473,10 +1473,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^16":
-  version: 16.18.82
-  resolution: "@types/node@npm:16.18.82"
-  checksum: ace573877c3fe2fad4004a85b1ec72812eef43718a89cea92370777505954dfa59f44cf65db90217f977f2207e4c5de399eb81ab0006e3f7ff57388f585b4fb1
+"@types/node@npm:*, @types/node@npm:^18":
+  version: 18.19.54
+  resolution: "@types/node@npm:18.19.54"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: d85bacc7430c2913bcd2cf293f312bc1f9108819707ac25b58404185c3b8f9ca9e3e93c396672f457c18e65f5ba86cc8363803f830207c6b7dd14fd74e1455b0
   languageName: node
   linkType: hard
 
@@ -6975,6 +6977,13 @@ __metadata:
     has-symbols: ^1.0.3
     which-boxed-primitive: ^1.0.2
   checksum: b7a1cf5862b5e4b5deb091672ffa579aa274f648410009c81cca63fed3b62b610c4f3b773f912ce545bb4e31edc3138975b5bc777fc6e4817dca51affb6380e9
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~5.26.4":
+  version: 5.26.5
+  resolution: "undici-types@npm:5.26.5"
+  checksum: 3192ef6f3fd5df652f2dc1cd782b49d6ff14dc98e5dced492aa8a8c65425227da5da6aafe22523c67f035a272c599bb89cfe803c1db6311e44bed3042fc25487
   languageName: node
   linkType: hard
 
