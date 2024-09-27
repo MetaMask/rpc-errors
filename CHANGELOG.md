@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.4.0]
+
+### Uncategorized
+
+- build: Migrate to ts-bridge ([#152](https://github.com/MetaMask/rpc-errors/pull/152))
+- Bump the npm_and_yarn group with 2 updates ([#151](https://github.com/MetaMask/rpc-errors/pull/151))
+- Bump braces in the npm_and_yarn group across 1 directory ([#146](https://github.com/MetaMask/rpc-errors/pull/146))
+- chore(devdeps): @lavamoat/allow-scripts@^3.0.0->^3.0.4 ([#143](https://github.com/MetaMask/rpc-errors/pull/143))
+
 ## [6.3.1]
 
 ### Changed
@@ -195,7 +204,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `serializeError`
   - If the object passed to the function has a `.message` property, it will preferred over the `.message` property of the fallback error when creating the returned serialized error object
 
-[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v6.3.1...HEAD
+[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v6.4.0...HEAD
+[6.4.0]: https://github.com/MetaMask/rpc-errors/compare/v6.3.1...v6.4.0
 [6.3.1]: https://github.com/MetaMask/rpc-errors/compare/v6.3.0...v6.3.1
 [6.3.0]: https://github.com/MetaMask/rpc-errors/compare/v6.2.1...v6.3.0
 [6.2.1]: https://github.com/MetaMask/rpc-errors/compare/v6.2.0...v6.2.1
