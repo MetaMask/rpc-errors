@@ -98,7 +98,7 @@ describe('serializeError', () => {
     const result = serializeError(invalidError7);
     expect(result).toStrictEqual({
       code: rpcCodes.internal,
-      message: getMessageFromCode(rpcCodes.internal),
+      message: invalidError7.message,
       data: {
         cause: {
           code: invalidError7.code,
@@ -209,7 +209,7 @@ describe('serializeError', () => {
     const result = serializeError(error);
     expect(result).toStrictEqual({
       code: errorCodes.rpc.internal,
-      message: getMessageFromCode(errorCodes.rpc.internal),
+      message: error.message,
       data: {
         cause: {
           message: error.message,
@@ -220,7 +220,7 @@ describe('serializeError', () => {
 
     expect(JSON.parse(JSON.stringify(result))).toStrictEqual({
       code: errorCodes.rpc.internal,
-      message: getMessageFromCode(errorCodes.rpc.internal),
+      message: error.message,
       data: {
         cause: {
           message: error.message,

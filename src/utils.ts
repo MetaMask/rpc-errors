@@ -145,14 +145,35 @@ function buildError(
     return error;
   }
 
+  const originalMessage = getOriginalMessage(error);
+
   // If the error does not match the JsonRpcError type, use the fallback error, but try to include the original error as `cause`.
   const cause = serializeCause(error);
   const fallbackWithCause = {
     ...fallbackError,
+    ...(originalMessage && { message: originalMessage }),
     data: { cause },
   };
 
   return fallbackWithCause;
+}
+
+/**
+ * Attempts to extract the original `message` property from an error value of uncertain shape.
+ *
+ * @param error - The error in question.
+ * @returns The original message, if it exists and is a non-empty string.
+ */
+function getOriginalMessage(error: unknown): string | undefined {
+  if (
+    isObject(error) &&
+    hasProperty(error, 'message') &&
+    typeof error.message === 'string' &&
+    error.message.length > 0
+  ) {
+    return error.message;
+  }
+  return undefined;
 }
 
 /**
