@@ -96,14 +96,20 @@ export function isValidCode(code: unknown): code is number {
  * @param error - The error to serialize.
  * @param options - Options bag.
  * @param options.fallbackError - The error to return if the given error is
- * not compatible. Should be a JSON serializable value.
+ * not compatible. Should be a JSON-serializable value.
  * @param options.shouldIncludeStack - Whether to include the error's stack
  * on the returned object.
+ * @param options.shouldPreserveMessage - Whether to preserve the error's
+ * message if the fallback error is used.
  * @returns The serialized error.
  */
 export function serializeError(
   error: unknown,
-  { fallbackError = FALLBACK_ERROR, shouldIncludeStack = true } = {},
+  {
+    fallbackError = FALLBACK_ERROR,
+    shouldIncludeStack = true,
+    shouldPreserveMessage = true,
+  } = {},
 ): SerializedJsonRpcError {
   if (!isJsonRpcError(fallbackError)) {
     throw new Error(
@@ -111,7 +117,7 @@ export function serializeError(
     );
   }
 
-  const serialized = buildError(error, fallbackError);
+  const serialized = buildError(error, fallbackError, shouldPreserveMessage);
 
   if (!shouldIncludeStack) {
     delete serialized.stack;
@@ -121,15 +127,18 @@ export function serializeError(
 }
 
 /**
- * Construct a JSON-serializable object given an error and a JSON serializable `fallbackError`
+ * Construct a JSON-serializable object given an error and a JSON-serializable `fallbackError`
  *
  * @param error - The error in question.
- * @param fallbackError - A JSON serializable fallback error.
- * @returns A JSON serializable error object.
+ * @param fallbackError - A JSON-serializable fallback error.
+ * @param shouldPreserveMessage - Whether to preserve the error's message if the fallback
+ * error is used.
+ * @returns A JSON-serializable error object.
  */
 function buildError(
   error: unknown,
   fallbackError: SerializedJsonRpcError,
+  shouldPreserveMessage: boolean,
 ): SerializedJsonRpcError {
   // If an error specifies a `serialize` function, we call it and return the result.
   if (
@@ -151,7 +160,8 @@ function buildError(
   const cause = serializeCause(error);
   const fallbackWithCause = {
     ...fallbackError,
-    ...(originalMessage && { message: originalMessage }),
+    ...(shouldPreserveMessage &&
+      originalMessage && { message: originalMessage }),
     data: { cause },
   };
 
