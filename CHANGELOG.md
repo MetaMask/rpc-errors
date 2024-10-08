@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [7.0.0]
 
-### Uncategorized
+### Changed
 
-- feat: Preserve original messages during error serialization by default ([#158](https://github.com/MetaMask/rpc-errors/pull/158))
-- chore: Migrate to Yarn 4, use JS constraints ([#156](https://github.com/MetaMask/rpc-errors/pull/156))
-- chore: Bump minimum Node version ([#154](https://github.com/MetaMask/rpc-errors/pull/154))
+- **BREAKING**: Preserve original messages during error serialization by default ([#158](https://github.com/MetaMask/rpc-errors/pull/158))
+  - `5.0.0` behavior of overwriting the original message is available by passing `shouldPreserveMessage: false` to `serializeError()`.
+- **BREAKING:** Bump minimum Node version ([#154](https://github.com/MetaMask/rpc-errors/pull/154))
 
 ## [6.4.0]
 
