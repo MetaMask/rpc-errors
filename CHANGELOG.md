@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **BREAKING**: Preserve original messages during error serialization by default ([#158](https://github.com/MetaMask/rpc-errors/pull/158))
   - The behavior introduced in [`5.0.0`](#500) of overwriting the original message is available by passing `shouldPreserveMessage: false` to `serializeError()`.
-- **BREAKING:** Bump minimum Node version ([#154](https://github.com/MetaMask/rpc-errors/pull/154))
+- **BREAKING:** Bump minimum Node.js version from 16 to 18 ([#154](https://github.com/MetaMask/rpc-errors/pull/154))
 
 ## [6.4.0]
 
