@@ -52,7 +52,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@metamask/utils": "^9.0.0",
+    "@metamask/utils": "^10.0.0",
     "fast-safe-stringify": "^2.0.6"
   },
   "devDependencies": {
