@@ -9,10 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [7.0.2]
 
-### Uncategorized
+### Changed
 
 - Bump `@metamask/utils` from `^10.0.0` to `^11.0.1` ([#166](https://github.com/MetaMask/rpc-errors/pull/166))
-- Bump the npm_and_yarn group with 2 updates ([#164](https://github.com/MetaMask/rpc-errors/pull/164))
 
 ## [7.0.1]
 
