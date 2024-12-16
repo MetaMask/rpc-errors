@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.2]
+
+### Changed
+
+- Bump `@metamask/utils` from `^10.0.0` to `^11.0.1` ([#166](https://github.com/MetaMask/rpc-errors/pull/166))
+
 ## [7.0.1]
 
 ### Changed
@@ -216,7 +222,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `serializeError`
   - If the object passed to the function has a `.message` property, it will preferred over the `.message` property of the fallback error when creating the returned serialized error object
 
-[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v7.0.1...HEAD
+[Unreleased]: https://github.com/MetaMask/rpc-errors/compare/v7.0.2...HEAD
+[7.0.2]: https://github.com/MetaMask/rpc-errors/compare/v7.0.1...v7.0.2
 [7.0.1]: https://github.com/MetaMask/rpc-errors/compare/v7.0.0...v7.0.1
 [7.0.0]: https://github.com/MetaMask/rpc-errors/compare/v6.4.0...v7.0.0
 [6.4.0]: https://github.com/MetaMask/rpc-errors/compare/v6.3.1...v6.4.0
