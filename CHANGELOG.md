@@ -9,12 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [7.0.3]
 
-### Uncategorized
-
-- Update workflows to use `MetaMask/action-checkout-and-setup` ([#170](https://github.com/MetaMask/rpc-errors/pull/170))
-- chore: update security-code-scanner@main to action-security-code-scanner@v1 ([#169](https://github.com/MetaMask/rpc-errors/pull/169))
-- chore: add workflow_dispatch to security-code-scanner ([#168](https://github.com/MetaMask/rpc-errors/pull/168))
-
 ### Changed
 
 - Bump `@metamask/utils` from `^11.0.1` to `^11.4.2` ([#171](https://github.com/MetaMask/rpc-errors/pull/171))
