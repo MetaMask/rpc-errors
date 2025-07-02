@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bump `@metamask/utils` from `^11.0.1` to `^11.4.2` ([#171](https://github.com/MetaMask/rpc-errors/pull/171))
+
 ## [7.0.2]
 
 ### Changed
