@@ -75,11 +75,7 @@ export class JsonRpcError<
         serialized.data.cause = serializeCause(this.data.cause);
       }
     }
-
-    if (this.stack) {
-      serialized.stack = this.stack;
-    }
-
+    
     return serialized;
   }
 
